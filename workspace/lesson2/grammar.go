@@ -24,7 +24,7 @@ func main() {
     /*
     Within a function, variable can be declared first, and then assigned value
     */
-    var local_var int
-    local_var = 100
+    var local_var bool
+    local_var = true
     fmt.Println(local_var)
 }
