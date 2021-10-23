@@ -1,13 +1,10 @@
 # 变量
 * 全局变量：以下是全局变量的定义方法，定义后全局变量在代码里可以不使用
-
   * 方法1
-
   ```go 
   var name type = value
   ```
   * 方法2 
-
   ```go
   var name type // the value will be defaulted to 0, false, "" based on the type
   ```
