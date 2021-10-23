@@ -24,8 +24,13 @@ var (
 )
 
 var (
-    v3 int // default to 0
-    v4 bool  // default to false
+    v3 = 100
+    v4 = false
+)
+
+var (
+    v5 int // default to 0
+    v6 bool  // default to false
 )
 
 
@@ -40,4 +45,13 @@ func main() {
     var g = 50
     h := 60
     fmt.Println(f, g, h)
+
+    var (
+        a1 int = 10
+        a2 bool = false
+    )
+    fmt.Println(a1, a2)
+    
+    b1 := 20
+    fmt.Println(b1)
 }
