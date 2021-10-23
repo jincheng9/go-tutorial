@@ -17,6 +17,7 @@ var c = 30
 // e:=10
 
 
+// another way to define global variable
 var (
     v1 int = 100
     v2 bool = true
@@ -26,6 +27,7 @@ var (
     v3 int // default to 0
     v4 bool  // default to false
 )
+
 
 func main() {
     fmt.Println(a, b, c)
