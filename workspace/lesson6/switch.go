@@ -32,4 +32,17 @@ func main() {
 		result = "exception"
 	}
 	println("gender:", gender, "result:", result) // the value of result is "better"
+
+
+	switch {
+	case grade >= 90:
+		level = "A"
+	case grade >= 80 && grade < 90:
+		level = "B"
+	case grade >= 60 && grade <80:
+		level = "C"
+	case grade <60:
+		level = "D"
+	}
+	println("grade:", grade, "level:", level)
 }
