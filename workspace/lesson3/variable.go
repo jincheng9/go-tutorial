@@ -51,7 +51,11 @@ func main() {
         a2 bool = false
     )
     fmt.Println(a1, a2)
-    
+
     b1 := 20
     fmt.Println(b1)
+
+    var b2 int
+    b2 = 200
+    fmt.Println(b2)
 }
