@@ -21,20 +21,20 @@
   * 指定数组大小
 
     ```go
-    	var float_num_list1 [5]float32 = [5]float32{1.0, 2.0, 3.0, 4.0, 5.0}
-    	var float_num_list2 = [5]float32{1.0, 2.0, 3.0, 4.0, 5.0}
-    	int_num_list := [3]int{1, 2, 3}
-    	for index, value := range float_num_list1 {
-    		fmt.Println("[float_num_list1]index=", index, "value=", value)
-    	}
+    var float_num_list1 [5]float32 = [5]float32{1.0, 2.0, 3.0, 4.0, 5.0}
+    var float_num_list2 = [5]float32{1.0, 2.0, 3.0, 4.0, 5.0}
+    int_num_list := [3]int{1, 2, 3}
+    for index, value := range float_num_list1 {
+    	fmt.Println("[float_num_list1]index=", index, "value=", value)
+    }
     
-    	for index, value := range float_num_list2 {
-    		fmt.Println("[float_num_list2]index=", index, "value=", value)
-    	}
+    for index, value := range float_num_list2 {
+    	fmt.Println("[float_num_list2]index=", index, "value=", value)
+    }
     
-    	for index, value := range int_num_list {
-    		fmt.Println("[int_num_list]index=", index, "value=", value)
-    	}
+    for index, value := range int_num_list {
+    	fmt.Println("[int_num_list]index=", index, "value=", value)
+    }
     ```
 
   * 不指定数组大小，编译器根据赋的值自行推导
@@ -76,7 +76,7 @@
 
 * 初始化
 
-* 访问使用
+* 访问数组
 
   
 
