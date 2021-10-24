@@ -58,4 +58,11 @@ func main() {
     var b2 int
     b2 = 200
     fmt.Println(b2)
+
+
+    function := func(a string) string {
+        return a
+    }
+    result := function("hello")
+    fmt.Println("result=", result)
 }

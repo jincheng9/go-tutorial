@@ -84,5 +84,56 @@
       a1, b1 := 1, "str"
       ```
 
-      
+* 变量类型
+
+  * 数值：整数，浮点数，复数
+
+  * bool
+
+  * 字符串
+
+  * 指针：var a *int
+
+    ```go
+    num := 100
+    var a * int = &num
+    ```
+
+  * 数组：var a []int
+
+    ```go
+    var a []int = []int{1,2}
+    list := [6]int{1,2} //size为6的数组，前面2个元素是1和2，后面的是默认值0
+    ```
+
+  * map：var a map[string] int
+
+    ```go
+    dict := map[string] int{"a":1, "b":2}
+    ```
+
+  * 函数：var a func(string) int
+
+    ```go
+    function := func(str string) string {
+      return str
+    }
+    result := function("hello fans")
+    fmt.Println("result=", result)
+    ```
+
+  * 结构体:  var instance Struct
+
+    ```go
+    type Circle struct {
+      redius float64
+    }
+    
+    var c1 Circle
+    c1.radius = 10.00
+    ```
+
+  * channel：var a chan int
+
+  * 接口：var a error // error是接口
 
