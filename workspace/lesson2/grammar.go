@@ -27,4 +27,20 @@ func main() {
     var local_var bool
     local_var = true
     fmt.Println(local_var)
+
+    /*
+    浮点数只有float32 and float64这2种类型，没有float类型
+    */
+    var data float32 = 0
+    fmt.Println(data)
+
+
+    var be byte = 255
+    fmt.Println(be)
+
+    var ru rune = -2147483648
+    fmt.Println("[func|main]ru=", ru)
+
+    var up uintptr = 100
+    fmt.Println("[func|main]up=", up)
 }
