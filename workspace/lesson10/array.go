@@ -8,6 +8,11 @@ func main() {
 	var float_num_list1 [5]float32 = [5]float32{1.0, 2.0, 3.0, 4.0, 5.0}
 	var float_num_list2 = [5]float32{1.0, 2.0, 3.0, 4.0, 5.0}
 	int_num_list := [3]int{1, 2, 3}
+    
+    for index := range float_num_list1 {
+        fmt.Println("[float_num_list1]index=", index)
+    }
+    
 	for index, value := range float_num_list1 {
 		fmt.Println("[float_num_list1]index=", index, "value=", value)
 	}
