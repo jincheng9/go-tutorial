@@ -57,18 +57,35 @@
 
 * 访问数组
 
-  ```go
-  balance := [5]int{1:10, 3:30} // 将数组下标为1和3的元素分别初始化为10和30
-  fmt.Println(balance)
+  * 使用下标访问
   
-  num := balance[1]
-  fmt.Println("num=", num)
-  for i:=0; i<5; i++ {
-  	fmt.Printf("balance[%d]=%d\n", i, balance[i])
-  }
-  ```
-
+    ```go
+    balance := [5]int{1:10, 3:30} // 将数组下标为1和3的元素分别初始化为10和30
+    fmt.Println(balance)
+    
+    num := balance[1]
+    fmt.Println("num=", num)
+    for i:=0; i<5; i++ {
+    	fmt.Printf("balance[%d]=%d\n", i, balance[i])
+    }
+    ```
   
+  * range遍历 
+  
+    ```go
+    var float_num_list1 [5]float32 = [5]float32{1.0, 2.0, 3.0, 4.0, 5.0}
+    for index := range float_num_list1 {
+        // index是数组下标
+        fmt.Println("[float_num_list1]index=", index) 
+    }
+    
+    for index, value := range float_num_list1 {
+        // index是数组下标，value是对应的数组元素
+    	fmt.Println("[float_num_list1]index=", index, "value=", value)
+    }
+    ```
+  
+    
 
 ## 多维数组
 
