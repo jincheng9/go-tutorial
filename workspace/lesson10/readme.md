@@ -37,7 +37,7 @@
     }
     ```
 
-  * 不指定数组大小，编译器根据赋的值自行推导
+  * 不显示指定数组大小，编译器根据赋的值自行推导
 
     ```go
     var balance1 []int = [...]int{1,2} // 等价于[2]int{1,2}
@@ -85,7 +85,12 @@
     }
     ```
   
-    
+  * 获取数组长度len(array)
+  
+    ```go
+    a := [...]int {1, 2, 3, 4, 5} 
+    fmt.Println("array length=", len(a)) // array length=5
+    ```
 
 ## 多维数组
 
@@ -185,7 +190,7 @@
   
 * 数组作为函数参数进行传递
 
-  * 如果数组作为函数参数，实参和形参的定义必须相同，要么都是长度相同的数组，要么都是slice类型
+  * 如果数组作为函数参数，实参和形参的定义必须相同，要么都是长度相同的数组，要么都是slice类型。如果实参和形参的类型一个是数组，一个是slice，或者实参和形参都是数组但是长度不一致都会编译报错
   
     ```go
     package main
@@ -226,6 +231,39 @@
     ```
   
   * 值传递和引用传递
+  
+    * 数组传参是指传递， slice传参是引用传递。如果使用数组作为参数，想修改实参的值，那就要传指向数组的指针
+  
+      ```go
+      // changeArray无法改变实参数组的值
+      func changeArray(array [3]int) {
+          array[0] = 10
+      }
+      
+      // changeArray2可以改变实参的值
+      func changeArray2(array *[3]int) {
+          array[0] = 10
+      }
+      
+      // changeArray3可以改变实参的值
+      func changeArray3(array []int) {
+          array[0] = 10
+      }
+      
+      param := [3]int{1,2,3}
+      changeArray(param)
+      fmt.Println("param=", param) // param= [1 2 3]
+      changeArray2(&param)
+      fmt.Println("param=", param) // param= [10 2 3]
+      
+      sliceArray := []int{1,2,3}
+      changeArray3(sliceArray)
+      fmt.Println("sliceArray=", sliceArray) // sliceArray= [10 2 3]
+      ```
+  
+      
+  
+      
   
   
 
