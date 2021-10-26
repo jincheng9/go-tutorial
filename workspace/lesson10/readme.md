@@ -40,9 +40,9 @@
   * 不指定数组大小，编译器根据赋的值自行推导
 
     ```go
-    var balance1 []int = []int{1,2}
-    var balance2 = []int{1,2,3}
-    balance3 := []int{1, 2}
+    var balance1 []int = [...]int{1,2} // 等价于[2]int{1,2}
+    var balance2 = [...]int{1,2,3}
+    balance3 := [...]int{1, 2}
     fmt.Println("balance1=", balance1)
     fmt.Println("balance2=", balance2)
     fmt.Println("balance3=", balance3)
@@ -107,7 +107,7 @@
     fmt.Println("array2=", array2)
     ```
 
-  * append赋值，数组的大小不能提前指定
+  * append赋值，slice切片类型，不能算数组。参见后面lesson13里的slice类型介绍
 
     ```go
     twoDimArray := [][]int{}
@@ -143,13 +143,17 @@
         fmt.Printf("row %d is ", index) //index的值是0,1，表示二维数组的第1行和第2行
         fmt.Println(twoDimArray[index])
     }
+     for row_index, row_value := range twoDimArray {
+        for col_index, col_value := range row_value {
+            fmt.Printf("twoDimArray[%d][%d]=%d ", row_index, col_index, col_value)
+        }
+        fmt.Println()
+    }
     ```
   
 * 注意事项
 
-  * 多维数组的每一维度的大小可以不相同，比如二维数组的第0行和第1行的size可以不同。
-
-    下例里的第0行size是3，第1行size是2。如果直接访问twoDimArray\[2][2]会报错
+  * 多维动态数组(slice类型)的每一维度的大小可以不相同，比如下例里的第0行size是3，第1行size是2。如果直接访问twoDimArray\[2][2]会报错。slice类型的介绍参见lesson13
 
     ```go
     twoDimArray := [][]int{}
@@ -161,5 +165,50 @@
     twoDimArray = append(twoDimArray, row2)
     fmt.Println("twoDimArray=", twoDimArray)
     ```
+  
+* 数组作为函数参数进行传递
 
+  * 如果数组作为函数参数，实参和形参的定义必须相同，要么都是长度相同的数组，要么都是slice类型
+  
+    ```go
+    package main
+    
+    import "fmt"
+    import "reflect"
+    
+    func sum(array [5]int, size int) int{
+        sum := 0
+        for i:=0; i<size; i++ {
+            sum += array[i]
+        }
+        return sum
+    }
+    
+    func sumSlice(array []int, size int) int{
+        sum := 0
+        for i:=0; i<size; i++ {
+            sum += array[i]
+        }
+        return sum
+    }
+    
+    func main() {
+        a := [5]int {1, 2, 3, 4, 5} // a := [...]int{1, 2, 3, 4, 5}也可以去调用sum，编译器会自动推导出a的长度5
+        fmt.Println("type of a:", reflect.TypeOf(a)) // type of a: [5]int
+        ans := sum(a, 5)
+        fmt.Println("ans=", ans)
+        
+        b := []int{1, 2, 3, 4, 5}
+        ans2 := sumSlice(b, 5)
+        fmt.Println("ans2=", ans2)
+        
+        array := [...]int {1}
+        fmt.Println("type of array:", reflect.TypeOf(array)) // type of array: [1]int，是一个数组类型
+        fmt.Println("array=", array)
+    }
+    ```
+  
+  * 值传递和引用传递
+  
+  
 

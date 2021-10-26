@@ -43,6 +43,12 @@ func main() {
         fmt.Printf("row %d is ", index) // index的值是0,1，表示二维数组的第1行和第2行
         fmt.Println(twoDimArray[index])
     }
+    for row_index, row_value := range twoDimArray {
+        for col_index, col_value := range row_value {
+            fmt.Printf("twoDimArray[%d][%d]=%d ", row_index, col_index, col_value)
+        }
+        fmt.Println()
+    }
     
     // 可以直接取二维数组的某一行完整数据出来
     oneDimArray := array1[0]
