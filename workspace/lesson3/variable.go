@@ -33,8 +33,12 @@ var (
     v6 bool  // default to false
 )
 
+var global_int int
+//global_int = 10
 
 func main() {
+    global_int = 10
+
     fmt.Println(a, b, c)
     fmt.Println(v1, v2)
     fmt.Println("v3:", v3, "v4:", v4)

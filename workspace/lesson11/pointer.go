@@ -26,6 +26,7 @@ func main() {
     fmt.Println(*intPtr4)
     fmt.Println("type of pointer:", reflect.TypeOf(intPtr4))
     
+    // 不赋值的时候，默认值为nil
     var intPtr5 *int
     fmt.Println("intPtr5==nil:", intPtr5==nil)
 }

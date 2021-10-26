@@ -4,9 +4,12 @@
   ```go 
   var name type = value
   ```
-  * 方法2 
+  * 方法2：注意，全局变量如果采用这个方式定义，那不能在全局范围内赋值，只能在函数体内给这个全局变量赋值
   ```go
-  var name type // the value will be defaulted to 0, false, "" based on the type
+  var name type // value will be defaulted to 0, false, "" based on the type
+  /* 如果定义上面的全局变量，就不能紧接着对变量name做赋值，比如name = 10，会编译报错：
+   syntax error: non-declaration statement outside function body
+  *、
   ```
   * 方法3
   ```go
@@ -27,7 +30,7 @@
   	v4 = false
   )
   ```
-
+  
 * 局部变量：
   * 和全局变量的定义相比，多了以下定义方法
     * 方法5
