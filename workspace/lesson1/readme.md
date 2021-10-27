@@ -39,8 +39,18 @@
 
 # 注意事项
 * func main()是程序开始执行的函数(但是如果有func init()函数，则会先执行init函数，再执行main函数)
+
 * 文件名与包名没有直接关系，不一定要将文件名与包名定成同一个。
-*  文件夹名与包名没有直接关系，也不需要一致。
+
+* 文件夹名与包名没有直接关系，也不需要一致。
+
+* 只有在源程序文件开头声明package main，并且有func main()定义，才能生成可执行程序，否则go run file.go会报错，报错内容:
+
+  ```package command-line-arguments is not a main packagego
+  package command-line-arguments is not a main package
+  和
+  runtime.main_main·f: function main is undeclared in the main package
+  ```
 
 # 编译和运行
 Go是编译型语言
