@@ -129,7 +129,7 @@
     fmt.Println("array2=", array2)
     ```
 
-  * append赋值，slice切片类型，不能算数组。参见后面lesson13里的slice类型介绍
+  * append赋值，只能对slice切片类型使用append，不能对数组使用append。参见后面lesson13里的slice类型介绍
 
     ```go
     twoDimArray := [][]int{}
