@@ -10,5 +10,5 @@
 * [lesson8:函数和方法](./workspace/lesson8/readme.md)
 * [lesson9:变量作用域](./workspace/lesson9/readme.md)
 * [lesson10:数组：一维数组和多维数组](./workspace/lesson10/readme.md)
-* [lesson11:指针](./workspace/lesson11/readme.md)
+* [lesson11:指针](./workspace/lesson11)
 
