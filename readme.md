@@ -11,4 +11,5 @@
 * [lesson9: 变量作用域](./workspace/lesson9)
 * [lesson10: 数组：一维数组和多维数组](./workspace/lesson10)
 * [lesson11: 指针](./workspace/lesson11)
+* [lesson12:结构体](./workspace/lesson12)
 
