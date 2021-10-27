@@ -5,7 +5,7 @@
   * 语法
 
     ```go
-    var var_name *vartype
+    var var_name *var_type
     ```
 
   * 示例
@@ -68,7 +68,32 @@
 
   * 使用
 
+    ```go
+    package main
+    
+    import "fmt"
+    
+    const SIZE = 5
+    
+    func main() {
+        var ptrArray [SIZE]*int
+        a := [5]int{1,2,3,4,5}
+        for i:=0; i<SIZE; i++ {
+            ptrArray[i] = &a[i]
+        }
+        
+        for i:=0; i<SIZE; i++ {
+            fmt.Printf("%d ", *ptrArray[i])
+        }
+        fmt.Println()
+    }
+    ```
+
+    
+
 * 指向指针的指针
+
+  
 
 * 向函数传递指针参数
 
