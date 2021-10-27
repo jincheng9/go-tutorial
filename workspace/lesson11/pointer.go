@@ -29,4 +29,10 @@ func main() {
     // 不赋值的时候，默认值为nil
     var intPtr5 *int
     fmt.Println("intPtr5==nil:", intPtr5==nil)
-}
+    
+    array := [3]int{1,2,3}
+    var arrayPtr *[3]int = &array
+    for i:=0; i<len(array); i++ {
+        fmt.Printf("arrayPtr[%d]=%d\n", i, arrayPtr[i])
+    }
+ }

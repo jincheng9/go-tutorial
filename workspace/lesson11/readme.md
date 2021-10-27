@@ -1,6 +1,6 @@
 # 指针
 
-* 声明和初始化
+* 指针的值是指向的变量的内存地址。
 
   * 语法
 
@@ -58,6 +58,20 @@
     fmt.Println("intPtr5==nil:", intPtr5==nil) // intPtr5==nil: true
     ```
 
+* 指向数组的指针
+
+  * 注意这里和C++不一样，C++的数组名就是指向数组首元素的地址，Go不是
+
+    ```go
+    array := [3]int{1,2,3}
+    var arrayPtr *[3]int = &array // C++赋值就不用加&
+    for i:=0; i<len(array); i++ {
+    	fmt.Printf("arrayPtr[%d]=%d\n", i, arrayPtr[i])
+    }
+    ```
+
+    
+
 * 指针数组
 
   * 定义
@@ -93,7 +107,67 @@
 
 * 指向指针的指针
 
-  
+  * 定义
+
+    ```go
+    var a int = 100
+    var ptr1 *int = &a
+    var ptr2 **int = &ptr1
+    var ptr3 ***int = &ptr2
+    ```
+
+    
+
+  * 使用
+
+    ```go
+    package main
+    
+    import "fmt"
+    
+    func main() {
+        var a int = 100
+        var ptr1 *int = &a
+        var ptr2 **int = &ptr1
+        var ptr3 ***int = &ptr2
+        
+        fmt.Println("*ptr1=", *ptr1)
+        fmt.Println("**ptr2=", **ptr2)
+        fmt.Println("***ptr3=", ***ptr3)
+    }
+    ```
+
+    
 
 * 向函数传递指针参数
+
+  * 示例：通过指针参数修改实参的值
+
+    ```go
+    package main
+    
+    import "fmt"
+    
+    // 这个可以交换外部传入的2个实参的值
+    func swap(a *int, b *int) {
+        *a, *b = *b, *a
+    }
+    
+    // 这个无法交换外部传入的2个实参的值
+    func swap2(a *int, b *int) {
+        a, b = b, a
+    }
+    
+    
+    func main() {
+        a, b := 1, 2
+        swap(&a, &b)
+        fmt.Println("a=", a, " b=", b) // a= 2  b= 1
+        
+        swap2(&a, &b)
+        fmt.Println("a=", a, " b=", b) // a= 2  b= 1
+    }
+    ```
+
+    
 
