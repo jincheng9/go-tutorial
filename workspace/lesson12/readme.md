@@ -70,7 +70,7 @@
 
 * 结构体指针
 
-  * 语法。注意结构体指针访问结构体里的成员，也是用点**.**，这个和C++用->不一样
+  * 语法。**注意**:结构体指针访问结构体里的成员，也是用点**.**，这个和C++用->不一样
 
     ```go
     var struct_pointer *struct_type // 指针struct_pointer指向结构体struct_type
@@ -110,5 +110,48 @@
 
 * 方法
 
-* 大写字母
+  * Go没有C++的class概念，但是可以对struct结构体类型定义方法，结构体对象调用该方法，来达到类似效果
 
+    ```go
+    package main
+    
+    import "fmt"
+    
+    type Book struct {
+        id int
+        author string
+        title string
+    }
+    
+    
+    func (book Book) printBook() {
+        fmt.Printf("id:%d, author:%s, title:%s\n", book.id, book.author, book.title)
+    }
+    
+    func (book *Book) changeTitle1() {
+        book.title = "new title1"
+    }
+    
+    // 这个无法改变调用该方法的结构体变量里的成员的值
+    func (book Book) changeTitle2() {
+        book.title = "new title2"
+    }
+    
+    func main() {
+        book := Book{1, "expert", "go"}
+        book.printBook()
+        
+        book.changeTitle1() // 会修改变量book里的成员title的值
+        book.printBook()
+        
+        book.changeTitle2() // 不会对book的值有任何影响
+        book.printBook()
+        
+    }
+    ```
+
+    
+
+* 结构体成员首字母大小写
+
+  * 如果结构体的成员要被其它包使用和访问，那结构体的成员名首字母要大写，否则只在当前包里可以访问
