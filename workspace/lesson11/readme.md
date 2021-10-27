@@ -66,10 +66,11 @@
     array := [3]int{1,2,3}
     var arrayPtr *[3]int = &array // C++赋值就不用加&
     for i:=0; i<len(array); i++ {
+      // arrayPtr[i]的值就是数组array里下标索引i对应的值
     	fmt.Printf("arrayPtr[%d]=%d\n", i, arrayPtr[i])
     }
     ```
-
+    
     
 
 * 指针数组

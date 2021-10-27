@@ -158,19 +158,58 @@
     copy(dstSlice, srcSlice) // 把srcSlice切片里的元素拷贝到dstSlice切片里
     ```
 
-  * **注意事项**：只从拷贝min(len(srcSlice, dstSlice))个元素到目标切片dstSlice里。如果dstSlice的长度是0，那一个都不会从srcSlice拷贝到dstSlice里。如果dstSlice的长度M小于srcSlice的长度N，则只会拷贝srcSlice里的前M个元素到目标切片dstSlice里。
+  * **注意事项**：只从源切片srcSlice拷贝min(len(srcSlice), len(dstSlice))个元素到目标切片dstSlice里。如果dstSlice的长度是0，那一个都不会从srcSlice拷贝到dstSlice里。如果dstSlice的长度M小于srcSlice的长度N，则只会拷贝srcSlice里的前M个元素到目标切片dstSlice里。
 
     ```go
+    package main
+    
+    import "fmt"
+    
+    
+    func main() {
+    	a := []int{1, 2}
+    	b := make([]int, 1, 3) // 切片b的长度是1
+    
+    	copy(b, a) // 只拷贝1个元素到b里
+    	fmt.Println("a=", a) // a= [1 2]
+    	fmt.Println("b=", b) // b= [1]
+    }
     ```
 
     
 
-* 指向切片的指针
+* 函数传参
 
-  ```go
-  ```
+  * slice切片如果是函数参数，则都是**引用**传递，函数体内对切片的修改会影响到实参。比如下例里的change1函数第一行
 
-  
+  * 如果在函数体内通过append直接对切片添加新元素，不会改变外部切片的值，比如下例里的change1函数第2行。但是如果函数使用切片指针作为参数，在函数体内可以通过切片指针修改外部切片的值，比如下例里的change2函数
 
-* 函数传参：slice如果是函数参数，则都是**引用**传递，函数体内对切片的修改会影响到实参
+    ```go
+    package main
+    
+    import "fmt"
+    
+    
+    func change1(param []int) {
+    	param[0] = 100 // 这个会改变外部切片的值
+    	param = append(param, 200) // append不会改变外部切片的值
+    }
+    
+    func change2(param *[]int) {
+    	*param = append(*param, 300) // 传切片指针，通过这种方式append可以改变外部切片的值
+    }
+    
+    func main() {
+    	slice := make([]int, 2, 100)
+    	fmt.Println(slice) // [0, 0]
+    
+    	change1(slice)
+    	fmt.Println(slice) // [100, 0]
+    
+    	change2(&slice)
+    	fmt.Println(slice) // [100, 0, 300]
+    }
+    ```
+
+    
 
