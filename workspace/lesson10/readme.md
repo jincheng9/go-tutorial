@@ -2,9 +2,9 @@
 
 ## 一维数组
 
-* 声明
+* 声明：数组的大小必须是常量，不能是变量，比如下面的语法里的size必须是常量
 
-  * 格式
+  * 语法
 
     ```go
     var variable_name [size] variable_type
@@ -94,9 +94,9 @@
 
 ## 多维数组
 
-* 声明
+* 声明：数组的大小必须是常量，不能是变量，比如下面语法里的size1，size2，...，sizeN必须是常量
 
-  * 格式
+  * 语法
 
     ```go
     var variable_name [size1][size2]...[sizeN] variable_type
@@ -144,7 +144,7 @@
 
 * 访问二维数组
 
-  * 数组下标遍历
+  * 数组下标遍历具体的元素
   
     ```go
     array1 := [2][3]int {
@@ -158,12 +158,35 @@
     }
     ```
   
+  * 数组下标遍历某行元素
+  
+    ```go
+    package main
+    
+    import "fmt"
+    import "reflect"
+    
+    func main() {
+        array := [2][3]int{{1, 2, 3}, {4, 5, 6}}
+        for index := range array {
+            // array[index]类型是一维数组
+            fmt.Println(reflect.TypeOf(array[index])) 
+            fmt.Printf("index=%d, value=%v\n", index, array[index])
+        }
+    }
+    ```
+    
+    
+    
   * range遍历
   
     ```go
+    twoDimArray := [2][3]int {
+        {0, 1, 2},
+        {3, 4, 5}}
     for index := range twoDimArray {
         fmt.Printf("row %d is ", index) //index的值是0,1，表示二维数组的第1行和第2行
-        fmt.Println(twoDimArray[index])
+        fmt.Println(twoDimArray[index]) //twoDimArray[index]类型就是一维数组
     }
      for row_index, row_value := range twoDimArray {
         for col_index, col_value := range row_value {
@@ -175,7 +198,7 @@
   
 * 注意事项
 
-  * 多维动态数组(slice类型)的每一维度的大小可以不相同，比如下例里的第0行size是3，第1行size是2。如果直接访问twoDimArray\[2][2]会报错。slice类型的介绍参见lesson13
+  * slice类型的每一维度的大小可以不相同，比如下例里的第0行size是3，第1行size是2。如果直接访问twoDimArray\[2][2]会报错。slice类型的介绍参见lesson13
 
     ```go
     twoDimArray := [][]int{}
