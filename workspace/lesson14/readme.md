@@ -102,10 +102,90 @@
 
 * range对切片slice进行迭代
 
-  * 一维切片
-  * 二维切片
+  * 一维切片：会根据切片的长度len()进行遍历
 
-* range集合map
+    ```go
+    package main
+    
+    import "fmt"
+    
+    func main() {
+        slice := []int{1,2,3}
+        // 方式1
+        for index := range slice {
+            fmt.Printf("index=%d, value=%d\n", index, slice[index])
+        }
+        // 方式2
+        for index, value := range slice {
+            fmt.Printf("index=%d, value=%d\n", index, value)
+        }
+    }
+    ```
+
+    
+
+  * 二维切片：range遍历方式类似二维数组
+
+    ```go
+    package main
+    
+    import "fmt"
+    import "reflect"
+    
+    func main() {
+        slice := [][]int{{1,2}, {3, 4, 5}}
+        fmt.Println(len(slice))
+        // 方法1，拿到行索引
+        for index := range slice{
+            fmt.Printf("index=%d, type:%v, value=%v\n", index, reflect.TypeOf(slice[index]), slice[index])
+        }
+        
+        // 方法2，拿到行索引和该行的值，每行都是一维切片
+        for row_index, row_value := range slice{
+            fmt.Printf("index=%d, type:%v, value=%v\n", row_index, reflect.TypeOf(row_value), row_value)
+        }
+        
+        // 方法3，双重遍历，获取每个元素的值
+        for row_index, row_value := range slice {
+            for col_index, col_value := range row_value {
+                fmt.Printf("slice[%d][%d]=%d ", row_index, col_index, col_value)
+            }
+            fmt.Println()
+        }
+    }
+    ```
+
+    
+
+* range对集合map进行迭代
+
+  * 有如下2种方法可以遍历map，一种是拿到key，一种是拿到key,value
+
+    ```go
+    package main
+    
+    import "fmt"
+    
+    func main() {
+        hash := map[string]int{"a":1}
+        // 方法1，拿到key，再根据key获取value
+        for key := range hash{
+            fmt.Printf("key=%s, value=%d\n", key, hash[key])
+        }
+        
+        // 方法2，同时拿到key和value
+        for key, value := range hash{
+            fmt.Printf("key=%s, value=%d\n", key, value)
+        }
+        
+        /* nil map不能存放key-value键值对，比如下面的方式会报错：panic: assignment to entry in nil map
+        var hash2 map[string]int 
+        hash2["a"] = 1
+        */
+    }
+    ```
+
+    
 
 * range通道channel
 
