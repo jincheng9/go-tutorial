@@ -46,7 +46,7 @@
 
   * 默认情况下每个case分支最后自带break效果，匹配成功就不会执行其它case。
 
-    如果需要执行后面的case，可以使用fallthrough。使用 fallthrough 会强制执行后面的 case 语句，fallthrough 不会判断下一条 case 的表达式结果是否为 true。
+    如果需要执行后面的case，可以使用fallthrough。使用 fallthrough 会强制执行紧接着的下一个 case 语句，fallthrough 不会判断紧接着的下一条 case 的表达式结果是否为 true。
 
   * 方法1
 
@@ -61,7 +61,7 @@
       case value5:
         do sth5
       default:
-      do sth
+      	do sth
     }
     ```
 
@@ -71,11 +71,11 @@
     switch {
       case condition1:
       	do sth1
-    	case condition2:
+      case condition2:
       	do sth2
-    	case condition3, condition4:
+      case condition3, condition4:
       	do sth34
-    	default:
+      default:
       	do sth
     }
     ```
