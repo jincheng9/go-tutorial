@@ -11,7 +11,9 @@
         member_name3, member_name4 data_type3
     }
     
+    // 方式1：必须给结构体里每个数据成员赋值
     struct_var := struct_type{value1, value2, value3, value4}
+    // 方式2：可以只给部分数据成员赋值，没有赋值的会是数据成员的数据类型默认值
     struct_var2 := struct_type{member_name1:value1, member_name2:value2}
     ```
 

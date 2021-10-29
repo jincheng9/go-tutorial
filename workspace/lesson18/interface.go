@@ -2,28 +2,34 @@ package main
 
 import "fmt"
 
-type person interface {
+type Person interface {
     getName() string
     getAge() int
-    getGender() string
 }
 
 type Man struct {
     name string
     age int
-    gender string
     height float32
 }
 
-func(man Man) getName() {
+func(man Man) getName() string{
     fmt.Println("name:", man.name)
-}
-func(man Man) getHeight() {
-    fmt.Println("height:", man.height)
+    return man.name
 }
 
+func(man Man) getAge() int{
+    fmt.Println("age:", man.age)
+    return man.age
+}
+
+/*
+func(man Man) getHeight() {
+    fmt.Println("height:", man.height)
+}*/
+
 func main() {
-    person := new(Man)
-    person.getName()
-    person.getHeight()
+    var boy Person = Man{"test2", 10, 1.80}
+    
+    boy.getName()
 }
