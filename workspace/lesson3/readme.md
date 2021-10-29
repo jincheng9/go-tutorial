@@ -89,33 +89,33 @@
 
 * 变量类型
 
-  * 数值：整数，浮点数，复数
+  * 数值：整数，浮点数，复数，默认值是0
 
-  * bool
+  * bool，默认值是false
 
-  * 字符串
+  * 字符串，默认值是空串""
 
-  * 指针：var a *int
+  * 指针：var a *int，默认值是nil
 
     ```go
     num := 100
     var a * int = &num
     ```
 
-  * 数组：var a []int
+  * 数组：var a []int，默认值是nil
 
     ```go
     var a []int = []int{1,2}
     list := [6]int{1,2} //size为6的数组，前面2个元素是1和2，后面的是默认值0
     ```
 
-  * map：var a map[string] int
+  * map：var a map[string] int，默认值是nil
 
     ```go
     dict := map[string] int{"a":1, "b":2}
     ```
 
-  * 函数：var a func(string) int
+  * 函数：var a func(string) int，默认值是nil
 
     ```go
     function := func(str string) string {
@@ -125,7 +125,7 @@
     fmt.Println("result=", result)
     ```
 
-  * 结构体:  var instance Struct
+  * 结构体:  var instance Struct，默认值是nil
 
     ```go
     type Circle struct {
@@ -136,7 +136,7 @@
     c1.radius = 10.00
     ```
 
-  * channel：var a chan int
+  * channel：var a chan int  // 通道，默认值是nil
 
-  * 接口：var a error // error是接口
+  * 接口：var a error // error是接口interface，默认值是nil
 

@@ -18,9 +18,9 @@
   }
   
   func main() {
-  	/*开启一个goroutine去执行hello函数*/
-      go hello()
-      fmt.Println("main end")
+    	/*开启一个goroutine去执行hello函数*/
+  		go hello()
+  		fmt.Println("main end")
   }
   ```
 
@@ -64,6 +64,10 @@
 
 * 定义：channel是一种类型，默认值是nil。channel是引用类型，如果作为函数参数，是传引用。
 
+  多个goroutine之间，可以通过channel来通信，一个goroutine可以发送数据到指定channel，其它goroutine可以从这个channel里接收数据。
+
+  channel就像队列，满足FIFO原则，定义channel的时候必须指定channel要传递的元素类型。
+
 * 语法：
 
   ```go
@@ -85,11 +89,34 @@
   ch8 := make(chan struct_type)
   ```
 
-* 示例：
+* 使用：channel有3种操作，发送数据，接收数据和关闭channel。发送和接收都是用**<-**符号
 
-* 使用
+  * 发送值到通道：channel <- value
 
-  
+    ```go
+    ch := make(chan int)
+    ch <- 10 // 把10发送到ch里
+    ```
+
+  * 从通道接收值：value <- channel
+
+    ```go
+    ch := make(chan int)
+    x := <-ch // 从通道ch里接收值，并复制给变量x
+    <-ch // 从通道里接收值，不做其它处理
+    ```
+
+  * 关闭通道
+
+    ```go
+    ch := make(chan int)
+    close(ch) // 关闭通道
+    ```
+
+* 缓冲区：channel默认没有缓冲区，可以在定义channel的时候指定缓冲区长度，也就是缓冲区可以存储的元素个数
+
+* 遍历通道
+* 单向通道：指定通道方向
 
 ## 并发同步和锁
 
