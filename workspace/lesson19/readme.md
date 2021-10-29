@@ -8,7 +8,7 @@
 
 * 语法：go 函数名([参数列表])，示例代码如下：
 
-  ```
+  ```go
   package main
   
   import "fmt"
@@ -23,6 +23,8 @@
       fmt.Println("main end")
   }
   ```
+
+  
 
 * Go会为main()函数创建一个默认的goroutine，如果main()函数结束了，那所有在main()中启动的goroutine都会立马结束。比如下面的例子：
 
@@ -60,7 +62,30 @@
 
 ## channel
 
-* 定义
+* 定义：channel是一种类型，默认值是nil。channel是引用类型，如果作为函数参数，是传引用。
+
+* 语法：
+
+  ```go
+  /*channel_name是变量名，data_type是通道里的数据类型
+  channel_size是channel通道缓冲区最多可以存放的元素个数，这个参数是可选的，不给就表示没有缓冲区
+  */
+  var channel_name chan data_type = make(chan data_type, [channel_size])
+  ```
+
+  ```go
+  var ch1 chan int 
+  var ch2 chan string
+  var ch3 chan []int
+  var ch4 chan struct_type // 可以往通道传递结构体变量
+  
+  ch5 := make(chan int)
+  ch6 := make(chan string, 100)
+  ch7 := make(chan []int)
+  ch8 := make(chan struct_type)
+  ```
+
+* 示例：
 
 * 使用
 
