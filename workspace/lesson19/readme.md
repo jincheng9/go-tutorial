@@ -42,7 +42,7 @@
   }
   ```
 
-  执行结果可能有以下3种。这是因为main函数的goroutine和hello这个goroutine是并发执行的，有可能main执行完了，hello还没执行，这个时候只打印main end。有可能hello先执行完，main后执行完，也可能反过来。所以共有3种情况。
+  执行结果可能有以下3种：
 
   * main end // 只打印main end
 
@@ -54,10 +54,23 @@
 
     main end
 
+  这是因为main函数的goroutine和hello这个goroutine是并发执行的，有可能main执行完了，hello还没执行，这个时候只打印main end。有可能hello先执行完，main后执行完，也可能反过来。所以共有3种情况。
+
 * 多个goroutine之间可以通过channel来通信
 
 ## channel
 
 * 定义
+
 * 使用
+
+  
+
+## 并发同步和锁
+
+
+
+## 原子操作
+
+
 
