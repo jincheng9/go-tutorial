@@ -88,14 +88,292 @@
   }
   ```
 
-* 多个类型可以实现同一个interface：多个类型都有共同的方法(行为)。比如上面示例里的猫和狗都会叫唤，猫和狗就是2个类型，叫唤就是speak方法。
+* **多个struct类型可以实现同一个interface**：多个类型都有共同的方法(行为)。比如上面示例里的猫和狗都会叫唤，猫和狗就是2个类型，叫唤就是speak方法。
 
-* 一个类型可以实现多个interface：一个类型可能有好几个
+* **一个struct类型可以实现多个interface**。比如猫这个类型，既是猫科动物，也是哺乳动物。猫科动物可以是一个interface，哺乳动物可以是另一个interface，猫这个struct类型可以实现猫科动物和哺乳动物这2个interface里的方法。
 
-* 空interface
+  ```go
+  package main
+  
+  import "fmt"
+  
+  
+  // interface1，猫科动物的共同行为
+  type Felines interface {
+      feet() 
+  }
+  
+  // interface2, 哺乳动物的共同行为
+  type Mammal interface {
+      born()
+  }
+  
+  // 猫既是猫科动物也是哺乳动物，2个行为都实现
+  type Cat struct {
+      name string
+      age int
+  }
+  
+  func(cat Cat) feet() {
+      fmt.Println("cat feet")
+  }
+  
+  func(cat *Cat) born() {
+      fmt.Println("cat born")
+  }
+  
+  func main() {
+      cat := Cat{"rich", 1}
+      var a Felines = cat
+      a.feet()
+      
+      var b Mammal = &cat
+      b.born()
+  }
+  ```
+
+  
+
+* interface可以嵌套：一个interface里包含其它interface
+
+  ```go
+  package main
+  
+  import "fmt"
+  
+  
+  // interface1
+  type Felines interface {
+      feet() 
+  }
+  
+  // interface2, 嵌套了interface1
+  type Mammal interface {
+      Felines
+      born()
+  }
+  
+  // 猫实现Mammal这个interface里的所有方法
+  type Cat struct {
+      name string
+      age int
+  }
+  
+  func(cat Cat) feet() {
+      fmt.Println("cat feet")
+  }
+  
+  func(cat *Cat) born() {
+      fmt.Println("cat born")
+  }
+  
+  func main() {
+      cat := Cat{"rich", 1}
+      /*Mammal有feet和born方法，2个都可以调用*/
+      var a Mammal = &cat
+      a.feet()
+      a.born()
+      
+      var b Felines = cat
+      b.feet()
+      // b.born() 调用这个会编译报错，因为Felines没有born方法
+  }
+  ```
+
+  
+
+* 空接口interface
 
   * 如果空interface作为函数参数，可以接受任何类型的实参
+
+    * 语法
+
+      ```go
+      func function_name(x interface{}) {
+          do sth
+      }
+      ```
+
+      
+
+    * 示例
+
+      ```go
+      package main
+      
+      import "fmt"
+      
+      
+      type Cat struct {
+          name string
+          age int
+      }
+      
+      // 打印空interface的类型和具体的值
+      func print(x interface{}) {
+          fmt.Printf("type:%T, value:%v\n", x, x)
+      }
+      
+      func main() {
+          // 传map实参给空接口
+          dict := map[string]int{"a":1}
+          print(dict) // type:map[string]int, value:map[a:1]
+          
+          // 传struct实参给空接口
+          cat := Cat{"nimo", 2}
+          print(cat) // type:main.Cat, value:{nimo 2}
+      }
+      ```
+
+      
+
   * 如果空interface作为变量，可以把任何类型的变量赋值给空interface
 
+    * 语法 
+
+      ```go
+      var x interface{} // 空接口x
+      ```
+
+      
+
+    * 示例
+
+      ```go
+      package main
+      
+      import "fmt"
+      
+      
+      type Cat struct {
+          name string
+          age int
+      }
+      
+      // 打印空interface的类型和具体的值
+      func print(x interface{}) {
+          fmt.Printf("type:%T, value:%v\n", x, x)
+      }
+      
+      func main() {
+          // 定义空接口x
+          var x interface{}
+          // 将map变量赋值给空接口x
+          x = map[string]int{"a":1}
+          print(x) // type:map[string]int, value:map[a:1]
+          
+          // 传struct变量估值给空接口x
+          cat := Cat{"nimo", 2}
+          x = cat
+          print(x) // type:main.Cat, value:{nimo 2}
+      }
+      ```
+
+      
+
+  * 空接口作为map的值，可以实现map的value是不同的数据类型
+
+    * 语法
+
+      ```go
+      // 定义一个map类型的变量，key是string类型，value是空接口类型
+      dict := make(map[string]interface{}) 
+      ```
+
+      
+
+    * 示例
+
+      ```go
+      package main
+      
+      import "fmt"
+      
+      
+      func main() {
+          // 定义一个map类型的变量，key是string类型，value是空接口类型
+          dict := make(map[string]interface{})
+          // value可以是int类型
+          dict["a"] = 1 
+          // value可以是字符串类型
+          dict["b"] = "b"
+          // value可以是bool类型
+          dict["c"] = true
+          fmt.Println(dict) // map[a:1 b:b c:true]
+          fmt.Printf("type:%T, value:%v\n", dict["b"], dict["b"]) // type:string, value:b
+      }
+      ```
+
+      
+
+  * x.(T)
+
+    * 断言：断言接口变量x是T类型
+
+      * 语法：value是将x转化为T类型后的变量，ok是布尔值，true表示断言成功，false表示断言失败
+
+        ```go
+        // x是接口变量，如果要判断x是不是
+        value, ok := x.(string)
+        ```
+
+        
+
+      * 示例
+
+        ```go
+        var x interface{}
+        x = "a"
+        // 断言接口变量x的类型是string
+        v, ok := x.(string)
+        if ok {
+            // 断言成功
+            fmt.Println("assert true, value:", v)
+        } else{
+            // 断言失败
+        	fmt.Println("assert false")
+        }
+        ```
+
+    * 动态判断数据类型
+
+      ```go
+      package main
+      
+      import "fmt"
+      
+      func checkType(x interface{}) {
+          // 动态判断接口变量x的数据类型
+          switch v := x.(type) {
+          case int:
+              fmt.Printf("type: int, value: %v\n", v)
+          case string:
+              fmt.Printf("type: string，value: %v\n", v)
+          case bool:
+              fmt.Printf("type: bool, value: %v\n", v)
+          default:
+              fmt.Printf("type: %T, value: %v\n", x, x)
+          }
+      }
+      
+      type Cat struct {
+          name string
+          age int
+      }
+      
+      func main() {   
+          var x interface{}
+          x = "a"
+          checkType(x) // type: string，value: a
+          
+          x = Cat{"hugo", 3}
+          checkType(x) // type: main.Cat, value: {hugo 3}
+      }
+      ```
+
+      
+
 * **注意事项**
+
+  * 如果把一个结构体变量赋值给interface变量，那结构体需要实现interface里的所有方法，否则会编译报错：xx does not implement yy，表示结构体xx没有实现接口yy
 
