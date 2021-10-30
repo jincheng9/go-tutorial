@@ -136,7 +136,36 @@
     c1.radius = 10.00
     ```
 
-  * channel：var a chan int  // 通道，默认值是nil
+  * channel：var a chan int，通道channel，默认值是nil
 
-  * 接口：var a error // error是接口interface，默认值是nil
+    ```go
+    var a chan int = make(chan int)
+    var b = make(chan string)
+    c := make(chan bool)
+    ```
+  
+    
+  
+  * 接口：var a interface_type，接口interface，默认值是nil
+  
+    ```go
+    type Animal interface {
+      speak()
+    }
+    
+    type Cat struct {
+      name string
+      age int
+    }
+    
+    func(cat Cat) speak() {
+      fmt.Println("miao...")
+    }
+    
+    // 定义一个接口变量a
+    var a Animal = Cat{"gaffe", 1}
+    a.speak() // miao...
+    ```
+  
+    
 
