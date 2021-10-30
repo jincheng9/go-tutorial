@@ -4,7 +4,7 @@
 
 * 定义：goroutine是轻量级的用户态线程，可以在代码里创建成千上万个goroutine来并发工作。如此多的goroutine是Go运行时来调度的。Go运行时会把goroutine的任务分配给CPU去执行。**注意**，goroutine不是我们通常理解的线程，线程是操作系统调度的。
 
-* Go编程里不需要自己去写进程、线程和协程，想让某个任务并发执行，就把这个任务封装为一个函数，然后启动一个goroutine去执行这个函数就行了。
+* Go编程里不需要自己在代码里写线程和协程，想让某个任务并发执行，就把这个任务封装为一个函数，然后启动一个goroutine去执行这个函数就行了。
 
 * 语法：go 函数名([参数列表])，示例代码如下：
 
@@ -159,18 +159,55 @@
 
     * 如果没有time.Sleep(2*time.Second)这一行，那程序运行结果会是怎么样？
 
-      Answer: 可能end和函数fetchChannel里的print内容都打印，**也可能只会打印end**。因为fetchChannel里的value := <-ch执行之后，main里的ch<-a就不再阻塞，继续往下执行了，所以可能main里最后的fmt.Println比fetchChannel里的fmt.Printf先执行，main执行完之后程序就结束了，所有goroutine自动结束，就不再执行fetchChannel里的fmt.Printf了。main里加上time.Sleep就可以允许fetchChannel这个goroutine有足够的时间执行完成。
+      Answer: 可能main函数里的end和函数fetchChannel里的print内容都打印，**也可能只会打印main函数里的end**。因为fetchChannel里的value := <-ch执行之后，main里的ch<-a就不再阻塞，继续往下执行了，所以可能main里最后的fmt.Println比fetchChannel里的fmt.Printf先执行，main执行完之后程序就结束了，所有goroutine自动结束，就不再执行fetchChannel里的fmt.Printf了。main里加上time.Sleep就可以允许fetchChannel这个goroutine有足够的时间执行完成。
 
-  * 有缓冲区
+  * 有缓冲区：可以在初始化channel的时候通过make指定channel的缓冲区长度。
+
+    ```go
+    ch := make(chan int, 100) // 定义了一个可以缓冲区长度为100的channel
+    ```
+
+    对于有缓冲区的channel，对发送方而言：
+
+    * 如果缓冲区未满，那发送方发送数据到channel缓冲区后，就可以继续往下执行，不用阻塞等待接收方从channel里接收数据。
+    * 如果缓冲区已满，那发送方发送数据到channel会阻塞，直到接收方从channel里接收了数据，这样缓冲区才有空间存储发送方发送的数据，发送方所在goroutine才能继续往下执行。
+
+    对于接收方而言，在有值可以从channel接收之前，会一直阻塞。
+
+    ```go
+    package main
+    
+    import "fmt"
+    
+    func main() {
+    	ch := make(chan int, 2)
+    	// 下面2个发送操作不用阻塞等待接收方接收数据
+    	ch <- 10
+    	ch <- 20
+    	/*
+    	如果添加下面这行代码，就会一直阻塞，因为缓冲区已满，运行会报错
+    	fatal error: all goroutines are asleep - deadlock!
+    	
+    	ch <- 30
+    	*/
+    	
+    	fmt.Println(<-ch) // 10
+    	fmt.Println(<-ch) // 20
+    }
+    ```
+
+    
 
 * 遍历通道
-* 单向通道：指定通道方向
+  * range迭代
+  * 死循环
+* 单向通道：在函数中限制channel的方向，只能往channel发送数据或者只能从channel接收数据
 * **注意**
   * 
 
 ## 并发同步和锁
 
-
+* 多个goroutine共享进程的内存数据，需要有同步机制来保证数据读写不冲突
 
 ## 原子操作
 
