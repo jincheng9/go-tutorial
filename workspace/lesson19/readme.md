@@ -72,7 +72,7 @@
 
   ```go
   /*channel_name是变量名，data_type是通道里的数据类型
-  channel_size是channel通道缓冲区最多可以存放的元素个数，这个参数是可选的，不给就表示没有缓冲区
+  channel_size是channel通道缓冲区的容量，表示最多可以存放的元素个数，这个参数是可选的，不给就表示没有缓冲区，通过cap()函数可以获取channel的容量
   */
   var channel_name chan data_type = make(chan data_type, [channel_size])
   ```
@@ -113,7 +113,7 @@
     close(ch) // 关闭通道
     ```
 
-* 缓冲区：channel默认没有缓冲区，可以在定义channel的时候指定缓冲区长度，也就是缓冲区最多可以存储的元素个数
+* 缓冲区：channel默认没有缓冲区，可以在定义channel的时候指定缓冲区容量，也就是缓冲区最多可以存储的元素个数，通过函数**cap()**可以获取到channel的容量。
 
   * 无缓冲区： channel无缓冲区的时候，往channel发送数据和从channel接收数据都会**阻塞**。往channel发送数据的时候，必须有其它goroutine从channel里接收了数据，发送操作才可以成功，发送操作所在的goroutine才能继续往下执行。从channel里接收数据也是同理，必须有其它goroutine往channel里发送了数据，接收操作才可以成功，接收操作所在的goroutine才能继续往下执行。
 
@@ -161,10 +161,10 @@
 
       Answer: 可能main函数里的end和函数fetchChannel里的print内容都打印，**也可能只会打印main函数里的end**。因为fetchChannel里的value := <-ch执行之后，main里的ch<-a就不再阻塞，继续往下执行了，所以可能main里最后的fmt.Println比fetchChannel里的fmt.Printf先执行，main执行完之后程序就结束了，所有goroutine自动结束，就不再执行fetchChannel里的fmt.Printf了。main里加上time.Sleep就可以允许fetchChannel这个goroutine有足够的时间执行完成。
 
-  * 有缓冲区：可以在初始化channel的时候通过make指定channel的缓冲区长度。
+  * 有缓冲区：可以在初始化channel的时候通过make指定channel的缓冲区容量。
 
     ```go
-    ch := make(chan int, 100) // 定义了一个可以缓冲区长度为100的channel
+    ch := make(chan int, 100) // 定义了一个可以缓冲区容量为100的channel
     ```
 
     对于有缓冲区的channel，对发送方而言：
@@ -199,11 +199,158 @@
     
 
 * 遍历通道
-  * range迭代
-  * 死循环
-* 单向通道：在函数中限制channel的方向，只能往channel发送数据或者只能从channel接收数据
+
+  * range迭代从channel里不断取数据
+
+    ```go
+    package main
+    
+    import "fmt"
+    import "time"
+    
+    
+    func addData(ch chan int) {
+    	/*
+    	每3秒往通道ch里发送一次数据
+    	*/
+    	size := cap(ch)
+    	for i:=0; i<size; i++ {
+    		ch <- i
+    		time.Sleep(3*time.Second)
+    	}
+    	// 数据发送完毕，关闭通道
+    	close(ch)
+    }
+    
+    
+    func main() {
+    	ch := make(chan int, 10)
+    	// 开启一个goroutine，用于往通道ch里发送数据
+    	go addData(ch)
+    
+    	/* range迭代从通道ch里获取数据
+    	通道close后，range迭代取完通道里的值后，循环会自动结束
+    	*/
+    	for i := range ch {
+    		fmt.Println(i)
+    	}
+    }
+    ```
+
+    对于上面的例子，有个点可以思考下：
+
+    * 如果删掉close(ch)这一行代码，结果会怎么样？
+
+      Answer: 如果通道没有close，采用range从channel里循环取值，当channel里的值取完后，range会阻塞，如果没有继续往channel里发送值，go运行时会报错
+
+      ```go
+      fatal error: all goroutines are asleep - deadlock!
+      ```
+
+      
+
+  * for死循环不断获取channel里的数据，如果channel的值取完后，继续从channel里获取，会存在2种情况
+
+    * 如果channel已经被close了，继续从channel里获取值会拿到对应channel里数据类型的零值
+    * 如果chanenl没有被close，也不在继续往channel里发送数据，接收方会阻塞报错
+
+    ```go
+    package main
+    
+    import "fmt"
+    import "time"
+    
+    
+    func addData(ch chan int) {
+    	/*
+    	每3秒往通道ch里发送一次数据
+    	*/
+    	size := cap(ch)
+    	for i:=0; i<size; i++ {
+    		ch <- i
+    		time.Sleep(3*time.Second)
+    	}
+    	// 数据发送完毕，关闭通道
+    	close(ch)
+    }
+    
+    
+    func main() {
+    	ch := make(chan int, 10)
+    	// 开启一个goroutine，用于往通道ch里发送数据
+    	go addData(ch)
+    
+    	/* 
+    	for循环取完channel里的值后，因为通道close了，再次获取会拿到对应数据类型的零值
+    	如果通道不close，for循环取完数据后就会阻塞报错
+    	*/
+    	for {
+    		value, ok := <-ch
+    		if ok {
+    			fmt.Println(value)
+    		} else {
+    			fmt.Println("finish")
+    			break
+    		}
+    	}
+    }
+    ```
+
+    
+
+* 单向通道：如果channel作为函数的形参，可以控制限制数据和channel之间的数据流向，控制只能往channel发送数据或者只能从channel接收数据，不做限制的时候，channel是双向的，既可以往channel写数据，也可以从channel读数据。
+
+  * 语法
+
+    ```go
+    chan <- int // 只写，只能往channel写数据，不能从channel读数据
+    <- chan int // 只读，只能往channel读数据，不能从channel写数据
+    ```
+
+  * 实例
+
+    ```go
+    package main
+    
+    import "fmt"
+    import "time"
+    
+    
+    func write(ch chan<-int) {
+    	/*
+    	参数ch是只写channel，不能从channel读数据，否则编译报错
+    	receive from send-only type chan<- int
+    	*/
+    	ch <- 10
+    }
+    
+    
+    func read(ch <-chan int) {
+    	/*
+    	参数ch是只读channel，不能往channel里写数据，否则编译报错
+    	send to receive-only type <-chan int
+    	*/
+    	fmt.Println(<-ch)
+    }
+    
+    func main() {
+    	ch := make(chan int)
+    	go write(ch)
+    	go read(ch)
+    
+    	// 等待3秒，保证write和read这2个goroutine都可以执行完成
+    	time.Sleep(3*time.Second)
+    }
+    ```
+
+    
+
 * **注意**
-  * 
+
+  * channel被close后，如果再往channel里发送数据，会引发panic
+  * channel被close后，如果再次close，也会引发panic
+  * channel被close后，如果channel还有值，接收方可以一直从channel里获取值，直到channel里的值都已经取完。
+  * channel别close后，如果channel里没有值了，接收方继续从channel里取值，会得到channel里存的数据类型对应的默认零值，如果一直取值，就一直拿到零值。
 
 ## 并发同步和锁
 
