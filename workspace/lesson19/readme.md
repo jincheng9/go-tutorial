@@ -115,6 +115,54 @@
 
 * 缓冲区：channel默认没有缓冲区，可以在定义channel的时候指定缓冲区长度，也就是缓冲区最多可以存储的元素个数
 
+  * 无缓冲区： channel无缓冲区的时候，往channel发送数据和从channel接收数据都会**阻塞**。往channel发送数据的时候，必须有其它goroutine从channel里接收了数据，发送操作才可以成功，发送操作所在的goroutine才能继续往下执行。从channel里接收数据也是同理，必须有其它goroutine往channel里发送了数据，接收操作才可以成功，接收操作所在的goroutine才能继续往下执行。
+
+    ```go
+    package main
+    
+    import "fmt"
+    import "time"
+    
+    type Cat struct {
+    	name string
+    	age int
+    }
+    
+    func fetchChannel(ch chan Cat) {
+    	value := <- ch
+    	fmt.Printf("type: %T, value: %v\n", value, value)
+    }
+    
+    
+    func main() {
+    	ch := make(chan Cat)
+    	a := Cat{"yingduan", 1}
+    	// 启动一个goroutine，用于从ch这个通道里获取数据
+    	go fetchChannel(ch)
+    	// 往cha这个通道里发送数据
+    	ch <- a
+    	// main这个goroutine在这里等待2秒
+    	time.Sleep(2*time.Second)
+    	fmt.Println("end")
+    }
+    ```
+
+    对于上面的例子，有2个点可以**思考**下
+
+    * 如果go fetchChannel(ch)和下面的 ch<-a这2行交换顺序会怎么样？
+
+      Answer: 如果交换了顺序，main函数就会堵塞在ch<-a这一行，因为这个发送是阻塞的，不会往下执行，这个时候没有任何goroutine会从channel接收数据，错误信息如下：
+
+      ```go
+      fatal error: all goroutines are asleep - deadlock!
+      ```
+
+    * 如果没有time.Sleep(2*time.Second)这一行，那程序运行结果会是怎么样？
+
+      Answer: 可能end和函数fetchChannel里的print内容都打印，**也可能只会打印end**。因为fetchChannel里的value := <-ch执行之后，main里的ch<-a就不再阻塞，继续往下执行了，所以可能main里最后的fmt.Println比fetchChannel里的fmt.Printf先执行，main执行完之后程序就结束了，所有goroutine自动结束，就不再执行fetchChannel里的fmt.Printf了。main里加上time.Sleep就可以允许fetchChannel这个goroutine有足够的时间执行完成。
+
+  * 有缓冲区
+
 * 遍历通道
 * 单向通道：指定通道方向
 * **注意**
