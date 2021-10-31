@@ -1,5 +1,3 @@
-[TOC]
-
 # 并发
 
 ## goroutine
