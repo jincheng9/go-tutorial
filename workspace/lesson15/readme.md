@@ -87,6 +87,39 @@
 
 * 遍历map：使用range迭代，参见[lesson14](../lesson14)
 
+* map作为函数参数，是传引用。示例如下：
+
+  ```go
+  package main
+  
+  import "fmt"
+  
+  
+  
+  func buildMap(str string, m map[rune]int) {
+  	/*函数内对map变量m的修改会影响main里的实参mapping*/
+  	for _, value := range str {
+  		m[value]++
+  	}
+  }
+  
+  
+  func main() {
+  	mapping := map[rune]int{}
+  	str := "abc"
+  	buildMap(str, mapping)
+  
+  	/*
+  	mapping的值被buildMap修改了
+  	*/
+  	for key, value := range mapping {
+  		fmt.Printf("key:%v, value:%d\n", key, value)
+  	}
+  }
+  ```
+
+  
+
 ## delete函数
 
 * 删除key，参数为map和对应的key。允许删除一个不存在的key，对map无任何影响。
