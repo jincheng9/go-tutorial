@@ -1,4 +1,4 @@
-# 并发
+# goroutine和channel
 
 ## goroutine
 
@@ -252,7 +252,7 @@
   * for死循环不断获取channel里的数据，如果channel的值取完后，继续从channel里获取，会存在2种情况
 
     * 如果channel已经被close了，继续从channel里获取值会拿到对应channel里数据类型的零值
-    * 如果chanenl没有被close，也不在继续往channel里发送数据，接收方会阻塞报错
+    * 如果channel没有被close，也不在继续往channel里发送数据，接收方会阻塞报错
 
     ```go
     package main
@@ -352,17 +352,7 @@
   * channel被close后，如果channel还有值，接收方可以一直从channel里获取值，直到channel里的值都已经取完。
   * channel别close后，如果channel里没有值了，接收方继续从channel里取值，会得到channel里存的数据类型对应的默认零值，如果一直取值，就一直拿到零值。
 
-## 并发编程 
 
-* Go语言并发编程的哲学：Do not communicate by sharing memory; instead, share memory by communicating.（提倡通过通信来共享内存，而不是通过共享内存来通信）
-
-### 传统的加锁
-
-多个goroutine共享进程的内存数据，需要有同步机制来保证数据读写不冲突。
-
-###  channel并发
-
-## 原子操作
 
 
 
