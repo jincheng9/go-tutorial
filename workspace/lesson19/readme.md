@@ -1,3 +1,5 @@
+[TOC]
+
 # 并发
 
 ## goroutine
@@ -352,9 +354,15 @@
   * channel被close后，如果channel还有值，接收方可以一直从channel里获取值，直到channel里的值都已经取完。
   * channel别close后，如果channel里没有值了，接收方继续从channel里取值，会得到channel里存的数据类型对应的默认零值，如果一直取值，就一直拿到零值。
 
-## 并发同步和锁
+## 并发编程 
 
-* 多个goroutine共享进程的内存数据，需要有同步机制来保证数据读写不冲突
+* Go语言并发编程的哲学：Do not communicate by sharing memory; instead, share memory by communicating.（提倡通过通信来共享内存，而不是通过共享内存来通信）
+
+### 传统的加锁
+
+多个goroutine共享进程的内存数据，需要有同步机制来保证数据读写不冲突。
+
+###  channel并发
 
 ## 原子操作
 
