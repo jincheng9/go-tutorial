@@ -351,6 +351,126 @@
   * channel被close后，如果再次close，也会引发panic
   * channel被close后，如果channel还有值，接收方可以一直从channel里获取值，直到channel里的值都已经取完。
   * channel别close后，如果channel里没有值了，接收方继续从channel里取值，会得到channel里存的数据类型对应的默认零值，如果一直取值，就一直拿到零值。
+  
+* **goroutine和闭包closure一起使用时要注意**，避免多个goroutine闭包使用同一个变量，否则goroutine执行的时候，这个变量的值可能已经被改了，和原来预期不符。比如下面例子：
+
+  ```go
+  package main
+  
+  import (
+      "fmt"
+      "sync"
+      "time"
+  )
+  
+  
+  func worker(id int) {
+      fmt.Printf("worker %d starting\n", id)
+      time.Sleep(time.Second)
+      fmt.Printf("worker %d done\n", id)
+  }
+  
+  func main() {
+      var wg sync.WaitGroup
+      /* wg跟踪10个goroutine */
+      size := 10
+      wg.Add(size)
+      /* 开启10个goroutine并发执行 */
+      for i:=0; i<size; i++ {
+          go func() {
+              defer wg.Done()
+              worker(i)
+          }()
+      }
+      /* Wait会一直阻塞，直到wg的计数器为0*/
+      wg.Wait()
+      fmt.Println("end")
+  }
+  ```
+  
+  在for循环里，用到了goroutine和闭包，每个闭包共享变量**i**，在闭包真正执行的时候，闭包里面用到的变量**i**的值可能已经被改了，所以闭包里调用worker的时候的传参i就不是想象中的从0到9。
+  
+  有2种方法规避
+  
+  * 方法1，把变量作为闭包的参数传给闭包
+  
+    ```go
+    package main
+    
+    import (
+        "fmt"
+        "sync"
+        "time"
+    )
+    
+    
+    func worker(id int) {
+        fmt.Printf("worker %d starting\n", id)
+        time.Sleep(time.Second)
+        fmt.Printf("worker %d done\n", id)
+    }
+    
+    func main() {
+        var wg sync.WaitGroup
+        /* wg跟踪10个goroutine */
+        size := 10
+        wg.Add(size)
+        /* 开启10个goroutine并发执行 */
+        for i:=0; i<size; i++ {
+            go func(id int) {
+                defer wg.Done()
+                worker(id)
+            }(i)
+        }
+        /* Wait会一直阻塞，直到wg的计数器为0*/
+        wg.Wait()
+        fmt.Println("end")
+    }
+    ```
+  
+    
+  
+  * 方法2，在启动goroutine执行闭包前，定义一个新的变量**i**，这样每个闭包就可以用各自预期的变量值了
+  
+    ```go
+    package main
+    
+    import (
+        "fmt"
+        "sync"
+        "time"
+    )
+    
+    
+    func worker(id int) {
+        fmt.Printf("worker %d starting\n", id)
+        time.Sleep(time.Second)
+        fmt.Printf("worker %d done\n", id)
+    }
+    
+    func main() {
+        var wg sync.WaitGroup
+        /* wg跟踪10个goroutine */
+        size := 10
+        wg.Add(size)
+        /* 开启10个goroutine并发执行 */
+        for i:=0; i<size; i++ {
+            /*定义一个新的变量*/
+            i := i
+            go func() {
+                defer wg.Done()
+                worker(i)
+            }()
+        }
+        /* Wait会一直阻塞，直到wg的计数器为0*/
+        wg.Wait()
+        fmt.Println("end")
+    }
+    ```
+  
+    
+  
+  References: https://golang.org/doc/faq#closures_and_goroutines
 
 
 
