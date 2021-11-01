@@ -21,7 +21,7 @@
 * [lesson19: goroutine和channel](./workspace/lesson19)
 * [lesson20: defer](./workspace/lesson20)
 * [lesson21: 并发编程之sync包介绍sync.WaitGroup](./workspace/lesson21)
-* [lesson22:  并发编程之sync.Once](./wrokspace/lesson22)
+* [lesson22:  并发编程之sync.Once](./workspace/lesson22)
 * [lesson23:  并发编程之sync.Mutex和sync.RWMutex](./workspace/lesson23)
 * [lesson24: 并发编程之sync.Cond](./workspace/lesson24)
 * [lesson25: 并发编程之sync.Map](./workspace/lesson25)
