@@ -88,6 +88,20 @@
   }
   ```
 
+* struct结构体类型在实现interface里的所有方法时，关于interface变量赋值有2个点要**注意**
+
+  * 只要有某个方法的实现使用了指针接受者，那给包含了这个方法的interface变量赋值的时候要使用引用。比如上面的Dog类型要赋值给Animal，必须使用引用，因为Dog实现speak方法用了指针接受者。
+
+  * 如果全部方法都使用的是值接受者，那给interface变量赋值的时候用值或者引用都可以。比如上面的例子，animal的初始化用下面的方式一样可以：
+
+    ```go
+    var animal Animal = &Cat{"gaffe", 1}
+    ```
+
+    
+
+  
+
 * **多个struct类型可以实现同一个interface**：多个类型都有共同的方法(行为)。比如上面示例里的猫和狗都会叫唤，猫和狗就是2个类型，叫唤就是speak方法。
 
 * **一个struct类型可以实现多个interface**。比如猫这个类型，既是猫科动物，也是哺乳动物。猫科动物可以是一个interface，哺乳动物可以是另一个interface，猫这个struct类型可以实现猫科动物和哺乳动物这2个interface里的方法。

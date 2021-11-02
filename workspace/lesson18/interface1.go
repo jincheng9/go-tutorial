@@ -29,6 +29,10 @@ func(dog *Dog) speak() {
 
 
 func main() {
+    /*
+    Cat实现speak方法用的是值接受者，给animal赋值的时候
+    使用值或者引用都可以，var animal Animal = &Cat{"gaffe", 1}
+    */
     var animal Animal = Cat{"gaffe", 1}
     animal.speak() // cat miaomiaomiao
     
