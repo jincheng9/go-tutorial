@@ -39,7 +39,7 @@ Cond结构体类型以下几个方法与其紧密相关：
 
   
 
-* Wait，这个方法会解锁c.L以及阻塞goroutine往下执行，解锁和阻塞组合在一起构成原子操作
+* Wait，这个方法会解锁c.L以及阻塞当前goroutine往下执行，解锁和阻塞组合在一起构成原子操作。Wait被Broadcast或者Signal唤醒时，会先对c.L加锁，然后Wait才return返回。
 
   ```go
   func (c *Cond) Wait()
