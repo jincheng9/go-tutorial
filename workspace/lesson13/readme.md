@@ -40,7 +40,7 @@
 
   * 如果slice类型的变量定义后没有初始化赋值，那值就是默认值nil。
 
-    **注意：**下例里的slice有赋值，所以slice!=nil。slice2没有赋值，slice2==nil
+    **注意**：下例里的slice有赋值，所以slice!=nil。slice2没有赋值，slice2==nil
 
     ```go
     package main
@@ -63,6 +63,32 @@
     }
     ```
 
+* 切片访问：对切片的访问，类似数组一样，可以用下标索引或者range迭代的方式进行。可以参考[lesson10](./workspace/lesson10)和[lesson14](./workspace/lesson14)
+
+  ```go
+  package main
+  
+  import "fmt"
+  
+  func main() {
+  	slice := make([]int, 3, 10)
+  	/*下标访问切片*/
+  	slice[0] = 1
+  	slice[1] = 2
+  	slice[2] = 3
+  	for i:=0; i<len(slice); i++ {
+  		fmt.Printf("slice[%d]=%d\n", i, slice[i])		
+  	}
+  
+  	/*range迭代访问切片*/
+  	for index, value := range slice {
+  		fmt.Printf("slice[%d]=%d\n", index, value)
+  	}
+  }
+  ```
+  
+  
+  
 * 切片截取：类似Python，使用冒号**:**来对数组或者切片做截取。切片后的变量是对原数组或者切片的**引用**，对新切片的修改也会影响原数组或者原切片。
 
   ```go
