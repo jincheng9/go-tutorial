@@ -18,7 +18,10 @@ func main() {
     /* wg跟踪10个goroutine */
     size := 10
     wg.Add(size)
-    /* 开启10个goroutine并发执行 */
+    /* 开启10个goroutine并发执行 
+    这里10个goroutine在闭包里都用了变量i，等闭包真正执行的时候，i的值
+    已经改变，所以这种实现方式不安全
+    */
     for i:=0; i<size; i++ {
         go func() {
             defer wg.Done()
