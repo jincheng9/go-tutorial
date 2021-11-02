@@ -1,5 +1,7 @@
 # sync.Once
 
+## 定义
+
 Once是sync包里的一个结构体类型，Once可以在并发场景下让某个操作只执行一次，比如设计模式里的单例只创建一个实例，比如只加载一次配置文件，比如对同一个channel只关闭一次（对一个已经close的channel再次close会引发panic）等。
 
 定义如下：
@@ -55,7 +57,58 @@ func main() {
 
 
 
-## 注意事项
+## sync.Once实现并发安全的单例
+
+```go
+package main
+
+import (
+    "fmt"
+    "sync"
+)
+
+type Singleton struct {
+    member int
+}
+
+var instance *Singleton
+
+var once sync.Once
+
+func getInstance() *Singleton {
+    /*
+    通过sync.Once实现单例，只会生成一个Singleton实例
+    */
+    once.Do(func() {
+        fmt.Println("once")
+        instance = &Singleton{}
+        instance.member = 100
+    })
+    fmt.Println(instance.member)
+    return instance
+}
+
+func main() {
+    var wg sync.WaitGroup
+    size := 10
+    wg.Add(size)
+    /*
+    多个goroutine同时去获取Singelton实例
+    */
+    for i:=0; i<size; i++ {
+        go func() {
+            defer wg.Done()
+            instance = getInstance()
+        }()
+    }
+    wg.Wait()
+    fmt.Println("end")
+}
+```
+
+
+
+##　注意事项
 
 * Once变量作为函数参数传递时，只能传指针，不能传值。传值给函数A的话，对于函数A而言，参数列表里的once形参会是一个新生成的once局部变量，和外部传入的once实参不一样。
 
