@@ -166,7 +166,7 @@ RWMutex结构体类型有5个方法：
   }
   ```
 
-  
+  Mutex和RWMutex这2个结构体类型实现了Locker这个interface里的所有方法，因此可以把Mutex和RWMutex变量或者指针赋值给Locker实例，然后通过Locker实例来加锁和解锁，这个在条件变量sync.Cond里会用到，可以参考[sync.Cond](./workspace/lesson24)
 
 ### 示例
 
