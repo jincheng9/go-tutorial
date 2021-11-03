@@ -11,6 +11,17 @@ type Cat struct {
 // 打印空interface的类型和具体的值
 func print(x interface{}) {
     fmt.Printf("type:%T, value:%v\n", x, x)
+    switch v := x.(type) {
+    case map[string]int:
+    	for key, value := range v {
+    		fmt.Println("key=", key, " value=", value)
+    	}
+    case *Cat:
+    	fmt.Println("cat name:", v.name, " age=", v.age)
+    	v.age = 10
+    default:
+    	fmt.Println("unknown type")
+    }
 }
 
 func main() {
@@ -20,5 +31,6 @@ func main() {
     
     // 传struct实参给空接口
     cat := Cat{"nimo", 2}
-    print(cat) // type:main.Cat, value:{nimo 2}
+    print(&cat) // type:main.Cat, value:{nimo 2}
+    fmt.Println(cat)
 }

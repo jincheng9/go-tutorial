@@ -24,14 +24,6 @@ func main() {
     var x interface{}
     x = "a"
     checkType(x)
-    /*
-    v, ok := x.(string)
-    if ok {
-        fmt.Println("assert true, value:", v)
-    } else{
-        fmt.Println("assert false")
-    }*/
-    
     
     x = Cat{"hugo", 3}
     checkType(x)
