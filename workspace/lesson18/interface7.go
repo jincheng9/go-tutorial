@@ -3,6 +3,7 @@ package main
 import "fmt"
 
 func checkType(x interface{}) {
+    /*动态判断x的数据类型*/
     switch v := x.(type) {
     case int:
         fmt.Printf("type: int, value: %v\n", v)
@@ -28,15 +29,15 @@ type Cat struct {
 func main() {   
     var x interface{}
     x = "a"
-    checkType(x)
+    checkType(x) //type: string，value: a
     
     x = Cat{"hugo", 3}
-    checkType(x)
+    checkType(x) // type: Cat, value: {hugo 3}
 
     /*map是传引用，在checkType里对map做修改
     会影响外面的实参x
     */
     x = map[string]int{"a":1}
-    checkType(x)
+    checkType(x) // type: map[string]int, value: map[a:1]
     fmt.Println(x) // map[a:10]
 }
