@@ -51,5 +51,38 @@
   }
   ```
 
-  
+* defer结合goroutine和闭包一起使用，可以让任务函数内部不用关心Go并发里的同步原语，更多内容可以参考后续并发编程[goroutine](./workspace/lesson19)和[sync.WaitGroup](./workspace/lesson21)
 
+  ```go
+  package main
+  
+  import (
+      "fmt"
+      "sync"
+  )
+  
+  func worker(id int) {
+      fmt.Println(id)
+  }
+  
+  func main() {
+      var wg sync.WaitGroup
+      size := 10
+      wg.Add(size)
+      
+      for i:=0; i<size; i++ {
+          i := i 
+          /*把worker的调用和defer放在一个闭包里
+          这样worker函数内部就不用使用WaitGroup了
+          */
+          go func() {
+              defer wg.Done()
+              worker(i)
+          }()
+      }
+      
+      wg.Wait()
+  }
+  ```
+
+  
