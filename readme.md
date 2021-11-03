@@ -1,5 +1,7 @@
 # Learning notes for go-lang
 
+## 基础篇
+
 * [lesson1: Go程序结构](./workspace/lesson1)
 * [lesson2: 数据类型](./workspace/lesson2)
 * [lesson3: 变量类型和变量定义：全局变量，局部变量](./workspace/lesson3)
@@ -26,6 +28,10 @@
 * [lesson24: 并发编程之sync.Cond](./workspace/lesson24)
 * [lesson25: 并发编程之sync.Map](./workspace/lesson25)
 * [lesson26: 并发编程之原子操作](./workspace/lesson26)
+
+
+
+## 应用篇
 
 
 
