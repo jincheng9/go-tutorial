@@ -26,11 +26,20 @@ Go官方设计sync.Map主要满足以下2个场景的用途
 
 sync.Map结构体类型有如下几个方法：
 
-* Delete
+* Delete，删除map里的key，即使key不存在，执行Delete操作也没任何影响
+
+  ```go
+  func (m *Map) Delete(key interface{})
+  ```
+
 * Load
+
 * LoadAndDelete
+
 * LoadOrStore
+
 * Range
+
 * Store
 
 ## 使用

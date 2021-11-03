@@ -1,11 +1,13 @@
 package main
 
 import (
-	"fmt"
-	"sync"
+    "fmt"
+    "sync"
 )
 
 func main() {
-	m := sync.Map{}
-	fmt.Println(m)
+    m := sync.Map{}
+    m.Delete("a")
+    fmt.Println(m)
+    
 }

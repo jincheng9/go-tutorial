@@ -2,6 +2,27 @@
 
 ## 定义
 
+Go语言里的map底层是通过**hash**实现的，是一种**无序**的基于<key, value>对组成的数据结构
+
+map是引用类型，必须初始化才能使用，如果只是声明map，但是没有初始化是不能使用的，比如下面的例子会在运行时报错：
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+    /*counter没有初始化，给counter赋值会在运行时报错
+    panic: assignment to entry in nil map
+    */
+    var counter map[string]int
+    counter["a"] = 1
+    fmt.Println(counter)
+}
+```
+
+
+
 * 语法
 
   ```go
@@ -11,7 +32,8 @@
   
   map_var := map[key_data_type]value_data_type{}
   
-  map_var := make(map[key_data_type]value_data_type)
+  /*cap是map容量，超过后会自动扩容*/
+  map_var := make(map[key_data_type]value_data_type, [cap]) 
   ```
 
 * 示例
@@ -83,9 +105,18 @@
     }
     ```
 
-    
-
 * 遍历map：使用range迭代，参见[lesson14](../lesson14)
+
+* len(map)：通过内置的len()函数可以获取map里<key, value>对的数量
+
+  ```go
+  counter := make(map[string]int)
+  fmt.Println(len(counter))
+  counter["a"] = 1
+  fmt.Println(len(counter))
+  ```
+
+  
 
 * map作为函数参数，是传引用。示例如下：
 
