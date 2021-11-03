@@ -51,7 +51,7 @@
   }
   ```
 
-* defer结合goroutine和闭包一起使用，可以让任务函数内部不用关心Go并发里的同步原语，更多内容可以参考后续并发编程[goroutine](./workspace/lesson19)和[sync.WaitGroup](./workspace/lesson21)
+* defer结合goroutine和闭包一起使用，可以让任务函数内部不用关心Go并发里的同步原语，更多内容可以参考[goroutine](./workspace/lesson19)和[sync.WaitGroup](./workspace/lesson21)
 
   ```go
   package main
