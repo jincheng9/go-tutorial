@@ -252,7 +252,7 @@
     * 示例
 
       ```go
-    package main
+      package main
       
       import "fmt"
       
@@ -281,8 +281,6 @@
       }
       ```
     
-      
-
   * 空接口作为map的值，可以实现map的value是不同的数据类型
 
     * 语法
