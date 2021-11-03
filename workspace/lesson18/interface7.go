@@ -9,6 +9,7 @@ func checkType(x interface{}) {
         fmt.Printf("type: int, value: %v\n", v)
     case string:
         fmt.Printf("type: string，value: %v\n", v)
+        v = "b"
     case bool:
         fmt.Printf("type: bool, value: %v\n", v)
     case Cat:
@@ -30,7 +31,8 @@ func main() {
     var x interface{}
     x = "a"
     checkType(x) //type: string，value: a
-    
+    fmt.Println(x) // a
+
     x = Cat{"hugo", 3}
     checkType(x) // type: Cat, value: {hugo 3}
 
