@@ -249,12 +249,10 @@
       var x interface{} // 空接口x
       ```
 
-      
-
     * 示例
 
       ```go
-      package main
+    package main
       
       import "fmt"
       
@@ -282,7 +280,7 @@
           print(x) // type:main.Cat, value:{nimo 2}
       }
       ```
-
+    
       
 
   * 空接口作为map的值，可以实现map的value是不同的数据类型
@@ -357,7 +355,6 @@
       import "fmt"
       
       func checkType(x interface{}) {
-          // 动态判断接口变量x的数据类型
           switch v := x.(type) {
           case int:
               fmt.Printf("type: int, value: %v\n", v)
@@ -365,6 +362,11 @@
               fmt.Printf("type: string，value: %v\n", v)
           case bool:
               fmt.Printf("type: bool, value: %v\n", v)
+          case Cat:
+              fmt.Printf("type: Cat, value: %v\n", v)
+          case map[string]int:
+              fmt.Printf("type: map[string]int, value: %v\n", v)
+              v["a"] = 10
           default:
               fmt.Printf("type: %T, value: %v\n", x, x)
           }
@@ -378,13 +380,20 @@
       func main() {   
           var x interface{}
           x = "a"
-          checkType(x) // type: string，value: a
+          checkType(x)
           
           x = Cat{"hugo", 3}
-          checkType(x) // type: main.Cat, value: {hugo 3}
+          checkType(x)
+      
+          /*map是传引用，在checkType里对map做修改
+          会影响外面的实参x
+          */
+          x = map[string]int{"a":1}
+          checkType(x)
+          fmt.Println(x) // map[a:10]
       }
       ```
-
+      
       
 
 * **注意事项**
