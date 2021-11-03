@@ -27,3 +27,13 @@
 * [lesson25: 并发编程之sync.Map](./workspace/lesson25)
 * [lesson26: 并发编程之原子操作](./workspace/lesson26)
 
+
+
+## References
+
+* https://pkg.go.dev/std
+
+* https://gobyexample.com/
+
+* https://www.liwenzhou.com/posts/Go/golang-menu/
+
