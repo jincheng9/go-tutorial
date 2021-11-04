@@ -1,10 +1,19 @@
 package util2
 
-import "fmt"
+import (
+    "fmt"
+    "project/util/strings"
+)
 
 func init() {
     fmt.Println("math")
 }
+
 func Sum(a, b int) int {
     return a+b
+}
+
+func CallReverse(str string) string {
+    result := strings.Reverse(str)
+    return result
 }

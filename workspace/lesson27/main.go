@@ -2,8 +2,9 @@ package main
 
 import (
     "fmt"
-    "sync"
     "project/util"
+    "project/util/strings"
+    "sync"
 )
 
 func main() {
@@ -17,4 +18,13 @@ func main() {
     wg.Wait()
     fmt.Println(result)
     fmt.Println(util2.Sub(1,2))
+
+    str := "abc"
+    fmt.Println(strings.Reverse(str))
+
+    str2 := "cba"
+    fmt.Println(util2.CallReverse(str2))
+
+    str2 = "test"
+    fmt.Println(str2)
 }
