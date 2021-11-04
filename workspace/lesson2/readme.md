@@ -19,6 +19,47 @@
         }
         ```
 
+    * **注意**：string是immutable的，不能在初始化string变量后，修改string里的值，除非对string变量重新赋值
+
+        ```go
+        package main
+        
+        import "fmt"
+        
+        func main() {
+            str := "abc"
+            str = "def" // ok
+            /* 下面的就不行，编译报错：cannot assign to str[0] (strings are immutable)
+            str[0] = "d"
+            */
+            fmt.Println(str)
+        }
+        ```
+
+    * 字符串里字符的访问可以通过str[index]下标索引或者range迭代的方式进行访问
+
+        ```go
+        package main
+        
+        import "fmt"
+        
+        func main() {
+            str := "abc"
+            /*下标访问*/
+            size := len(str)
+            for i:=0; i<size; i++ {
+                fmt.Printf("%d ", str[i])
+            }
+            fmt.Println()
+            
+            /*range迭代访问*/
+            for _, value := range str {
+                fmt.Printf("%d ", value)
+            }
+            fmt.Println()
+        }
+        ```
+
         
 
 * bool
