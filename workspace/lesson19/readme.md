@@ -62,7 +62,7 @@
 
 ## channel
 
-* 定义：channel是一种类型，默认值是nil。channel是引用类型，如果作为函数参数，是传引用。
+* 定义：channel是一种类型，默认值是nil。**channel是引用类型**，如果作为函数参数，是传引用。
 
   多个goroutine之间，可以通过channel来通信，一个goroutine可以发送数据到指定channel，其它goroutine可以从这个channel里接收数据。
 
