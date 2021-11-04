@@ -468,9 +468,16 @@
     }
     ```
   
-    
   
-  References: https://golang.org/doc/faq#closures_and_goroutines
+  
+  
+  ## References
+  
+  * https://golang.org/doc/faq#closures_and_goroutines
+  
+  
+  
+  
 
 
 
