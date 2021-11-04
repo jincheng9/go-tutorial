@@ -24,7 +24,7 @@ package的使用分为3类情况
 
 * 使用Go标准库自带的package，比如fmt。
 * 使用go get获取到的第三方package
-* 使用工程本地的package
+* 使用应用本地的package
 
 
 
