@@ -10,11 +10,21 @@ package本质上就是一个目录，目录里包含有一个或者多个Go源�
 package package_name
 ```
 
-package的代码结构大致如下：
+package的代码结构示例如下：
+
+![image-20211104181754164](./img/package_structure.jpg)
+
+package里的变量、函数，结构体，方法等如果要被package外的程序引用，需要在命名的时候首字母大写。
+
+如果首字母小写，那就只能在同一个package里面被使用。**注意**，这里说的是同一个package，不是同一个文件，
 
 
 
-package里的变量、函数，结构体，方法等如果要被package外的程序引用，需要在命名的时候首字母大写。如果首字母小写，那就只能在同一个package里面被使用。
+package的使用分为3类情况
+
+* 使用Go标准库自带的package
+* 使用go get获取到的第三方package
+* 使用工程本地的package
 
 
 
