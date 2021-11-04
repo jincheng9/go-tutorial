@@ -41,10 +41,11 @@ package的使用分为3类情况
 ## 注意事项
 
 * package目录名和package目录下的Go源程序文件开头声明的包名可以不一样，不过一般还是写成一样，避免歧义和出错。
-* 
+
+
 
 ## References
 
 * https://www.callicoder.com/golang-packages/
-
 * https://www.liwenzhou.com/posts/Go/import_local_package_in_go_module/
+* https://maelvls.dev/go111module-everywhere/#go111module-with-go-116
