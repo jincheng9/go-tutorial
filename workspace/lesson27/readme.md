@@ -137,22 +137,49 @@ Go 1.11开始，有了Go Modules，工程项目可以建在任何地方，代码
 ### 不开启GO111MODULES时import package
 
 1. 项目建在$GOPATH/src下面
+2. import package的时候路径从$GOPATH/src往下找
 
-2. import package的时候从$GOPATH/src
+使用说明参考[gopath package demo](./gopath/)
 
-   
+
 
 ### 开启GO111MODULES时import package
 
-1. 项目建在任何地方
+1. 项目可以建在任何地方
+
 2. 在项目所在根目录创建go.mod文件
-3. import package的时候指定模块名称
+
+   ```go
+   go mod init module_name
+   ```
+
+3. import项目里的package的时候指定go.mod文件里的模块名称
+
+使用说明参考[module package demo](./module)
+
+
+
+## init函数
+
+init函数没有参数，没有返回值。
+
+* 每个package里可以有多个init函数
+
+* 每个源程序文件里也可以有多个init函数
+
+* init函数不能被显示调用，在main()函数执行之前，自动被调用
+* 同一个pacakge里的init函数调用顺序不确定
+* 不同package的init函数，根据package import的依赖关系来决定调用顺序，比如package A里import了package B，那package B的init()函数就会比package A的init函数先调用。
 
 
 
 ## 注意事项
 
 * package目录名和package目录下的Go源程序文件开头声明的包名可以不一样，不过一般还是写成一样，避免出错。
+
+* 禁止循环导入package。
+
+  
 
 ## References
 

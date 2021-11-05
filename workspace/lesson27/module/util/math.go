@@ -6,7 +6,7 @@ import (
 )
 
 func init() {
-    fmt.Println("math")
+    fmt.Println("math init")
 }
 
 func Sum(a, b int) int {

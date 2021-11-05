@@ -1,5 +1,11 @@
 package strings
 
+import "fmt"
+
+func init() {
+	fmt.Println("reverse_help init")
+}
+
 func reverseRune(r []rune) []rune {
 	size := len(r)
 	for i:=0; i<size/2; i++ {

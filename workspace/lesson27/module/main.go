@@ -6,7 +6,9 @@ import (
     "project/util/strings"
     "sync"
 )
-
+func init() {
+    fmt.Println("main init")
+}
 func main() {
     var result int
     var wg sync.WaitGroup

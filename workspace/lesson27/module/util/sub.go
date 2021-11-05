@@ -3,7 +3,7 @@ package util2
 import "fmt"
 
 func init() {
-    fmt.Println("sub")
+    fmt.Println("sub init")
 }
 
 func Sub(a, b int) int {
