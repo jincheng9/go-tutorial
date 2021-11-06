@@ -2,7 +2,9 @@
 
 GOPROXY控制GO Module下载的来源。
 
-Go默认的GOPROXY地址是https://proxy.golang.org,direct，通过如下命令可以获取到对应的值
+Go默认的GOPROXY地址是https://proxy.golang.org,direct
+
+通过如下命令可以获取到对应的值
 
 ```go
 go env | grep GOPROXY // linux or mac
