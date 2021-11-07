@@ -143,7 +143,7 @@ Go 1.11开始，有了Go Modules，工程项目可以建在任何地方，代码
 
 
 
-### 开启GO111MODULES时import package
+### 开启GO111MODULES时import本地package
 
 1. 项目可以建在任何地方
 
@@ -153,9 +153,45 @@ Go 1.11开始，有了Go Modules，工程项目可以建在任何地方，代码
    go mod init module_name
    ```
 
-3. import项目里的package的时候指定go.mod文件里的模块名称
+3. import项目本地的package时指定go.mod文件里的模块名称
+
+   比如module_name是project，在这个模块里，main.go使用了本地的util包，那在main.go里按照如下格式import这个package
+
+   ```go
+   import "project/util"
+   ```
 
 使用说明参考[module package demo](./module)
+
+
+
+### 开启GO111MODULES时import第三方开发的Module
+
+1. 项目可以建在任何地方
+
+2. 在项目所在根目录创建go.mod文件
+
+   ```go
+   go mod init module_name
+   ```
+
+3. 下载所需第三方Module，比如gin
+
+   ```go
+   go get -u github.com/gin-gonic/gin
+   ```
+
+4. 代码里import对应的Module
+
+   ```go
+   import "github.com/gin-gonic/gin"
+   ```
+
+**tips**: ’go mod tidy‘命令可以更新go.mod里的依赖内容，比如go.mod里少写了依赖的packages，就可以执行该命令自动更新go.mod，在go.mod所在目录执行如下命令即可：
+
+```go
+go mod tidy
+```
 
 
 
