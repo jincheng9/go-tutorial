@@ -34,12 +34,12 @@ package的使用分为3类情况：
 
 ```go
 import (
-    "fmt" // 标准库
-	"sync/atomic" // 标准库sync的atomic子package
-    "package1" // 自开发的package
-    "package2/package21" // 自开发package，嵌套子package
-    "package2/package22" // 自开发package，嵌套子package
-    "package3/package31/package311" // 自开发package，多重嵌套
+	"fmt" // 标准库
+  "sync/atomic" // 标准库sync的atomic子package
+  "package1" // 自开发的package
+  "package2/package21" // 自开发package，嵌套子package
+	"package2/package22" // 自开发package，嵌套子package
+	"package3/package31/package311" // 自开发package，多重嵌套
 )
 ```
 
@@ -47,7 +47,7 @@ import (
 
 举个例子，假设上面import的路径package2/package21这个目录下的Go源程序文件开头声明的package名称是realpackage，那访问这个package里的方法，结构体等要用realpackage.xxx来访问，而不是用package21.xxx来访问。
 
-一句话总结：import的是路径，访问用package名称。最佳实践就是让两者保持一致。
+一句话总结：**import的是路径，访问用package名称**。最佳实践就是让两者保持一致。
 
 ### 别名
 
