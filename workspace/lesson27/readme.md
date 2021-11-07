@@ -34,11 +34,11 @@ package的使用分为3类情况：
 
 ```go
 import (
-	"fmt" // 标准库
-  "sync/atomic" // 标准库sync的atomic子package
-  "package1" // 自开发的package
-  "package2/package21" // 自开发package，嵌套子package
-	"package2/package22" // 自开发package，嵌套子package
+	"fmt"                           // 标准库
+	"sync/atomic"                   // 标准库sync的atomic子package
+	"package1"                      // 自开发的package
+	"package2/package21"            // 自开发package，嵌套子package
+	"package2/package22"            // 自开发package，嵌套子package
 	"package3/package31/package311" // 自开发package，多重嵌套
 )
 ```
