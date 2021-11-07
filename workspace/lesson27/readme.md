@@ -147,7 +147,7 @@ Go 1.11开始，有了Go Modules，工程项目可以建在任何地方，代码
 
 1. 项目可以建在任何地方
 
-2. 在项目所在根目录创建go.mod文件
+2. 在项目所在根目录创建go.mod文件, module_name是模块名称
 
    ```go
    go mod init module_name
@@ -158,7 +158,7 @@ Go 1.11开始，有了Go Modules，工程项目可以建在任何地方，代码
    比如module_name是project，在这个模块里，main.go使用了本地的util包，那在main.go里按照如下格式import这个package
 
    ```go
-   import "project/util"
+   import "project/util" // project是模块名称, util是这个模块下的本地package
    ```
 
 使用说明参考[module package demo](./module)
