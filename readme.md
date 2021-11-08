@@ -56,6 +56,8 @@
 
 * [lesson27: 包Package](./workspace/lesson27)
 
+* [lesson28: 错误处理error, panic, recover](./workspace/lesson28)
+
   
 
 ## 应用篇
