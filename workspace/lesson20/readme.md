@@ -170,3 +170,4 @@
 * https://go.dev/blog/defer-panic-and-recover
 * https://golang.google.cn/ref/spec#Defer_statements
 
+* https://stackoverflow.com/questions/52718143/is-golang-defer-statement-execute-before-or-after-return-statement
