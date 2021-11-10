@@ -58,6 +58,8 @@
 
 * [lesson28: panic, recover运行期错误处理](./workspace/lesson28)
 
+* [lesson29: select语义](./workspace/lesson29)
+
   
 
 ## 应用篇

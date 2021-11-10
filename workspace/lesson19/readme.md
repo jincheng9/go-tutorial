@@ -62,13 +62,15 @@
 
 ## channel
 
-* 定义：channel是一种类型，默认值是nil。**channel是引用类型**，如果作为函数参数，是传引用。
+* 定义：channel是一种类型，零值是nil。**channel是引用类型**，如果作为函数参数，是传引用。
 
   多个goroutine之间，可以通过channel来通信，一个goroutine可以发送数据到指定channel，其它goroutine可以从这个channel里接收数据。
 
   channel就像队列，满足FIFO原则，定义channel的时候必须指定channel要传递的元素类型。
 
 * 语法：
+
+  **未初始化的channel变量的值是nil，为nil的channel不能用于通信**。nil channel收发消息都会阻塞，可能引起死锁。
 
   ```go
   /*channel_name是变量名，data_type是通道里的数据类型
@@ -113,7 +115,7 @@
     close(ch) // 关闭通道
     ```
 
-* 缓冲区：channel默认没有缓冲区，可以在定义channel的时候指定缓冲区容量，也就是缓冲区最多可以存储的元素个数，通过函数**cap()**可以获取到channel的容量。
+* 缓冲区：channel默认没有缓冲区，可以在定义channel的时候指定缓冲区容量，也就是缓冲区最多可以存储的元素个数，通过内置函数**cap**可以获取到channel的容量。
 
   * 无缓冲区： channel无缓冲区的时候，往channel发送数据和从channel接收数据都会**阻塞**。往channel发送数据的时候，必须有其它goroutine从channel里接收了数据，发送操作才可以成功，发送操作所在的goroutine才能继续往下执行。从channel里接收数据也是同理，必须有其它goroutine往channel里发送了数据，接收操作才可以成功，接收操作所在的goroutine才能继续往下执行。
 
