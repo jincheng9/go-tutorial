@@ -40,7 +40,7 @@
 
 * [lesson19: goroutine和channel](./workspace/lesson19)
 
-* [lesson20: defer](./workspace/lesson20)
+* [lesson20: defer语义](./workspace/lesson20)
 
 * [lesson21: 并发编程之sync包介绍sync.WaitGroup](./workspace/lesson21)
 
@@ -56,7 +56,7 @@
 
 * [lesson27: 包Package](./workspace/lesson27)
 
-* [lesson28: 错误处理error, panic, recover](./workspace/lesson28)
+* [lesson28: panic, recover运行期错误处理](./workspace/lesson28)
 
   
 
