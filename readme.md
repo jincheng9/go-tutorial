@@ -80,9 +80,8 @@
 
 ## References
 
+* https://golang.google.cn/ref/spec
 * https://pkg.go.dev/std
-
 * https://gobyexample.com/
-
 * https://www.liwenzhou.com/posts/Go/golang-menu/
 
