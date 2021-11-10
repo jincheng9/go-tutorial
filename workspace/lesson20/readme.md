@@ -1,8 +1,17 @@
 ## defer关键字
 
+## 含义
+
 * defer是延迟的意思，在Go里可以放在某个函数或者方法调用的前面，让该函数或方法延迟执行
 
-* 语法：defer本身是在某个函数体内执行，比如在函数A内调用了defer func_name()，只要defer func_name()这行代码被执行到了，那func_name这个函数就会**被延迟到函数A return之前执行，并且一定会执行**。 
+* 语法：
+
+  ```go
+  defer function([parameter_list]) // 延迟执行函数
+  defer method([parameter_list]) // 延迟执行方法
+  ```
+
+  defer本身是在某个函数体内执行，比如在函数A内调用了defer func_name()，只要defer func_name()这行代码被执行到了，那func_name这个函数就会**被延迟到函数A return之前执行，并且一定会执行**。 
 
   ```go
   defer func_name([parameter_list])
@@ -13,7 +22,7 @@
 
 * defer的用途？
 
-  Answer：defer常用于成对的操作，比如文件打开后要关闭，sync.WaitGroup跟踪的goroutine的申请和释放等。为了确保资源被释放，可以结合defer一起使用，避免在代码的各种条件分支里去释放资源，容易遗漏和出错。
+  Answer：defer常用于成对的操作，比如文件打开后要关闭，sync.WaitGroup跟踪的goroutine的计数器的释放等。为了确保资源被释放，可以结合defer一起使用，避免在代码的各种条件分支里去释放资源，容易遗漏和出错。
 
 * 示例1
 
@@ -87,7 +96,69 @@
 
 
 
+## 注意事项
+
+1. defer后面跟的必须是函数或者方法调用，defer后面的表达式不能加括号。
+
+   ```go
+   defer (fmt.Println(1)) // 编译报错，因为defer后面跟的表达式不能加括号
+   ```
+
+2. 被defer的函数的参数在执行到defer语句的时候就被确定下来了。
+
+   ```go
+   func a() {
+       i := 0
+       defer fmt.Println(i) // 最终打印0
+       i++
+       return
+   }
+   ```
+
+   上例中，被defer的函数fmt.Println的参数**i**在执行到defer这一行的时候，**i**的值是0，fmt.Println的参数就被确定下来是0了，因此最终打印的结果是0，而不是1。
+
+3. 被defer的函数执行顺序满足LIFO原则，后defer的先执行。
+
+   ```go
+   func b() {
+       for i := 0; i < 4; i++ {
+           defer fmt.Print(i)
+       }
+   }
+   ```
+
+   上例中，输出的结果是3210，后defer的先执行。
+
+4. 被defer的函数可以对defer语句所在的函数的命名返回值做读取和修改操作。
+
+   ```go
+   // f returns 42
+   func f() (result int) {
+   	defer func() {
+   		// result is accessed after it was set to 6 by the return statement
+   		result *= 7
+   	}()
+   	return 6
+   }
+   ```
+
+   上例中，被defer的函数func对defer语句所在的函数**f**的命名返回值result做了修改操作。
+
+   调用函数**f**，返回的结果是42。
+
+   执行顺序是函数**f**先把要返回的值6赋值给result，然后执行被defer的函数func，result被修改为42，然后函数**f**返回result，也就是返回了42。
+
+   官方说明如下：
+
+   ```mark
+   Each time a "defer" statement executes, the function value and parameters to the call are evaluated as usual and saved anew but the actual function is not invoked. Instead, deferred functions are invoked immediately before the surrounding function returns, in the reverse order they were deferred. That is, if the surrounding function returns through an explicit return statement, deferred functions are executed after any result parameters are set by that return statement but before the function returns to its caller. If a deferred function value evaluates to nil, execution panics when the function is invoked, not when the "defer" statement is executed.
+   ```
+
+   
+
 
 ## References
 
 * https://go.dev/blog/defer-panic-and-recover
+* https://golang.google.cn/ref/spec#Defer_statements
+
