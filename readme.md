@@ -74,6 +74,12 @@
 
 
 
+## 翻译
+
+1. [官方博文：Go开源12周年](./workspace/official-blog/twelve-years-of-go.md)
+
+
+
 ## 常见问题
 
 1. [GitHub上的项目go get连不上怎么办？](./workspace/problem/readme1.md)
