@@ -63,7 +63,7 @@ func b() {
 }
 ```
 
-上面的示例里，select语句会for循环执行10次，每次select语句都会随机从channel1或者channel2里接收一个值并打印。可以看把[示例代码](./select.go)下载本地运行看结果。
+上面的示例里，select语句会for循环执行10次，每次select语句都会随机从channel1或者channel2里接收一个值并打印。可以把[示例代码](./select.go)下载到本地运行看结果。
 
 ## References
 
