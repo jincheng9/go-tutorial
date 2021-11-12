@@ -100,8 +100,9 @@
 
 ## References
 
-* https://golang.google.cn/ref/spec
-* https://pkg.go.dev/std
+* https://golang.google.cn
+* https://pkg.go.dev
+* https://medium.com/a-journey-with-go
 * https://gobyexample.com/
-* https://www.liwenzhou.com/posts/Go/golang-menu/
+* https://go101.org/article/101.html
 
