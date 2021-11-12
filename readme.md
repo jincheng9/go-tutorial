@@ -98,11 +98,14 @@
 
 
 
-## References
+## 优秀博客
 
-* https://golang.google.cn
-* https://pkg.go.dev
-* https://medium.com/a-journey-with-go
-* https://gobyexample.com/
+* https://eddycjy.com/
+
 * https://go101.org/article/101.html
 
+* https://medium.com/a-journey-with-go
+
+* https://gobyexample.com/
+
+  
