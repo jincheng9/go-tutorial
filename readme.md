@@ -62,7 +62,7 @@
 
   
 
-## 应用篇
+## 实战篇
 
 ### Web框架
 
@@ -74,7 +74,7 @@
 
 
 
-## 翻译
+## 外文翻译
 
 1. [官方博文：Go开源12周年](./workspace/official-blog/twelve-years-of-go.md)
 
@@ -83,6 +83,17 @@
 ## 常见问题
 
 1. [GitHub上的项目go get连不上怎么办？](./workspace/problem/readme1.md)
+
+
+
+## Go新闻
+
+* https://go.dev/blog/
+* https://twitter.com/_rsc
+* https://twitter.com/golang
+* https://twitter.com/golang_news
+* https://twitter.com/golangweekly
+* https://twitter.com/GolangTrends
 
 
 
