@@ -26,7 +26,7 @@
 
 1. 支持macOS ARM64处理器架构
 2. 增加了一个文件系统接口
-3. 增加了嵌入式文件
+3. 增加了embeded包
 3. 默认开启modules
 3. 一些其它改进和优化
 
@@ -84,9 +84,28 @@ Go语言发展到现在不仅仅是靠Google的Go团队，还要感谢大家的�
 
 ## References
 
-* https://go.dev/blog/12years
+* 英文原文：https://go.dev/blog/12years
 
   
+
+## 附言
+
+欢迎大家关注微信公众号：coding进阶。本公众号将持续分享以下内容：
+
+1. Go语言基础
+2. Go编程实战
+3. Go设计原理
+4. Go常见的坑
+5. Go版本迭代
+6. Go面试题集锦
+7. Go重要外文翻译
+8. 分布式系统架构
+
+![公众号二维码](./qrcode_wechat.jpg)
+
+一起进步！
+
+
 
 
 
