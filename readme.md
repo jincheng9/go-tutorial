@@ -107,3 +107,9 @@
 * [Go By Example](https://gobyexample.com/)
 * [John Arundel](https://bitfieldconsulting.com/)
 
+
+
+## Go Video
+
+* [Youtube-Basics, Intermediate, Advanced Go Tutorials](https://www.youtube.com/c/BitfieldConsulting)
+
