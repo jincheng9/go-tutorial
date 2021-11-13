@@ -104,7 +104,7 @@
 
 * [John Arundel](https://bitfieldconsulting.com/)
 
-* [Go101](https://go101.org/article/101.html)
+* [Go101.org](https://go101.org/article/101.html)
 
 * [Medium: A Journey with Go](https://medium.com/a-journey-with-go)
 
