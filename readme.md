@@ -113,3 +113,9 @@
 
 * [Youtube-Basics, Intermediate, Advanced Go Tutorials](https://www.youtube.com/c/BitfieldConsulting)
 
+
+
+## Go Book
+
+* [Go语言高级编程](https://chai2010.gitbooks.io/advanced-go-programming-book/content/)
+
