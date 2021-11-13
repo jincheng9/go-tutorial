@@ -116,7 +116,9 @@
 
 ## Go Video
 
-* [Youtube-Basics, Intermediate, Advanced Go Tutorials](https://www.youtube.com/c/BitfieldConsulting)
+### YouTube
+
+* [Basics, Intermediate, Advanced Go Tutorials](https://www.youtube.com/c/BitfieldConsulting)
 
 
 
