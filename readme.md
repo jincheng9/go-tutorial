@@ -86,7 +86,7 @@
 
 
 
-## Go新闻
+## Go News
 
 * https://go.dev/blog/
 * https://twitter.com/_rsc
