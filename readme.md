@@ -101,13 +101,18 @@
 ## Go Blog
 
 * [Russ Cox](https://research.swtch.com/)
-* [煎鱼](https://eddycjy.com/)
-* [Go101](https://go101.org/article/101.html)
-* [Medium: A Journey with Go](https://medium.com/a-journey-with-go)
-* [Go By Example](https://gobyexample.com/)
+
 * [John Arundel](https://bitfieldconsulting.com/)
 
+* [Go101](https://go101.org/article/101.html)
 
+* [Medium: A Journey with Go](https://medium.com/a-journey-with-go)
+
+* [Go By Example](https://gobyexample.com/)
+
+* [煎鱼](https://eddycjy.com/)
+
+  
 
 ## Go Video
 
