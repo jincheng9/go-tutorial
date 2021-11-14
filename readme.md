@@ -92,7 +92,6 @@
 * https://twitter.com/_rsc
 * https://twitter.com/rob_pike
 * https://twitter.com/golang
-* https://twitter.com/golang_news
 * https://twitter.com/golangweekly
 * https://twitter.com/GolangTrends
 
