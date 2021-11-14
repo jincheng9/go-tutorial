@@ -125,3 +125,13 @@
 
 * [Go语言高级编程](https://chai2010.gitbooks.io/advanced-go-programming-book/content/)
 
+
+
+## 微信公众号
+
+* coding进阶：分享Go语言入门、中级到高级教程，以及微服务、云原生架构
+
+  ![coding进阶](./workspace/official-blog/qrcode_wechat.jpg) 
+
+  
+
