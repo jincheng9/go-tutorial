@@ -80,9 +80,15 @@
 
 
 
-## 常见问题
+## Go环境问题
 
-1. [GitHub上的项目go get连不上怎么办？](./workspace/problem/readme1.md)
+1. [GitHub上的项目go get连不上怎么办？](./workspace/problem/p1/)
+
+
+
+## Go常见坑
+
+1. [被defer的函数一定会执行么？](./workspace/problem/p2)
 
 
 
