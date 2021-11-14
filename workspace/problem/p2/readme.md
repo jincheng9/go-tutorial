@@ -133,8 +133,6 @@ For portability, the status code should be in the range [0, 125].
 
 如果在函数里是因为执行了os.Exit而退出，而不是正常return退出或者panic退出，那程序会立即停止，被defer的函数调用不会执行。
 
-
-
 ## defer 4原则回顾
 
 1. defer后面跟的必须是函数或者方法调用，defer后面的表达式不能加括号。
