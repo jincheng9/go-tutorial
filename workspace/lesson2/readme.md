@@ -71,13 +71,14 @@
     * uint：32位或64位
     * uintptr: 无符号整数，是内存地址的整数表示形式，应用代码一般用不到（https://stackoverflow.com/questions/59042646/whats-the-difference-between-uint-and-uintptr-in-golang）
     
-* reflect包的TypeOf函数可以用来获取数据的类型
+* reflect包的TypeOf函数或者fmt.Printf的%T可以用来获取数据的类型
 
     ```go
     var b byte = 10
     var c = 'a'
     fmt.Println(reflect.TypeOf(b)) // uint8
     fmt.Println(reflect.TypeOf(c)) // int32
+    fmt.Printf("%T\n", c) // int32
     ```
-
+    
     
