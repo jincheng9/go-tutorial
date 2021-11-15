@@ -54,7 +54,7 @@
 
 * [lesson26: 并发编程之原子操作](./workspace/lesson26)
 
-* [lesson27: 包Package](./workspace/lesson27)
+* [lesson27: 包Package和模块Module](./workspace/lesson27)
 
 * [lesson28: panic, recover运行期错误处理](./workspace/lesson28)
 

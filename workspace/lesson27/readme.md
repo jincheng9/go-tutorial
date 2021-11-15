@@ -122,9 +122,11 @@ on表示开启，off表示关闭。GO111MODULE是从Go 1.11开始引入，在随
 
 Go 1.11开始，有了Go Modules，工程项目可以建在任何地方，代码在import某个package的时候，会按照如下顺序寻找package：
 
-* 先从$GOROOT/src里找。
+* 先从$GOROOT/src/路径找。(Go标准库会在这个路径找到)
 
-* 如果$GOROOT/src找不到，再看当前项目有没有go.mod文件，有的话就从go.mod文件里指定的模块所在路径往下找。如果没有go.mod文件，那就直接提示package xxx is not in GOROOT。
+* 再从$GOPATH/pkg/mod/路径找。(Go第三方库会在这个路径找到)
+
+* 如果都找不到，再看当前项目有没有go.mod文件，有的话就从go.mod文件里指定的模块所在路径往下找。如果没有go.mod文件，那就直接提示package xxx is not in GOROOT。(自己开发的本地库可以通过这个方式找到)
 
   
 
