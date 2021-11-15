@@ -2,7 +2,7 @@
 
 # 前言
 
-
+在Go中使用过map和channel的，
 
 ## 什么是引用变量(reference variable)
 
