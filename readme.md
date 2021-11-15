@@ -89,6 +89,7 @@
 ## Go常见坑
 
 1. [被defer的函数一定会执行么？](./workspace/problem/p2)
+1. [Go有引用变量和引用传递么？](./workspace/problem/p3)
 
 
 
