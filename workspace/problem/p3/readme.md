@@ -22,5 +22,5 @@
 
 也可以搜索公众号：coding进阶，查看更多Go知识。
 
-![df](/Users/zhangjincheng/Desktop/zhangjincheng/github/go-tutorial/workspace/official-blog/qrcode_wechat.jpg) 
+![df](../../official-blog/qrcode_wechat.jpg) 
 
