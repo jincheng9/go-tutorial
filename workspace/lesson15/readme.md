@@ -2,9 +2,11 @@
 
 ## 定义
 
-Go语言里的map底层是通过**hash**实现的，是一种**无序**的基于<key, value>对组成的数据结构
+Go语言里的map底层是通过**hash**实现的，是一种**无序**的基于<key, value>对组成的数据结构，key是唯一的，类似python的dict。
 
-map是引用类型，必须初始化才能使用，如果只是声明map，但是没有初始化是不能使用的，比如下面的例子会在运行时报错：
+map是引用类型，必须初始化后才能写map。
+
+如果只是声明map，但没有初始化，只能读，不能写。参考下面的例子的说明：
 
 ```go
 package main
@@ -12,12 +14,19 @@ package main
 import "fmt"
 
 func main() {
-    /*counter没有初始化，给counter赋值会在运行时报错
-    panic: assignment to entry in nil map
-    */
-    var counter map[string]int
-    counter["a"] = 1
-    fmt.Println(counter)
+	var counter map[string]int
+	/*
+	map没有初始化，读map相当于读了一个空map
+	下例中：value是int的零值0，ok是false
+	*/
+	value, ok := counter["a"]
+	fmt.Println(value, ok)
+
+	/*counter没有初始化，给counter赋值会在运行时报错
+	  panic: assignment to entry in nil map
+	*/
+	counter["a"] = 1
+	fmt.Println(counter)
 }
 ```
 
@@ -176,5 +185,13 @@ func main() {
 
   
 
+## 注意事项
 
+* key必须支持==和!=比较，才能用作map的key。
+
+  因此切片slice，函数类型function，集合map，不能用作map的key
+
+* map不是并发安全的，并发读写要加锁
+
+  
 

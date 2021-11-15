@@ -109,6 +109,8 @@
 
 * [John Arundel](https://bitfieldconsulting.com/)
 
+* [Dave Cheney](https://dave.cheney.net/)
+
 * [Go101.org](https://go101.org/article/101.html)
 
 * [Medium: A Journey with Go](https://medium.com/a-journey-with-go)
