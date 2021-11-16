@@ -57,11 +57,37 @@
     }
     ```
 
+  * 给返回值命名
+
+    ```go
+    // func2.go
+    package main
+    
+    import "fmt"
+    
+    /*
+    函数add的返回值有2个，类型是int，标识符分别是c和d
+    可以在函数体内直接给c和d赋值，return后面可以带，也可以不带返回值
+    */
+    func addAndSub(a int, b int) (c int, d int) {
+    	c = a + b
+    	d = a - b
+    	return // 这一行写为 return c, d 也可以
+    }
+    
+    func main() {
+    	a1, b1 := 1, 2
+    	c1, d1 := addAndSub(a1, b1)
+    	/*输出结果是：3 -1*/
+    	fmt.Println(c1, d1)
+    }
+    ```
+    
     
 
-* 函数参数
+* 函数参数传递
 
-  * 值传递：和C++里的传值一样，参加下例里的swap
+  * **Go里的函数传参只有值传递这一种方式**：和C++里的传值一样，参加下例里的swap
 
     ```go
     package main
@@ -101,48 +127,15 @@
     }
     ```
 
-  * 引用传递：和 C++里的传指针一样，参见下例里的swapRef
+    虽然swap函数无法改变外部实参的值，swapRef函数可以改变外部实参的值，但是swap和swapRef函数其实都是值传递，细节区别是：
 
-    ```go
-    package main
-    
-    
-    func add(a, b int, c, d string) (int, string) {
-    	return a+b, c+d
-    }
-    
-    func swap(a int, b int) {
-    	println("[func|swap]a=", a, "b=", b)
-    	a, b = b, a
-    	println("[func|swap]a=", a, "b=", b)
-    }
-    
-    func swapRef(pa *int, pb *int) {
-    	println("[func|swapRef]a=", *pa, "b=", *pb)
-    	var temp = *pa
-    	*pa = *pb
-    	*pb = temp
-    	println("[func|swapRef]a=", *pa, "b=", *pb)
-    }
-    
-    func main() {
-    	a, b := 1, 2
-    	c, d := "c", "d"
-    	res1, res2 := add(a, b, c, d)
-    	println("res1=", res1, "res2=", res2)
-    
-    	println("[func|main]a=", a, "b=", b)
-    	swap(a, b)
-    	println("[func|main]a=", a, "b=", b)
-    
-    	println("[func|main]a=", a, "b=", b)
-    	swapRef(&a, &b)
-    	println("[func|main]a=", a, "b=", b)	
-    }
-    ```
-
-    
-
+    * swap是直接把变量a和b的值拷贝一份给形参
+    * swapRef是把变量a和b的地址拷贝一份给形参
+  
+    所以，要清楚这2个其实都是值传递，Go里的函数传参也只有值传递这一种方式，并没有像C++那样的引用变量和引用传递。
+  
+    后续学习了Go里的map等变量类型，可以参考这篇文章[Go有引用变量和引用传递么？](../problem/p3)
+  
 * 函数高级用法
 
   * 函数作为其它函数的实参：函数定义后可以作为另一个函数的实参，比如下例的函数realFunc作为函数calValue的实参
@@ -191,22 +184,48 @@
     }
     ```
 
-  * 闭包
+  * 闭包：匿名函数。顾名思义就是没有函数名，参考下面的代码示例：
 
+    ```go
+    // func3.go
+    package main
+    
+    import "fmt"
+    
+    func main() {
+    	/*
+    		定义2个匿名函数，也就是闭包。
+    		闭包可以直接调用，也可以赋值给一个变量，后续调用
+    	*/
+    	result1 := func(a int, b int) int {
+    		return a + b
+    	}(1, 2)
+    
+    	var sub = func(a int, b int) int {
+    		return a - b
+    	}
+    	result2 := sub(1, 2)
+    	/*输出结果：3 -1*/
+    	fmt.Println(result1, result2)
+    }
+    ```
+  
+    
+  
   * 方法：类似C++ class里的方法，只是go没有class的概念。
-
+  
     * 定义：function_name是类型var_data_type的实例的方法
-
+  
       ```go
       func (var_name var_data_type) function_name([parameter_list])[return type] {
         do sth
       }
       ```
-
+  
       
-
+  
     * 示例：getArea是Circle的方法，Circle的实例可以调用该方法
-
+  
     ```go
     package main
     
@@ -250,5 +269,5 @@
     	fmt.Println("radius=", c.radius, "result=", result) // 20, 23.6
     }
     ```
-
+  
     
