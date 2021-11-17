@@ -118,6 +118,8 @@
 
 * [Go By Example](https://gobyexample.com/)
 
+* [golang.design](https://golang.design/)
+
 * [煎鱼](https://eddycjy.com/)
 
   
