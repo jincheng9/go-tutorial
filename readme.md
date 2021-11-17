@@ -134,7 +134,9 @@
 
 * [Go语言高级编程](https://chai2010.gitbooks.io/advanced-go-programming-book/content/)
 
+* [英文Go书籍list](https://github.com/dariubs/GoBooks)
 
+  
 
 ## 微信公众号
 
