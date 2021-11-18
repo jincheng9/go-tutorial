@@ -309,7 +309,7 @@ data = make(map[string]int)
 
 这一句等于把data这个指针，进行了重新赋值，函数内部的data指针不再指向外部实参data对应的runtime.hmap结构体的内存地址。
 
-因此在在函数体内对data的修改，并没有影响外部实参data以及data对应的runtime.hmap结构体的值。
+因此在函数体内对data的修改，并没有影响外部实参data以及data对应的runtime.hmap结构体的值。
 
 程序实际运行结果如下：
 
