@@ -182,45 +182,49 @@ data := make(map[string]int)
 
 Go编译器会把make调用转成对[runtime.makemap](https://golang.org/src/runtime/map.go#L298)的调用，我们来看看runtime.makemap的源代码实现。
 
->    298  // makemap implements Go map creation for make(map[k]v, hint).
->    299  // If the compiler has determined that the map or the first bucket
->    300  // can be created on the stack, h and/or bucket may be non-nil.
->    301  // If h != nil, the map can be created directly in h.
->    302  // If h.buckets != nil, bucket pointed to can be used as the first bucket.
->    303  func makemap(t *maptype, hint int, h *hmap) *hmap {
->    304  	mem, overflow := math.MulUintptr(uintptr(hint), t.bucket.size)
->    305  	if overflow || mem > maxAlloc {
->    306  		hint = 0
->    307  	}
->    308  
->    309  	// initialize Hmap
->    310  	if h == nil {
->    311  		h = new(hmap)
->    312  	}
->    313  	h.hash0 = fastrand()
->    314  
->    315  	// Find the size parameter B which will hold the requested # of elements.
->    316  	// For hint < 0 overLoadFactor returns false since hint < bucketCnt.
->    317  	B := uint8(0)
->    318  	for overLoadFactor(hint, B) {
->    319  		B++
->    320  	}
->    321  	h.B = B
->    322  
->    323  	// allocate initial hash table
->    324  	// if B == 0, the buckets field is allocated lazily later (in mapassign)
->    325  	// If hint is large zeroing this memory could take a while.
->    326  	if h.B != 0 {
->    327  		var nextOverflow *bmap
->    328  		h.buckets, nextOverflow = makeBucketArray(t, h.B, nil)
->    329  		if nextOverflow != nil {
->    330  			h.extra = new(mapextra)
->    331  			h.extra.nextOverflow = nextOverflow
->    332  		}
->    333  	}
->    334  
->    335  	return h
->    336  }
+```go
+298  // makemap implements Go map creation for make(map[k]v, hint).
+299  // If the compiler has determined that the map or the first bucket
+300  // can be created on the stack, h and/or bucket may be non-nil.
+301  // If h != nil, the map can be created directly in h.
+302  // If h.buckets != nil, bucket pointed to can be used as the first bucket.
+303  func makemap(t *maptype, hint int, h *hmap) *hmap {
+304  	mem, overflow := math.MulUintptr(uintptr(hint), t.bucket.size)
+305  	if overflow || mem > maxAlloc {
+306  		hint = 0
+307  	}
+308  
+309  	// initialize Hmap
+310  	if h == nil {
+311  		h = new(hmap)
+312  	}
+313  	h.hash0 = fastrand()
+314  
+315  	// Find the size parameter B which will hold the requested # of elements.
+316  	// For hint < 0 overLoadFactor returns false since hint < bucketCnt.
+317  	B := uint8(0)
+318  	for overLoadFactor(hint, B) {
+319  		B++
+320  	}
+321  	h.B = B
+322  
+323  	// allocate initial hash table
+324  	// if B == 0, the buckets field is allocated lazily later (in mapassign)
+325  	// If hint is large zeroing this memory could take a while.
+326  	if h.B != 0 {
+327  		var nextOverflow *bmap
+328  		h.buckets, nextOverflow = makeBucketArray(t, h.B, nil)
+329  		if nextOverflow != nil {
+330  			h.extra = new(mapextra)
+331  			h.extra.nextOverflow = nextOverflow
+332  		}
+333  	}
+334  
+335  	return h
+336  }
+```
+
+
 
 从上面的源代码可以看出，runtime.makemap返回的是一个指向runtime.hmap结构的指针。
 
