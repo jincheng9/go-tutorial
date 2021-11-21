@@ -60,6 +60,24 @@
         }
         ```
 
+    * 不能对string里的某个字符取地址：如果s[i]是字符串s里的第i个字符，那&s[i]这种方式是非法的
+
+        ```go
+        // string3.go
+        package main
+        
+        import "fmt"
+        
+        func main() {
+        	str := "abc"
+        	/*
+        	the following code has compile error:
+        	cannot take the address of str[0]
+        	*/
+        	fmt.Println(&str[0])
+        }
+        ```
+
         
 
 * bool
