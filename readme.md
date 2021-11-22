@@ -68,7 +68,7 @@
 
 ### Gin
 
-* [当前流行的Go web框架以及Gin介绍](./workspace/gin/01/)
+* [当前流行的Go web框架比较以及Gin介绍](./workspace/gin/01/)
 
 
 
