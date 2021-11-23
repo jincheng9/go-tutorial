@@ -129,7 +129,7 @@
     fmt.Println("array2=", array2)
     ```
 
-  * append赋值，只能对slice切片类型使用append，不能对数组使用append。参见后面lesson13里的slice类型介绍
+  * append赋值，只能对slice切片类型使用append，不能对数组使用append。参见后面lesson13里的[slice类型介绍](../lesson13)
 
     ```go
     twoDimArray := [][]int{}
@@ -198,7 +198,7 @@
   
 * 注意事项
 
-  * slice类型的每一维度的大小可以不相同，比如下例里的第0行size是3，第1行size是2。如果直接访问twoDimArray\[2][2]会报错。slice类型的介绍参见lesson13
+  * slice类型的每一维度的大小可以不相同，比如下例里的第0行size是3，第1行size是2。如果直接访问twoDimArray\[2][2]会报错。slice类型的介绍参见[lesson13](../lesson13)
 
     ```go
     twoDimArray := [][]int{}
@@ -255,8 +255,12 @@
   
   * 值传递和引用传递
   
-    * 数组传参是指传递， slice传参是引用传递。如果使用数组作为参数，想修改实参的值，那就要传指向数组的指针
+    * **Go语言里只有值传递，没有引用传递**。可以参考进阶篇文章[Go有引用传递么?](../problem/p3)。
   
+    * 如果数组作为函数参数，在函数体内不能改变外部实参的值。如果使用数组作为形参，想修改实参的值，那就要传指向数组的指针
+    
+    * 如果slice作为函数参数，在函数体内可以改变外部实参的值，**但是这并不意味着slice是引用传递**，slice传参也是值传递。只不过slice这个结构里有一个指针指向底层的数组，实参把值拷贝给形参的时候，形参slice里的指针和外部实参slice的指针的值相同，也就指向了同一块数组内存空间，所以形参slice对数组元素做修改也会影响外部实参的值。
+    
       ```go
       // changeArray无法改变实参数组的值
       func changeArray(array [3]int) {
@@ -283,10 +287,11 @@
       changeArray3(sliceArray)
       fmt.Println("sliceArray=", sliceArray) // sliceArray= [10 2 3]
       ```
-  
+    
       
-  
+    
       
+    
   
   
 
