@@ -40,7 +40,9 @@
 1. [被defer的函数一定会执行么？](./workspace/problem/p2)
 1. [Go有引用变量和引用传递么？](./workspace/problem/p3)
 
+3. [new和make的使用区别是什么？](./workspace/problem/p4)
 
+   
 
 ## 实战篇
 
