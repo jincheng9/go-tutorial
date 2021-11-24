@@ -81,6 +81,8 @@
 
 * [Russ Cox](https://research.swtch.com/)
 
+* [Go Documentation](https://go.dev/doc/)
+
 * [John Arundel](https://bitfieldconsulting.com/)
 
 * [Dave Cheney](https://dave.cheney.net/)
