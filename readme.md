@@ -4,7 +4,7 @@
 
 * [lesson1: Go程序结构](./workspace/lesson1)
 * [lesson2: 数据类型](./workspace/lesson2)
-* [lesson3: 变量类型和变量定义：全局变量，局部变量](./workspace/lesson3)
+* [lesson3: 变量类型和变量定义：全局变量，局部变量，多变量](./workspace/lesson3)
 * [lesson4: 常量和枚举](./workspace/lesson4)
 * [lesson5: 运算操作符](./workspace/lesson5)
 * [lesson6: 控制语句if/switch](./workspace/lesson6)
