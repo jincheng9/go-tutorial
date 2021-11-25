@@ -163,7 +163,7 @@ SUM:                            88           2555           2360          11916
 | binding  | 把http request的数据转成Go里自定义的结构体变量，可以不用自己去逐个解析http request里的参数，减少开发工作量。 |
 | examples | 使用Gin的一些代码示例，目前该目录只有一个README.md，具体的例子在[Gin Examples](https://github.com/gin-gonic/examples)这个单独的Repo里。 |
 | ginS     | 依赖sync.Once实现了一个单例版本的gin.Engine，目前看来没啥用处，在和作者[沟通中](https://github.com/gin-gonic/gin/issues/2957)，可以先忽略。 |
-| internal | Gin内部用的函数。在json这个子package包里引用了标准库的encoding/json和第三方的[json-iterator](https://github.com/json-iterator/go)，在bytesconv这个子package包里实现了零内存分配版本的string和byte切片的互相转换。 |
+| internal | Gin内部用的函数。在json这个子package里引用了标准库的encoding/json和第三方的[json-iterator](https://github.com/json-iterator/go)，在bytesconv这个子package包里实现了零内存分配版本的string和byte切片的互相转换。 |
 | render   | 支持将XML、JSON、YAML、ProtoBuf以及HTML数据做渲染，返回给前端可识别的响应格式。 |
 | testdata | 一些测试数据。                                               |
 
