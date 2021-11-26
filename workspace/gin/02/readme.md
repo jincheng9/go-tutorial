@@ -137,7 +137,7 @@
 |   version.go
 ```
 
-使用[cloc](http://cloc.sourceforge.net/)工具对源码做一个扫描，总共代码行数不到1W2。
+使用[cloc](http://cloc.sourceforge.net/)工具对源码做一个扫描，总共代码行数不到1.2W。
 
 ```go
 http://cloc.sourceforge.net v 1.64  T=0.91 s (97.2 files/s, 18596.7 lines/s)
