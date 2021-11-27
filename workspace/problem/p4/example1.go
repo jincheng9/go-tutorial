@@ -1,23 +1,15 @@
+// example1.go
 package main
 
-import (
-	"bytes"
-	"fmt"
-)
-
-type A struct {
-	s []int
-	b map[string]int
-	c int
-}
+import "fmt"
 
 func main() {
-	var a bytes.Buffer
-	fmt.Println(a)
+	a := *new([]int)
+	fmt.Printf("%T, %v\n", a, a==nil)
 
-	c := []int{}
-	fmt.Println(c == nil)
+	b := *new(map[string]int)
+	fmt.Printf("%T, %v\n", b, b==nil)
 
-	d := new([]int)
-	fmt.Println(d)
+	c := *new(chan int)
+	fmt.Printf("%T, %v\n", c, c==nil)
 }
