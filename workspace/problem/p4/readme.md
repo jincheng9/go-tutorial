@@ -86,7 +86,7 @@ ptr := &t
 
   * chan如果是nil，往chan发送数据或者从chan接收数据会引发panic
 
-  * slice会有点特殊，slice为nil的时候，也可以调用append函数对nil slice做扩容。但是我们使用slice，总是会希望可以自定义长度或者容量，这个时候就需要用到make。
+  * slice会有点特殊，理论上slice如果是nil，也是没法用的。但是append函数处理了nil slice的情况，可以调用append函数对nil slice做扩容。但是我们使用slice，总是会希望可以自定义长度或者容量，这个时候就需要用到make。
 
     
 
