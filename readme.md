@@ -123,5 +123,4 @@
 
 * coding进阶：分享Go语言入门、中级到高级教程，以及微服务、云原生架构
 
-  ![coding进阶](./workspace/official-blog/qrcode_wechat.jpg) 
-
+  ![coding进阶](./workspace/img/wechat.png)  
