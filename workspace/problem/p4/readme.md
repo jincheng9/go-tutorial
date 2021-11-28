@@ -143,3 +143,4 @@ ptr := &t
 * https://dave.cheney.net/2014/08/17/go-has-both-make-and-new-functions-what-gives
 * https://mp.weixin.qq.com/s/MTZ0C9zYsNrb8wyIm2D8BA
 * https://juejin.cn/post/6859145664316571661
+* https://www.godesignpatterns.com/2014/04/new-vs-make.html
