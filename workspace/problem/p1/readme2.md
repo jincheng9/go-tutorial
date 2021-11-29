@@ -63,4 +63,16 @@
 * 查看当前所有断点，并且可以设置断点执行的条件
 
   Ctrl+Shift+F8
+  
+* 启动Debug调试模式
+
+  Shift + F9
+
+* 结束调试
+
+  Ctrl + F2
+
+* 启动普通Run模式
+
+  Shift + F10
 
