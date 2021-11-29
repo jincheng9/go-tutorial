@@ -66,6 +66,8 @@
 
 1. [GitHub上的项目go get连不上怎么办？](./workspace/problem/p1/)
 
+2. [GoLand常用快捷键](./workspace/problem/p1/readme2.md)
+
    
 
 ## Go News
