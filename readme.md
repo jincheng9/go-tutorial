@@ -118,7 +118,7 @@
 ## Go Book
 
 * [Go语言高级编程](https://chai2010.gitbooks.io/advanced-go-programming-book/content/)
-* [Go语言设计与实现](https://draveness.me/golang-book-release)
+* [Go语言设计与实现](https://draveness.me/golang/)
 * [英文Go书籍list](https://github.com/dariubs/GoBooks)
 
 
