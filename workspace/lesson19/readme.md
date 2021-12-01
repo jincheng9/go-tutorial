@@ -352,7 +352,7 @@
   * channel被close后，如果再往channel里发送数据，会引发panic
   * channel被close后，如果再次close，也会引发panic
   * channel被close后，如果channel还有值，接收方可以一直从channel里获取值，直到channel里的值都已经取完。
-  * channel别close后，如果channel里没有值了，接收方继续从channel里取值，会得到channel里存的数据类型对应的默认零值，如果一直取值，就一直拿到零值。
+  * channel被close后，如果channel里没有值了，接收方继续从channel里取值，会得到channel里存的数据类型对应的默认零值，如果一直取值，就一直拿到零值。
   
 * **goroutine和闭包closure一起使用时要注意**，避免多个goroutine闭包使用同一个变量，否则goroutine执行的时候，这个变量的值可能已经被改了，和原来预期不符。比如下面例子：
 
