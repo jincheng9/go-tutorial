@@ -1,9 +1,15 @@
+// example3.go
 package main
 
-import "fmt"
+import (
+	"log"
+)
 
 func main() {
-	var a chan int
-	value := <- a
-	fmt.Println(value)
+	// 通过SetFlags设置Logger结构体里的flag属性
+	log.SetFlags(log.Ldate | log.Ltime | log.Lshortfile | log.Lmsgprefix)
+	// 通过SetPrefix设置Logger结构体里的prefix属性
+	log.SetPrefix("INFO:")
+	// 调用辅助函数Println打印日志到标准
+	log.Println("your message")
 }

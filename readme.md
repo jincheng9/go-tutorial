@@ -42,7 +42,14 @@
 
 3. [new和make的使用区别是什么？](./workspace/problem/p4)
 
-   
+
+
+
+##  Go标准库
+
+* [Go标准库之log使用详解](./workspace/std/log.md)
+
+  
 
 ## 实战篇
 
