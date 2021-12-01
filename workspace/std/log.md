@@ -18,7 +18,7 @@ type Logger struct {
 }
 ```
 
-Logger结构体里的字段，使用上我们只需要关心prefix，flag和out这3个字段的含义：
+Logger结构体里的字段，在使用上我们只需要关心prefix，flag和out这3个字段的含义：
 
 * out：表示日志输出的地方。可以是标准输出os.Stdout，os.Stderr或者指定的本地文件
 
@@ -52,7 +52,21 @@ Logger结构体里的字段，使用上我们只需要关心prefix，flag和out�
 
 * prefix：每行日志最开头的日志前缀
 
-  **注意**：如果flag开启了Lmsgprefix，那这个prefix前缀就不是放在每行日志的最开头了，而是在具体被打印的内容的前面
+  **注意**：如果flag开启了Lmsgprefix，那这个prefix前缀就不是放在每行日志的最开头了，而是在具体被打印的内容的前面。比如prefix如果是"INFO:"，
+  
+  * flag不开启Lmsgprefix的时候，prefix在每行日志最开头，日志输出为：
+  
+    ```go
+    INFO:2021/12/01 21:00:34 example1.go:14: your message
+    ```
+  
+  * flag开启Lmsgprefix的时候，prefix在要打印的内容"your message"的前面，日志输出为：
+  
+    ```go
+    2021/12/01 21:02:20 example1.go:14: INFO:your message
+    ```
+  
+    
 
 Logger结构体实现了若干指针接收者方法，包括设置日志属性、打印日志等。
 
@@ -88,7 +102,7 @@ var std = New(os.Stderr, "", LstdFlags)
 talk is cheap, show me the code。我们先看一段代码示例：
 
 ```go
-// example3.go
+// example1.go
 package main
 
 import (
@@ -111,7 +125,7 @@ func main() {
 2021/12/01 18:18:53 example3.go:14: INFO:your message
 ```
 
-所以方式1的使用流程如下：
+总结方式1的使用流程如下：
 
 1. 通过调用SetFlags，SetPrefix，SetOutput函数设置好日志属性。SetOutPut可以用于设置日志输出的地方，比如终端，文件等。
 
@@ -134,13 +148,98 @@ func main() {
 
    调用SetXXX函数可以修改std的默认设置。
 
-2. 调用log包里的辅助函数Print(f/ln)/Fatal(f/ln)/Panic(f/ln)打印日志
+2. 调用log包里的辅助函数Print[f|ln]，Fatal[f|ln]，Panic[f|ln]打印日志
 
+   * Fatal[f|ln]打印日志后会调用os.Exit(1)
+   * Panic[f|ln]打印日志后会调用panic
 
+上面的例子是把使用log包自带的std这个Logger指针把日志输出到控制台，我们也可以使用std把日志输出到指定文件，调用SetOutput设置好日志输出的参数即可。参见如下代码示例：
+
+```go
+// example2.go
+package main
+
+import (
+	"fmt"
+	"log"
+	"os"
+	"time"
+)
+
+func main() {
+	// 日志文件名
+	fileName := fmt.Sprintf("app_%s.log", time.Now().Format("20060102"))
+	// 创建文件
+	f, err := os.OpenFile(fileName, os.O_RDWR | os.O_CREATE | os.O_APPEND, 0666)
+	if err != nil {
+		log.Fatalf("open file error: %v", err)
+	}
+	// main退出之前，关闭文件
+	defer f.Close()
+	// 调用SetOutput设置日志输出的地方
+	log.SetOutput(f)
+	//log.SetOutput(io.MultiWriter(os.Stdout, f))
+	// 通过SetFlags设置Logger结构体里的flag属性
+	log.SetFlags(log.Ldate | log.Ltime | log.Lshortfile | log.Lmsgprefix | log.LUTC)
+	// 通过SetPrefix设置Logger结构体里的prefix属性
+	log.SetPrefix("INFO:")
+	// 调用辅助函数Println打印日志到指定文件
+	log.Println("your message")
+}
+```
+
+上面的代码会在当前目录下生成一个app_YYYYMMDD.log文件，log.Println里打印的内容会输出到这个文件里。细心的同学，可能看到了上面被注释的一行代码：
+
+```go
+log.SetOutput(io.MultiWriter(os.Stdout, f))
+```
+
+这个表示的含义是同时把打印内容输出到标准输出(控制台)和指定文件里。
 
 ## 方式2：自定义Logger
 
-因为Logger的方法都是指针接受者，要使用log这个包来打印日志，首先要定义一个Logger指针，然后使用Logger的方法来打印日志
+方式1只建议打印到控制台的时候使用，对于打印到日志文件的场景，建议使用自定义Logger，参考如下代码：
+
+```go
+// example3.go
+package main
+
+import (
+	"fmt"
+	"log"
+	"os"
+	"time"
+)
+
+func main() {
+	// 打开文件
+	fileName := fmt.Sprintf("app_%s.log", time.Now().Format("20060102"))
+	f, err := os.OpenFile(fileName, os.O_RDWR | os.O_APPEND | os.O_CREATE, 0666)
+	if err != nil {
+		log.Fatalf("open file error: %v", err)
+	}
+	// 通过New方法自定义Logger，New的参数对应的是Logger结构体的output, prefix和flag字段
+	logger := log.New(f, "[INFO] ", log.LstdFlags | log.Lshortfile | log.Lmsgprefix)
+	// 调用Logger的方法Println打印日志到指定文件
+	logger.Println("your message")
+}
+```
+
+上面的代码会在当前目录下生成一个app_YYYYMMDD.log文件，logger.Println里打印的内容会输出到这个文件里。
+
+**注意**：New函数返回的是Logger指针，Logger结构体的方法都是指针接受者。
+
+总结方式2的使用流程如下：
+
+1. 通过log.New创建一个新的Logger指针，在New函数里指定好output, prefix和flag等日志属性
+2. 调用log包里的辅助函数Print[f|ln]，Fatal[f|ln]，Panic[f|ln]打印日志
+   * Fatal[f|ln]打印日志后会调用os.Exit(1)
+   * Panic[f|ln]打印日志后会调用panic
+
+自定义Logger的方式，还可以实现打印日志到控制台，也可以实现同时打印日志到日志文件和控制台，只需要给New函数的第一个参数传递对应的io.Writer类型参数即可。
+
+* 如果要打印到控制台，参数可以用os.Stdout或者os.Stderr
+* 如果要同时打印到控制台和日志文件，参数可以用io.MultiWriter(os.Stdout, f)，参考上面的example2.go。
 
 
 
@@ -150,10 +249,11 @@ func main() {
 
 ## 注意事项
 
-* Lmsgprefix属性
-* LUTC属性
-* Fatal
-* Panic
+* Lmsgprefix属性：不开启该属性时，Logger结构体里的prefix属性就会在每行日志最开头。开启该属性后，prefix就会在被打印的具体内容之前，而不是在每行最开头。
+* LUTC属性：对于Logger结构体里的flag属性，如果开启了LUTC属性，那打印的日志里显示的时间就不是本地时间了，而是UTC标准时间。比如中国在东八区，中国时间减去8小时就是UTC时间。
+* Fatal[f|ln]：打印日志后，会调用os.Exit(1)。如果defer关键字和Fatal[f|ln]一起使用要小心，因为如果在函数里执行了defer，但是最后是使用的os.Exit退出的函数，那被defer的函数或者方法是不会执行的。具体可以参考我之前写的文章[Go语言里被defer的函数一定会执行么？](https://github.com/jincheng9/go-tutorial/tree/main/workspace/problem/p2)
+* Panic[f|ln]：打印日志后会调用panic，应用程序要考虑是否要通过recover来捕获panic。
+* log打印的日志一定会换行。所以即使调用的是log包里的Print函数或方法，打印的日志也会换行。因此使用Print和Println没有区别了。
 
 
 
@@ -167,6 +267,6 @@ func main() {
 
 ## References
 
-* log包里的变量，函数和类型说明：https://pkg.go.dev/log
+* https://pkg.go.dev/log
 * https://www.flysnow.org/about/
 

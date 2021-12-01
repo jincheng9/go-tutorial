@@ -1,4 +1,4 @@
-// example3.go
+// example1.go
 package main
 
 import (
@@ -10,6 +10,6 @@ func main() {
 	log.SetFlags(log.Ldate | log.Ltime | log.Lshortfile | log.Lmsgprefix)
 	// 通过SetPrefix设置Logger结构体里的prefix属性
 	log.SetPrefix("INFO:")
-	// 调用辅助函数Println打印日志到标准
-	log.Println("your message")
+	// 调用辅助函数Println打印日志到标准输出
+	log.Print("your message")
 }
