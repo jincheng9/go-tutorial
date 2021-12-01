@@ -476,6 +476,7 @@
   ## References
   
   * https://go.dev/doc/faq#closures_and_goroutines
+  * https://www.liwenzhou.com/posts/Go/14_concurrence/
   
   
 
