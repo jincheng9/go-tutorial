@@ -83,7 +83,7 @@ func main() {
     value, is_exist := map[key]
     ```
 
-    如果key存在，那is_exist就是true, value是对应的值。否则is_exist就是false, value是map的value数据类型的默认值。
+    如果key存在，那is_exist就是true, value是对应的值。否则is_exist就是false, value是map的value数据类型的零值。
 
     **注意**: 如果key不存在，通过map[key]访问不会给map自动插入这个新key。C++是会自动插入新key的，两个语言不一样。如果确定key存在，可以直接使用map[key]拿到value。
 
