@@ -2,7 +2,7 @@
 
 ## 简介
 
-log包实现了简单的日志打印功能。log包里核心的数据结构只有1个Logger，定义如下
+log包实现了简单的日志打印功能，支持日志输出到控制台或者日志文件。log包里核心的数据结构只有1个Logger，定义如下
 
 ```go
 // A Logger represents an active logging object that generates lines of
