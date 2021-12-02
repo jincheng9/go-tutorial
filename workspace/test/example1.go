@@ -3,8 +3,27 @@ package main
 
 import "fmt"
 
-var a [1<<31]byte
+var a [1<<30]byte
+
+type any = interface{}
+
+func getValue(m map[string]string, key string) any{
+	value, exist := m[key]
+	if !exist {
+		var a any
+		return a
+	} else {
+		return value
+	}
+}
 
 func main() {
-	fmt.Println(a[0])
+	m := map[string]string{"a":"1"}
+	value := getValue(m, "a")
+	fmt.Println(value)
+	fmt.Printf("%T\n", value)
+
+	var b interface{} = "a"
+	b = b + "1"
+	fmt.Println(b)
 }
