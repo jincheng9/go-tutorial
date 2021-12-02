@@ -245,15 +245,25 @@ func main() {
 
 ## 生产应用
 
+生产系统中打印日志就比上面的要复杂多了，需要考虑至少以下几个方面：
+
+* 日志路径设置：支持配置日志文件路径，将日志打印到指定路径的文件里。
+
+* 日志级别控制：支持Debug, Info, Warn, Error, Fatal等不同日志级别。
+* 日志切割：可以按照日期和日志大小进行自动切割。
+* 性能：在大量日志打印的时候不能对应用程序性能造成明显影响。
+
+Go生态中，目前比较流行的是Uber开发的zap，在GitHub上的开源地址：https://github.com/uber-go/zap
+
 
 
 ## 注意事项
 
 * Lmsgprefix属性：不开启该属性时，Logger结构体里的prefix属性就会在每行日志最开头。开启该属性后，prefix就会在被打印的具体内容之前，而不是在每行最开头。
 * LUTC属性：对于Logger结构体里的flag属性，如果开启了LUTC属性，那打印的日志里显示的时间就不是本地时间了，而是UTC标准时间。比如中国在东八区，中国时间减去8小时就是UTC时间。
-* Fatal[f|ln]：打印日志后，会调用os.Exit(1)。如果defer关键字和Fatal[f|ln]一起使用要小心，因为如果在函数里执行了defer，但是最后是使用的os.Exit退出的函数，那被defer的函数或者方法是不会执行的。具体可以参考我之前写的文章[Go语言里被defer的函数一定会执行么？](https://github.com/jincheng9/go-tutorial/tree/main/workspace/problem/p2)
-* Panic[f|ln]：打印日志后会调用panic，应用程序要考虑是否要通过recover来捕获panic。
-* log打印的日志一定会换行。所以即使调用的是log包里的Print函数或方法，打印的日志也会换行。因此使用Print和Println没有区别了。
+* Fatal[f|ln]：打印日志后，会调用os.Exit(1)。如果defer关键字和Fatal[f|ln]一起使用要小心，因为如果在函数里执行了defer，但是最后是由于调用了os.Exit而退出的函数，那被defer的函数和方法是不会执行的。具体可以参考我之前写的文章[Go语言里被defer的函数一定会执行么？](https://github.com/jincheng9/go-tutorial/tree/main/workspace/problem/p2)
+* Panic[f|ln]：打印日志后会调用panic，应用程序要考虑是否要通过recover来捕获panic，避免程序退出。
+* log打印的日志一定会换行。所以即使调用的是log包里的Print函数或方法，打印的日志也会换行。因此使用log包里的Print和Println没有区别了。
 
 
 

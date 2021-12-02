@@ -47,7 +47,7 @@
 
 ##  Go标准库
 
-* [Go标准库之log使用详解](./workspace/std/log.md)
+* [Go标准库之log使用详解](./workspace/std/01)
 
   
 
