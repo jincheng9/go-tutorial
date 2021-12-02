@@ -52,7 +52,7 @@ Logger结构体里的字段，在使用上我们只需要关心prefix，flag和o
 
 * prefix：每行日志最开头的日志前缀
 
-  **注意**：如果flag开启了Lmsgprefix，那这个prefix前缀就不是放在每行日志的最开头了，而是在具体被打印的内容的前面。比如prefix如果是"INFO:"，
+  **注意**：如果flag开启了Lmsgprefix，那这个prefix前缀就不是放在每行日志的最开头了，而是在具体被打印的内容的前面。比如prefix如果是"INFO:"
   
   * flag不开启Lmsgprefix的时候，prefix在每行日志最开头，日志输出为：
   
@@ -70,13 +70,13 @@ Logger结构体里的字段，在使用上我们只需要关心prefix，flag和o
 
 Logger结构体实现了若干指针接收者方法，包括设置日志属性、打印日志等。
 
-同时在log这个包里，自带了一个默认的Logger，源码如下：
+同时在log这个包里，自带了一个默认的Logger，源码定义如下：
 
 ```go
 var std = New(os.Stderr, "", LstdFlags)
 ```
 
-和这个自带的std配套的有若干辅助函数，用于设置日志属性和打印日志等。
+这个自带的std配套有若干辅助函数，用于设置日志属性和打印日志等。
 
 这些辅助函数实际上就是对Logger结构体的方法做了一层封装，在辅助函数里面都是通过std这个Logger指针去调用Logger的方法。所以辅助函数和Logger结构体方法是一一对应的。
 
@@ -180,7 +180,7 @@ func main() {
 	log.SetOutput(f)
 	//log.SetOutput(io.MultiWriter(os.Stdout, f))
 	// 通过SetFlags设置Logger结构体里的flag属性
-	log.SetFlags(log.Ldate | log.Ltime | log.Lshortfile | log.Lmsgprefix | log.LUTC)
+	log.SetFlags(log.Ldate | log.Ltime | log.Lshortfile | log.Lmsgprefix)
 	// 通过SetPrefix设置Logger结构体里的prefix属性
 	log.SetPrefix("INFO:")
 	// 调用辅助函数Println打印日志到指定文件
