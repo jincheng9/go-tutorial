@@ -278,5 +278,5 @@ Go生态中，目前比较流行的是Uber开发的zap，在GitHub上的开源�
 ## References
 
 * https://pkg.go.dev/log
-* https://www.flysnow.org/about/
+* https://www.flysnow.org/2017/05/06/go-in-action-go-log.html
 
