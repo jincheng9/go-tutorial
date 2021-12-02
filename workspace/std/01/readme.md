@@ -153,7 +153,7 @@ func main() {
    * Fatal[f|ln]打印日志后会调用os.Exit(1)
    * Panic[f|ln]打印日志后会调用panic
 
-上面的例子是把使用log包自带的std这个Logger指针把日志输出到控制台，我们也可以使用std把日志输出到指定文件，调用SetOutput设置好日志输出的参数即可。参见如下代码示例：
+上面的例子example1.go是使用log包自带的std这个Logger指针把日志输出到控制台，我们也可以使用std把日志输出到指定文件，调用SetOutput设置日志输出的参数即可。参见如下代码示例：
 
 ```go
 // example2.go
