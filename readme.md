@@ -49,6 +49,8 @@
 
 * [Go标准库之log使用详解](./workspace/std/01)
 
+* [Go标准库之cmd命令使用详解](./workspace/std/02)
+
   
 
 ## 实战篇
@@ -69,7 +71,7 @@
 
 
 
-## Go环境问题
+## Go环境和工具
 
 1. [GitHub上的项目go get连不上怎么办？](./workspace/problem/p1/)
 
