@@ -382,7 +382,7 @@
           x = Cat{"hugo", 3}
           checkType(x) // type: Cat, value: {hugo 3}
       
-          /*map是传引用，在checkType里对map做修改
+          /*在checkType里对map做修改
           会影响外面的实参x
           */
           x = map[string]int{"a":1}
