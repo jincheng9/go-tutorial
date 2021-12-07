@@ -31,6 +31,7 @@
 * [lesson27: 包Package和模块Module](./workspace/lesson27)
 * [lesson28: panic, recover运行期错误处理](./workspace/lesson28)
 * [lesson29: select语义](./workspace/lesson29)
+* [GitHub最流行的golang-cheat-sheet中文版本](https://github.com/jincheng9/golang-cheat-sheet-cn)
 
 
 
