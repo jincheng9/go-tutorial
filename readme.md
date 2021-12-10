@@ -6,7 +6,7 @@
 
 * [lesson1: Go程序结构](./workspace/lesson1)
 
-* [lesson2: 数据类型](./workspace/lesson2)
+* [lesson2: 基础数据类型：数字，字符串，bool](./workspace/lesson2)
 
 * [lesson3: 变量类型和变量定义：全局变量，局部变量，多变量](./workspace/lesson3)
 

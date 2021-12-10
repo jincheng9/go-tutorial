@@ -127,7 +127,17 @@ func (h Hello) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprint(w, "Hello!")
 }
 
+func strTest() {
+	s := "a"
+	fmt.Println(len(s))
+	s2 := s[:1]
+	//s2 = "b"
+	s = "b"
+	fmt.Println(s, s2)
+}
+
 func main() {
-	var h Hello
-	http.ListenAndServe("localhost:4000", h)
+	//var h Hello
+	//http.ListenAndServe("localhost:4000", h)
+	strTest()
 }
