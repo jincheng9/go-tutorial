@@ -3,7 +3,6 @@ package main
 
 import "fmt"
 
-var a [1<<30]byte
 
 type any = interface{}
 

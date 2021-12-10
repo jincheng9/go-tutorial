@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"math"
 	"net/http"
+	"path"
 	"reflect"
 	"time"
 )
@@ -136,8 +137,79 @@ func strTest() {
 	fmt.Println(s, s2)
 }
 
+func lastChar(str string) uint8 {
+	if str == "" {
+		panic("The length of the string can't be 0")
+	}
+	return str[len(str)-1]
+}
+
+func joinPaths(absolutePath, relativePath string) string {
+	fmt.Println(absolutePath, relativePath)
+	if relativePath == "" {
+		return absolutePath
+	}
+	finalPath := path.Join(absolutePath, relativePath)
+	fmt.Println(finalPath)
+	if lastChar(relativePath) == '/' && lastChar(finalPath) != '/' {
+		return finalPath + "/"
+	}
+	fmt.Println(finalPath)
+	return finalPath
+}
+
+func structTest() {
+	type A struct {
+		a int
+		b int
+	}
+
+	type B struct {
+		b float32
+		c string
+		d string
+	}
+
+	type C struct {
+		A
+		B
+		a string
+		c string
+	}
+
+	var c C
+	fmt.Println(c.a, c.A.a, c.A.b, c.B.b)
+}
+
+type i interface{
+	open(int) string
+	close(int) string
+}
+
+type S struct{
+	a,b int
+	pending func (int, int) int
+}
+func(s S) open(a int) string {
+	s.a = 10
+	return string(a)
+}
+
+func(s *S) close(a int) string {
+	s.a = 10
+	return string(a)
+}
+
+func interfaceTest() {
+	a := S{1}
+	a.open(1)
+	fmt.Println(a)
+	a.close(1)
+	fmt.Println(a)
+}
+
 func main() {
 	//var h Hello
 	//http.ListenAndServe("localhost:4000", h)
-	strTest()
+	interfaceTest()
 }
