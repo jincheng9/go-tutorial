@@ -201,7 +201,7 @@ func(s *S) close(a int) string {
 }
 
 func interfaceTest() {
-	a := S{1}
+	a := S{a:1}
 	a.open(1)
 	fmt.Println(a)
 	a.close(1)
