@@ -273,3 +273,4 @@ func main() {
 
 * https://go.dev/talks/2012/10things.slide#1
 * https://qvault.io/golang/anonymous-structs-golang/
+* https://gist.github.com/aodin/9493190
