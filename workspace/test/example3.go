@@ -208,8 +208,23 @@ func interfaceTest() {
 	fmt.Println(a)
 }
 
+type handleFunc func(int)int
+type st struct{
+	handleFunc
+}
+
+func structTest2() {
+	a := st{func(i2 int) int {
+		return i2
+	}}
+	result := a.handleFunc(1)
+	fmt.Println(result)
+}
+
 func main() {
 	//var h Hello
 	//http.ListenAndServe("localhost:4000", h)
-	interfaceTest()
+	structTest2()
+	var a *int
+	fmt.Println(*a)
 }

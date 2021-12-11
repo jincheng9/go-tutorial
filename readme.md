@@ -67,10 +67,10 @@
 
 ## 进阶篇
 
-1. [被defer的函数一定会执行么？](./workspace/problem/p2)
-1. [Go有引用变量和引用传递么？](./workspace/problem/p3)
-
-3. [new和make的使用区别是什么？](./workspace/problem/p4)
+1. [被defer的函数一定会执行么？](./workspace/senior/p2)
+2. [Go有引用变量和引用传递么？](./workspace/senior/p3)
+3. [new和make的使用区别是什么？](./workspace/senior/p4)
+3. [一文读懂Go匿名结构体使用场景](./workspace/senior/p5)
 
 
 
@@ -103,9 +103,9 @@
 
 ## Go环境和工具
 
-1. [GitHub上的项目go get连不上怎么办？](./workspace/problem/p1/)
+1. [GitHub上的项目go get连不上怎么办？](./workspace/senior/p1/)
 
-2. [GoLand常用快捷键](./workspace/problem/p1/readme2.md)
+2. [GoLand常用快捷键](./workspace/senior/p1/readme2.md)
 
    
 
