@@ -18,6 +18,7 @@ func add(a, b  int) int{
 	return a+b
 }
 
+
 func main() {
 	s := ST{ST2{}}
 	fmt.Println(s.close(10))
@@ -25,8 +26,7 @@ func main() {
 	result := add(1, 2)
 	fmt.Println(&result)
 
-	sl := [3]int{1, 2}
-	fmt.Println(&sl)
-	fmt.Println(&sl[0:1])
+	sl := make([]int, 3, 10)
+	fmt.Println(sl)
 }
 
