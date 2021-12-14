@@ -1,6 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"time"
+)
 
 type ST struct {
 	ST2
@@ -18,15 +21,22 @@ func add(a, b  int) int{
 	return a+b
 }
 
+func printDuration() {
+	timeCost := time.Minute + time.Second + 200 * time.Microsecond
+	fmt.Printf("%13v\n", timeCost)
+	if timeCost > time.Minute {
+		timeCost = timeCost.Truncate(time.Second)
+	}
+	fmt.Printf("%13v\n", timeCost)
+}
 
 func main() {
 	s := ST{ST2{}}
 	fmt.Println(s.close(10))
 
-	result := add(1, 2)
-	fmt.Println(&result)
-
 	sl := make([]int, 3, 10)
 	fmt.Println(sl)
+
+	printDuration()
 }
 
