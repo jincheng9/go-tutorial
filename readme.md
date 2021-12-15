@@ -6,7 +6,7 @@
 
 * [lesson1: Go程序结构](./workspace/lesson1)
 
-* [lesson2: 基础数据类型：数字，字符串，bool](./workspace/lesson2)
+* [lesson2: 数据类型](./workspace/lesson2)
 
 * [lesson3: 变量类型和变量定义：全局变量，局部变量，多变量](./workspace/lesson3)
 
@@ -67,10 +67,10 @@
 
 ## 进阶篇
 
-1. [被defer的函数一定会执行么？](./workspace/senior/p2)
-2. [Go有引用变量和引用传递么？](./workspace/senior/p3)
-3. [new和make的使用区别是什么？](./workspace/senior/p4)
-3. [一文读懂Go匿名结构体使用场景](./workspace/senior/p5)
+1. [被defer的函数一定会执行么？](./workspace/problem/p2)
+1. [Go有引用变量和引用传递么？](./workspace/problem/p3)
+
+3. [new和make的使用区别是什么？](./workspace/problem/p4)
 
 
 
@@ -97,15 +97,16 @@
 
 ## 外文翻译
 
-1. [官方博文：Go开源12周年](./workspace/official-blog/twelve-years-of-go.md)
+1. [官方博文：支持泛型的Go 1.18 Beta 1版本正式发布](./workspace/official-blog/go118beta1.md)
+2. [官方博文：Go开源12周年](./workspace/official-blog/twelve-years-of-go.md)
 
 
 
 ## Go环境和工具
 
-1. [GitHub上的项目go get连不上怎么办？](./workspace/senior/p1/)
+1. [GitHub上的项目go get连不上怎么办？](./workspace/problem/p1/)
 
-2. [GoLand常用快捷键](./workspace/senior/p1/readme2.md)
+2. [GoLand常用快捷键](./workspace/problem/p1/readme2.md)
 
    
 
