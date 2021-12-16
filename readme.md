@@ -2,8 +2,6 @@
 
 ## 基础篇
 
-* [GitHub最流行的golang-cheat-sheet中文版本](https://github.com/jincheng9/golang-cheat-sheet-cn)
-
 * [lesson1: Go程序结构](./workspace/lesson1)
 
 * [lesson2: 数据类型](./workspace/lesson2)
@@ -97,8 +95,9 @@
 
 ## 外文翻译
 
-1. [官方博文：支持泛型的Go 1.18 Beta 1版本正式发布](./workspace/official-blog/go118beta1.md)
-2. [官方博文：Go开源12周年](./workspace/official-blog/twelve-years-of-go.md)
+1. [GitHub最流行的golang-cheat-sheet中文版本](https://github.com/jincheng9/golang-cheat-sheet-cn)
+2. [官方博文：支持泛型的Go 1.18 Beta 1版本正式发布](./workspace/official-blog/go118beta1.md)
+3. [官方博文：Go开源12周年](./workspace/official-blog/twelve-years-of-go.md)
 
 
 
