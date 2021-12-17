@@ -66,9 +66,10 @@
 ## 进阶篇
 
 1. [被defer的函数一定会执行么？](./workspace/problem/p2)
-1. [Go有引用变量和引用传递么？](./workspace/problem/p3)
-
+2. [Go有引用变量和引用传递么？](./workspace/problem/p3)
 3. [new和make的使用区别是什么？](./workspace/problem/p4)
+3. [一文读懂Go匿名结构体的使用场景](./workspace/senior/p5)
+3. [官方教程：Go泛型入门](./workspace/senior/p6)
 
 
 
@@ -98,6 +99,7 @@
 1. [GitHub最流行的golang-cheat-sheet中文版本](https://github.com/jincheng9/golang-cheat-sheet-cn)
 2. [官方博文：支持泛型的Go 1.18 Beta 1版本正式发布](./workspace/official-blog/go118beta1.md)
 3. [官方博文：Go开源12周年](./workspace/official-blog/twelve-years-of-go.md)
+3. [官方教程：Go泛型入门](./workspace/senior/p6)
 
 
 
