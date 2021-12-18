@@ -7,5 +7,6 @@ func testAddr() [2]int {
 }
 
 func main() {
+	var a int64
 	fmt.Println(testAddr()[:])
 }
