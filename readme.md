@@ -2,6 +2,8 @@
 
 ## 基础篇
 
+* [GitHub最流行的golang-cheat-sheet中文版本](https://github.com/jincheng9/golang-cheat-sheet-cn)
+
 * [lesson1: Go程序结构](./workspace/lesson1)
 
 * [lesson2: 数据类型](./workspace/lesson2)
