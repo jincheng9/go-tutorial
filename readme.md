@@ -157,6 +157,7 @@
 ### YouTube
 
 * [Basics, Intermediate, Advanced Go Tutorials](https://www.youtube.com/c/BitfieldConsulting)
+* [GopherCon Talks Since 2014](https://www.youtube.com/c/GopherAcademy/videos)
 
 
 
