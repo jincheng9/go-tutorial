@@ -142,13 +142,17 @@
 
 * [smallest-colobu](https://colobu.com/)
 
+* [Teiva Harsanyi](https://teivah.medium.com/)
+
 * [Go By Example](https://gobyexample.com/)
 
 * [golang.design](https://golang.design/)
 
-* [halfrost](https://halfrost.com/)
+* [Dezhi Yu](https://halfrost.com/)
 
-* [煎鱼](https://eddycjy.com/)
+* [Andy Pan](https://strikefreedom.top/)
+
+* [jianyu](https://eddycjy.com/)
 
   
 
