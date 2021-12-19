@@ -7,5 +7,12 @@ func testAddr() [2]int {
 }
 
 func main() {
-	fmt.Println(testAddr()[:])
+	var a interface{}
+	a = 10
+	switch a.(type) {
+	case int:
+		fmt.Println("int", a)
+	default:
+		fmt.Println("default", a)
+	}
 }
