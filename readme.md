@@ -107,9 +107,9 @@
 
 ## Go环境和工具
 
-1. [GitHub上的项目go get连不上怎么办？](./workspace/problem/p1/)
+1. [GitHub上的项目go get连不上怎么办？](./workspace/senior/p1/)
 
-2. [GoLand常用快捷键](./workspace/problem/p1/readme2.md)
+2. [GoLand常用快捷键](./workspace/senior/p1/readme2.md)
 
    
 
