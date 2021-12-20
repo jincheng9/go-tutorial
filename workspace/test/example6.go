@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"unsafe"
 )
 
 func testAddr() [2]int {
@@ -18,17 +17,18 @@ func(S1) print() {
 }
 
 func sliceTest1(s *[]int) {
-	fmt.Printf("%p %p %v\n", s, &s, unsafe.Sizeof(s))
-	b := *s
-	fmt.Printf("%p %p\n", b, &b)
+	s1 := s
+	fmt.Println(s, *s)
 	*s = make([]int, 10)
-	fmt.Printf("%p %p\n", s, &s)
+	s2 := s
+	fmt.Println(s, *s)
+	fmt.Println(*s1, *s2)
 }
 
 func main() {
-	s := make([]int, 5)
-	sliceTest1(&s)
-	s2 := s
-	s2[0] = 10
-	fmt.Println(s, s2)
+	x := []int{1, 2, 3, 4, 5}
+	fmt.Println(len(x), cap(x))
+	y := x[1:3]
+	fmt.Println(len(y), cap(y))
+	fmt.Println(y[0:4])
 }
