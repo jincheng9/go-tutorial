@@ -203,7 +203,7 @@ For portability, the status code should be in the range [0, 125].
 
 ## 代码
 
-相关代码和说明开源在GitHub：[被defer的函数是否一定会执行？](https://github.com/jincheng9/go-tutorial/tree/main/workspace/problem/p2)
+相关代码和说明开源在GitHub：[被defer的函数是否一定会执行？](https://github.com/jincheng9/go-tutorial/tree/main/workspace/senior/p2)
 
 也可以搜索公众号：coding进阶，查看更多Go知识。
 

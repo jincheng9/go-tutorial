@@ -323,7 +323,7 @@ after init, data == nil: true
 
 ## 代码
 
-相关代码和说明开源在GitHub：[Go有引用变量和引用传递么？](https://github.com/jincheng9/go-tutorial/tree/main/workspace/problem/p3)
+相关代码和说明开源在GitHub：[Go有引用变量和引用传递么？](https://github.com/jincheng9/go-tutorial/tree/main/workspace/senior/p3)
 
 也可以搜索公众号：coding进阶，查看更多Go知识。
 
