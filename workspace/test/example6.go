@@ -31,4 +31,5 @@ func main() {
 	y := x[1:3]
 	fmt.Println(len(y), cap(y))
 	fmt.Println(y[0:4])
+	fmt.Println(1>(2))
 }
