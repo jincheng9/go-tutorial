@@ -148,11 +148,13 @@
 
 * [golang.design](https://golang.design/)
 
-* [Dezhi Yu](https://halfrost.com/)
+* [halfrost-Dezhi Yu](https://halfrost.com/)
 
-* [Andy Pan](https://strikefreedom.top/)
+* [strikefreedom-Andy Pan](https://strikefreedom.top/)
 
 * [Amit Saha](echorand.me)
+
+* [topgoer](https://www.topgoer.com/)
 
 * [jianyu](https://eddycjy.com/)
 
