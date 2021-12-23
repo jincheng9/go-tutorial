@@ -24,7 +24,7 @@ Go 1.18 Beta 1版本凝聚了谷歌的整个Go团队以及来自世界的Go语�
 
 Go 1.18 Beta 1版本是第一个支持泛型的Go预览版本(preview release)。泛型是Go 1.0版本发布以来Go语言做出的最重要的变革，也是我们团队对单一语言做过的最大变革。对于任何重大的新功能上线，让用户试用并发现bug是通用惯例，泛型也不例外，大家可以先提前尝鲜，谨慎使用。
 
-此外，对于一些特殊场景，比如递归泛型的特定种类支持会延后在未来的版本发布。我们知道有一些早期泛型使用者对于泛型使用得很愉快，如果你有一些场景认为适合使用泛型，我们也希望你可以尝试下这个beta版本。我们发布了一个关于泛型的简要教程，链接地址：https://go.dev/doc/tutorial/generics，我们也在上周的GopherCon会议上做了相关技术分享，链接地址：https://www.youtube.com/watch?v=35eIxI_n5ZM&t=1755s。你也可以在Go Playground的Go dev模式下试用泛型，链接地址：https://go.dev/play/?v=gotip。
+此外，对于一些特殊场景，比如递归泛型的特定种类支持会延后在未来的版本发布。我们知道有一些早期泛型使用者对于泛型使用得很愉快，如果你有一些场景认为适合使用泛型，我们也希望你可以尝试下这个beta版本。我们发布了一个关于泛型的简要教程，链接地址：https://go.dev/doc/tutorial/generics。我们也在上周的GopherCon会议上做了相关技术分享，链接地址：https://www.youtube.com/watch?v=35eIxI_n5ZM&t=1755s。你也可以在Go Playground的Go dev模式下试用泛型，链接地址：https://go.dev/play/?v=gotip。
 
 Go 1.18 Beta 1添加了对于模糊测试(fuzzing-based tests)的内置支持，用于自动查找可能导致程序崩溃或者返回非法值的恶意输入。
 
