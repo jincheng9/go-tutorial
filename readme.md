@@ -72,6 +72,7 @@
 3. [new和make的使用区别是什么？](./workspace/senior/p4)
 3. [一文读懂Go匿名结构体的使用场景](./workspace/senior/p5)
 3. [官方教程：Go泛型入门](./workspace/senior/p6)
+3. [一文读懂Go泛型设计和使用场景](./workspace/senior/p7)
 
 
 
