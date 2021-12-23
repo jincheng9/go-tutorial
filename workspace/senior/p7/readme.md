@@ -163,7 +163,7 @@ type Ordered interface {
 
 ### | 和 ~
 
-`\|`: 表示取并集。比如下例的`Number`这个interface可以作为类型限制，用于限定类型参数必须是int，int32和int64这3种类型。
+`|`: 表示取并集。比如下例的`Number`这个interface可以作为类型限制，用于限定类型参数必须是int，int32和int64这3种类型。
 
 ```go
 type Number interface{
