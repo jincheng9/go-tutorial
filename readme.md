@@ -152,7 +152,7 @@
 
 * [strikefreedom-Andy Pan](https://strikefreedom.top/)
 
-* [Amit Saha](echorand.me)
+* [Amit Saha](https://echorand.me/)
 
 * [topgoer](https://www.topgoer.com/)
 
@@ -171,9 +171,9 @@
 
 ## Go Book
 
-* [Go语言高级编程](https://chai2010.gitbooks.io/advanced-go-programming-book/content/)
-* [Go语言设计与实现](https://draveness.me/golang/)
-* [深入解析Go](https://tiancaiamao.gitbooks.io/go-internals/content/zh/)
+* [Go语言高级编程-chai2010.gitbooks.io](https://chai2010.gitbooks.io/advanced-go-programming-book/content/)
+* [Go语言设计与实现-draveness.me](https://draveness.me/golang/)
+* [深入解析Go-tiancaiamao.gitbooks.io](https://tiancaiamao.gitbooks.io/go-internals/content/zh/)
 * [英文Go书籍list](https://github.com/dariubs/GoBooks)
 
 
