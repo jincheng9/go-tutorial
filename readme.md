@@ -99,11 +99,14 @@
 ## 外文翻译
 
 1. [GitHub最流行的golang-cheat-sheet中文版本](https://github.com/jincheng9/golang-cheat-sheet-cn)
-2. [官方博文：支持泛型的Go 1.18 Beta 1版本正式发布](./workspace/official-blog/go118beta1.md)
-3. [官方博文：Go开源12周年](./workspace/official-blog/twelve-years-of-go.md)
-3. [官方教程：Go泛型入门](./workspace/senior/p6)
 
+2. [官方教程：Go泛型入门](./workspace/senior/p6)
 
+3. [官方博文：支持泛型的Go 1.18 Beta 1版本正式发布](./workspace/official-blog/go118beta1.md)
+
+4. [官方博文：Go开源12周年](./workspace/official-blog/twelve-years-of-go.md)
+
+   
 
 ## Go环境和工具
 
