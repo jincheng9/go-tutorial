@@ -140,6 +140,8 @@
 
 * [Dave Cheney](https://dave.cheney.net/)
 
+* [Jaana Dogan-Pricipal Engineer at AWS](https://rakyll.org/about/)
+
 * [Go101.org](https://go101.org/article/101.html)
 
 * [Medium: A Journey with Go](https://medium.com/a-journey-with-go)
