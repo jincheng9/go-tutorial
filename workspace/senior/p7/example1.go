@@ -25,8 +25,14 @@ type AnyString interface{
 }
 type MyString string
 
+func test[T any]() T {
+	var z T
+	return z
+}
 
 func main() {
 	f := min2(1, 2)
 	fmt.Println(f)
+
+	fmt.Println(test[int]())
 }

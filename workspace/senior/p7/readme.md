@@ -354,7 +354,10 @@ Go泛型有2种类型推导：
 **类型推导并不是一定成功**，比如类型参数用在函数的返回值或者函数体内，这种情况就必须指定类型实参了。
 
 ```go
-func test[T any] () (result T) {...}
+func test[T any] () T {
+  var result T
+  return result
+}
 func test[T any] () {
   fmt.Println(T)
 }
