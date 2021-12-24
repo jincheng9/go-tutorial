@@ -28,11 +28,9 @@
 [P, Q constraint1, R constraint2]
 ```
 
-这里
+这里定义了一个类型参数列表(type parameter list)，列表里可以包含一个或者多个类型参数。
 
-这里定义了一个类型参数列表，列表里可以包含一个或者多个类型参数。
-
-`P，Q和R`都是类型参数，`contraint1`和`contraint2`都是类型限制(type constraint)。
+`P，Q`和`R`都是类型参数，`contraint1`和`contraint2`都是类型限制(type constraint)。
 
 * 类型参数列表使用方括号`[]`
 * 类型参数建议首字母大写，用来表示它们是类型
@@ -159,6 +157,31 @@ type Ordered interface {
 
 `Integer`和`Float`也是定义在`constraints`这个包里的类型限制，
 
+**类型参数列表不能用于方法，只能用于函数**。
+
+```go
+type Foo struct {}
+
+func (Foo) bar[T any](t T) {}
+```
+
+上面的例子在结构体类型`Foo`的方法`bar`使用了类型参数列表，编译会报错：
+
+```bash
+./example1.go:30:15: methods cannot have type parameters
+./example1.go:30:16: invalid AST: method must have no type parameters
+```
+
+个人认为Go的这个编译提示：`methods cannot have type paramters` 不是特别准确。
+
+比如下面的例子，就是在方法`bar`里用到了类型参数`T`，改成`methods cannot have type paramter list`感觉会更好。
+
+```go
+type Foo[T any] struct {}
+
+func (Foo[T]) bar(t T) {}
+```
+
 **注意**：类型限制必须是`interface`类型。比如上例的`constraints.Ordered`就是一个`interface`类型。
 
 ### | 和 ~
@@ -171,21 +194,40 @@ type Number interface{
 }
 ```
 
-`~T`: `~` 是Go 1.18新增的符号，`~T`表示底层类型是T的所有类型。比如下例的`AnyString`这个interface可以作为类型限制，用于限定类型参数的底层类型必须是string。`string`本身以及下例的`MyString`都满足`AnyString`这个类型限制。
+`~T`: `~` 是Go 1.18新增的符号，`~T`表示底层类型是T的所有类型。`~`的英文读作tilde。
 
-```go
-type AnyString interface{
-   ~string
-}
-type MyString string
-```
+* 例1：比如下例的`AnyString`这个interface可以作为类型限制，用于限定类型参数的底层类型必须是string。`string`本身以及下面的`MyString`都满足`AnyString`这个类型限制。
+
+  ```go
+  type AnyString interface{
+     ~string
+  }
+  type MyString string
+  ```
+
+* 例2：再比如，我们定义一个新的类型限制叫`customConstraint`，用于限定底层类型为`int`并且实现了`String() string`方法的所有类型。下面的`customInt`就满足这个type constraint。
+
+  ```go
+  type customConstraint interface {
+     ~int
+     String() string
+  }
+  
+  type customInt int
+  
+  func (i customInt) String() string {
+     return strconv.Itoa(int(i))
+  }
+  ```
 
 类型限制有2个作用：
 
 1. 用于约定有效的类型实参，不满足类型限制的类型实参会被编译器报错。
-2. 如果某个类型限制里的所有类型都支持某个操作，那在代码里，类型参数就可以使用这个操作。
+2. 如果类型限制里的所有类型都支持某个操作，那在代码里，对应的类型参数就可以使用这个操作。
 
 ### constraint literals(类型限制字面值)
+
+type constraint既可以提前定义好，也可以在type parameter list里直接定义，后者就叫constraint literals。
 
 ```go
 [S interface{~[]E}, E interface{}]
@@ -207,7 +249,55 @@ type MyString string
 
 https://github.com/golang/go/blob/master/src/constraints/constraints.go
 
+包含的类型限制如下：
 
+* `constraints.Signed`
+
+  ```go
+  type Signed interface {
+  	~int | ~int8 | ~int16 | ~int32 | ~int64
+  }
+  ```
+
+* `constraints.Unsigned`
+
+  ```go
+  type Unsigned interface {
+  	~uint | ~uint8 | ~uint16 | ~uint32 | ~uint64 | ~uintptr
+  }
+  ```
+
+* `constraints.Integer`
+
+  ```go
+  type Integer interface {
+  	Signed | Unsigned
+  }
+  ```
+
+* `constraints.Float`
+
+  ```go
+  type Float interface {
+  	~float32 | ~float64
+  }
+  ```
+
+* `constraints.Complex`
+
+  ```go
+  type Complex interface {
+  	~complex64 | ~complex128
+  }
+  ```
+
+* `constraints.Ordered`
+
+  ```go
+  type Ordered interface {
+  	Integer | Float | ~string
+  }
+  ```
 
 ## Type inference(类型推导)
 
@@ -228,11 +318,49 @@ m1 = min[float64](a, b)
 m2 = min(a, b)
 ```
 
-方式2没有传递类型实参，编译器是根据函数实参`a`和`b`推导出`T`的类型。
+方式2没有传递类型实参，编译器是根据函数实参`a`和`b`推导出类型实参。
 
-并不是总是能推导出来。
+类型推导可以让我们的代码更简洁，更具可读性。
 
-> Constraint Type Inference: Deduce type arguments from type parameter constraints
+Go泛型有2种类型推导：
+
+1. function argument type inference: deduce type arguments from the types of the non-type arguments.
+
+   通过函数的实参推导出来具体的类型。比如上面例子里的`m2 = min(a, b)`，就是根据`a`和`b`这2个函数实参
+
+   推导出来`T`是`float64`。
+
+2. constraint type inference: inferring a type argument from another type argument, based on type parameter constraints.
+
+   通过已经确定的类型实参，推导出未知的类型实参。下面的代码示例里，根据函数实参2不能确定`E`是什么类型，但是可以确定`S`是`[]int32`，再结合类型限制里`S`的底层类型是`[]E`，可以推导出`E`是int32，int32满足`constraints.Integer`限制，因此推导成功。
+
+   ```go
+   type Point []int32
+   
+   func ScaleAndPrint(p Point) {
+     r := Scale(p, 2)
+     fmt.Println(r)
+   }
+   
+   func Scale[S ~[]E, E constraints.Integer](s S, c E) S {
+     r := make(S, len(s))
+     for i, v := range s {
+       r[i] = v * c
+     }
+     return r
+   }
+   ```
+
+**类型推导并不是一定成功**，比如类型参数用在函数的返回值或者函数体内，这种情况就必须指定类型实参了。
+
+```go
+func test[T any] () (result T) {...}
+func test[T any] () {
+  fmt.Println(T)
+}
+```
+
+更深入了解type inference可以参考：https://go.googlesource.com/proposal/+/refs/heads/master/design/43651-type-parameters.md#type-inference
 
 
 
@@ -242,15 +370,15 @@ m2 = min(a, b)
 
 > Write code, don't design types.
 
-在写Go代码的时候，对于泛型，Go泛型设计者`Ian Lance Taylor`建议不要一上来就定义type parameter和type constraint，如果你一上来就这么做，那大概率是搞错了泛型的最佳实践。
+在写Go代码的时候，对于泛型，Go泛型设计者`Ian Lance Taylor`建议不要一上来就定义type parameter和type constraint，如果你一上来就这么做，那就搞错了泛型的最佳实践。
 
-先写具体的代码逻辑，等意识到需要使用type parameter或者新的type constraint的时候，再加上type parameter和type constraint。
+先写具体的代码逻辑，等意识到需要使用type parameter或者定义新的type constraint的时候，再加上type parameter和type constraint。
 
 ### 什么时候使用泛型？
 
-* 函数使用到了slice, map, channel类型，但是slice, map, channel里的元素类型可能有多种。
+* 需要使用slice, map, channel类型，但是slice, map, channel里的元素类型可能有多种。
 
-* 通用的数据结构。比如支持下面的代码实现了一个支持任意数据类型的二叉树。
+* 通用的数据结构，比如链表，二叉树等。下面的代码实现了一个支持任意数据类型的二叉树。
 
   ```go
   type Tree[T any] struct {
@@ -295,23 +423,27 @@ m2 = min(a, b)
 
 ### 什么时候不要使用泛型?
 
-1. When just calling a method on the type argument
+1. 只是单纯调用实参的方法时，不要用泛型。
 
    ```go
    // good
-   func ReadFour(r io.Reader) ([]byte, error)
+   func foo(w io.Writer) {
+      b := getBytes()
+      _, _ = w.Write(b)
+   }
    
    // bad
-   func ReadFour[T io.Reader](r T) ([]byte, error)
+   func foo[T io.Writer](w T) {
+      b := getBytes()
+      _, _ = w.Write(b)
+   }
    ```
 
+   比如上面的例子，单纯是调用`io.Writer`的`Write`方法，把内容写到指定地方。使用`interface`作为参数更合适，可读性更强。
+
+2. 当函数或者方法或者具体的实现逻辑，对于不同类型不一样时，不要用泛型。比如`encoding/json`这个包使用了`reflect`，如果用泛型反而不合适。
+
    
-
-2. 当函数或者方法对于不同类型的实现逻辑不一样时，不要用泛型。
-
-3. 当不同类型的操作不一样时，不要用泛型。比如`encoding/json`就不适合用泛型实现，`encoding/json`使用了`Reflect`。
-
-
 
 ###  总结
 
@@ -319,15 +451,25 @@ m2 = min(a, b)
 >
 > Corollary: Don't use type parameters prematurely; wait until you are about to write boilerplate code.
 
-不要随便使用泛型，当你发现针对不同类型，会写出同样的代码逻辑时，才去使用泛型。
+不要随便使用泛型，Ian给的建议是：当你发现针对不同类型，会写出同样的代码逻辑时，才去使用泛型。也就是
+
+`Avoid boilerplate code`。
+
+Go语言里interface和refelect可以在某种程度上实现泛型，我们在处理多种类型的时候，要考虑具体的使用场景，切勿盲目用泛型。
+
+想更加深入了解Go泛型设计原理的可以参考Go泛型设计作者Ian和Robert写的Go Proposal：
+
+https://go.googlesource.com/proposal/+/refs/heads/master/design/43651-type-parameters.md
 
 
 
 ## 开源地址
 
-GitHub: https://github.com/jincheng9/go-tutorial
+文章和代码开源地址在GitHub: https://github.com/jincheng9/go-tutorial
 
 公众号：coding进阶
+
+
 
 ## References
 
