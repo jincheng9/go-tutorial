@@ -30,9 +30,15 @@ func test[T any]() T {
 	return z
 }
 
+func test2[T any] () {
+	var result T
+	fmt.Println(result)
+}
+
 func main() {
 	f := min2(1, 2)
 	fmt.Println(f)
 
+	fmt.Println(test[int]())
 	fmt.Println(test[int]())
 }

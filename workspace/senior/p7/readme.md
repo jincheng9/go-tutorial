@@ -359,7 +359,8 @@ func test[T any] () T {
   return result
 }
 func test[T any] () {
-  fmt.Println(T)
+  var result T
+  fmt.Println(result)
 }
 ```
 
