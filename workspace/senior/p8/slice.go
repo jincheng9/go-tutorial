@@ -10,8 +10,20 @@ func test() {
 	fmt.Println(len(y), cap(y), y)
 }
 
+func test2() {
+	var a []int
+	var oldCap = 0
+	for i := 0; i < 2048; i++ {
+		a = append(a, i)
+		if cap(a) != oldCap {
+			fmt.Println(len(a), cap(a))
+			oldCap = cap(a)
+		}
+	}
+}
+
 func main() {
-	test()
+	test2()
 	var s []int
 	fmt.Println(len(s), cap(s))
 	a := [...]int{0, 1, 2, 3}

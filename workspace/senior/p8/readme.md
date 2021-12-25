@@ -39,7 +39,7 @@ func main() {
 
 我们先逐个解答上面的问题。
 
-## slice的底层数据结构
+### slice的底层数据结构
 
 `talk is cheap, show me the code`.  直接上`slice`的源码：
 
@@ -65,14 +65,14 @@ type Pointer *ArbitraryType
 
 **因此给`slice`赋值，实际上都是给`slice`里的这3个字段赋值**。看起来这像是一句正确的废话，但是相信我，记住这句话可以帮助你非常清晰地理解对`slice`做修改后`slice`里3个字段的值是怎么变的，`slice` 指向的底层数组的数据是怎么变的。
 
-## `:`分割操作符
+### `:`分割操作符
 
 `:`分割操作符有几个特点：
 
 1. `:`可以对数组或者`slice`做数据截取
 
 2. `:`得到的结果是一个新`slice`
-3. 新`slice`的`array`指针指向原数组或者原`slice`的底层数组。
+3. 新`slice`结构体里的`array`指针指向原数组或者原`slice`的底层数组。
 4. `:`分割操作符右边的数值有上限，上限有2种情况
    * 如果分割的是数组，那上限是是被分割的数组的长度。
    * 如果分割的是切片，那上限是被分割的切片的容量。**注意**，这个和下标操作不一样，如果使用下标索引访问切片，下标索引的最大值是(切片的长度-1)，而不是切片的容量。
@@ -94,6 +94,7 @@ step2: 现在对切片`s`做分割`s2 := s[2:4]`，得到一个新切片`s2`，�
 * `s2`还是指向原切片`s`的底层数组，只不过指向的起始位置是下标索引为2的位置。
 * `s2`的长度`len(s2)`是2，因为`s2 := s[2:4]`只是截取了切片`s`下标索引为2和3的2个元素。
 * `s2`的容量`cap(s2)`是3，因为从`s2`指向的数组位置到底层数组末尾，可以存3个元素。
+* 因为长度是2，所以只有`s2[0]`和`s2[1]`是有效的下标索引访问。但是，容量为3，`s2[0:3]`是一个有效的分割表达式。
 
 step3: 对切片`s`做分割`s3 := s2[:cap(s2)]`，得到一个新切片`s3`，结构如下：
 
@@ -105,13 +106,40 @@ step3: 对切片`s`做分割`s3 := s2[:cap(s2)]`，得到一个新切片`s3`，�
 
 **因此，对数组或者切片做`:`分割操作产生的新切片还是指向原来的底层数组，并不会把原底层数组的元素拷贝一份到新的内存空间里。**
 
+正是因为他们指向同一块内存空间，所以对原数组或者原切片的修改会影响分割后的新切片的值，反之亦然。
 
+### append机制
 
-## append机制
+要了解append的机制，直接看源码说明。
 
+```go
+// The append built-in function appends elements to the end of a slice. If
+// it has sufficient capacity, the destination is resliced to accommodate the
+// new elements. If it does not, a new underlying array will be allocated.
+// Append returns the updated slice. It is therefore necessary to store the
+// result of append, often in the variable holding the slice itself:
+//	slice = append(slice, elem1, elem2)
+//	slice = append(slice, anotherSlice...)
+// As a special case, it is legal to append a string to a byte slice, like this:
+//	slice = append([]byte("hello "), "world"...)
+func append(slice []Type, elems ...Type) []Type
+```
 
+* append函数返回的也是一个切片
+* 如果原切片的容量足以包含新增加的元素，那append函数返回的切片结构里3个字段的值是：
+  * array指针字段的值不变，和原切片的array指针的值相同，也就是append返回的切片还是指向原切片的底层数组
+  * len长度字段的值做相应增加，增加了N个元素，长度就增加N
+  * cap容量不变
+* 如果原切片的容量不够包新增加的元素，那append函数返回的切片结构里的3个字段的值是：
+  * array指针字段的值变了，不再指向原切片的底层数组了，会指向一块新的内存空间
+  * len长度字段的值做相应增加，增加了N个元素，长度就增加N
+  * cap容量会增加
 
-## slice扩容机制
+如果原切片的容量不足以存储append添加的新元素，Go会先分配一块容量更大的新内存，然后把原切片里的所有元素拷贝过来，最后在新的内存里添加新元素。
+
+那么问题来了，新切片的容量是按照什么规则计算得出来的呢？
+
+### slice扩容机制
 
 
 
@@ -120,6 +148,17 @@ step3: 对切片`s`做分割`s3 := s2[:cap(s2)]`，得到一个新切片`s3`，�
 
 
 ## 加餐：copy机制
+
+src/builtin/builtin.go
+
+```go
+// The copy built-in function copies elements from a source slice into a
+// destination slice. (As a special case, it also will copy bytes from a
+// string to a slice of bytes.) The source and destination may overlap. Copy
+// returns the number of elements copied, which will be the minimum of
+// len(src) and len(dst).
+func copy(dst, src []Type) int
+```
 
 
 
@@ -140,6 +179,8 @@ step3: 对切片`s`做分割`s3 := s2[:cap(s2)]`，得到一个新切片`s3`，�
 * 给slice复制：指针赋值，是不是指向新地址， 长度赋值，容量赋值
 
 * copy机制
+
+* 打印只根据len长度来打印
 
 * Go没有传引用这个说法，都是传值，可以参考我之前的文章xxx
 
