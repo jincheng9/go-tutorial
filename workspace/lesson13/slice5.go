@@ -2,9 +2,8 @@ package main
 
 import "fmt"
 
-
 func change1(param []int) {
-	param[0] = 100 // 这个会改变外部切片的值
+	param[0] = 100             // 这个会改变外部切片的值
 	param = append(param, 200) // append不会改变外部切片的值
 }
 
@@ -21,5 +20,4 @@ func main() {
 
 	change2(&slice)
 	fmt.Println(slice) // [100, 0, 300]
-	
 }
