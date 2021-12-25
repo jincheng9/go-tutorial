@@ -73,6 +73,7 @@
 3. [一文读懂Go匿名结构体的使用场景](./workspace/senior/p5)
 3. [官方教程：Go泛型入门](./workspace/senior/p6)
 3. [一文读懂Go泛型设计和使用场景](./workspace/senior/p7)
+3. [Go Quiz: 从Go面试题看slice的底层原理和注意事项](./workspace/senior/p8)
 
 
 
