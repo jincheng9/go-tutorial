@@ -2,7 +2,16 @@ package main
 
 import "fmt"
 
+func test() {
+	a := [...]int{1, 2, 3, 4, 5}
+	x := a[2:4]
+	fmt.Println(len(x), cap(x), x)
+	y := x[0:1]
+	fmt.Println(len(y), cap(y), y)
+}
+
 func main() {
+	test()
 	var s []int
 	fmt.Println(len(s), cap(s))
 	a := [...]int{0, 1, 2, 3}
