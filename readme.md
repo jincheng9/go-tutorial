@@ -130,6 +130,8 @@
 
 ## Go Blog
 
+* [Jincheng's Blog](https://jincheng9.github.io/)
+
 * [Russ Cox](https://research.swtch.com/)
 
 * [Go Documentation](https://go.dev/doc/)
