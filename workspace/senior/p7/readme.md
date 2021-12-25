@@ -46,7 +46,7 @@ func min(x, y float64) float64 {
 }
 ```
 
-这个例子，只能计算2个`float64`中的较小者。有泛型之前，如果我们要支持计算2个int或者其它数值类型的较小者，就需要实现新的函数、或者使用`interface{}`，或者使用`Refelect`。
+这个例子，只能计算2个`float64`中的较小者。有泛型之前，如果我们要支持计算2个int或者其它数值类型的较小者，就需要实现新的函数、或者使用`interface{}`，或者使用`Reflect`。
 
 对于这个场景，使用泛型代码更简洁，效率也更优。支持比较不同数值类型的泛型min函数实现如下：
 
@@ -459,7 +459,7 @@ func test[T any] () {
 
 `Avoid boilerplate code`。
 
-Go语言里interface和refelect可以在某种程度上实现泛型，我们在处理多种类型的时候，要考虑具体的使用场景，切勿盲目用泛型。
+Go语言里interface和reflect可以在某种程度上实现泛型，我们在处理多种类型的时候，要考虑具体的使用场景，切勿盲目用泛型。
 
 想更加深入了解Go泛型设计原理的可以参考Go泛型设计作者Ian和Robert写的Go Proposal：
 
