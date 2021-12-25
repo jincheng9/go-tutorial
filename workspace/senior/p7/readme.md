@@ -459,7 +459,7 @@ func test[T any] () {
 
 `Avoid boilerplate code`。
 
-Go语言里interface和reflect可以在某种程度上实现泛型，我们在处理多种类型的时候，要考虑具体的使用场景，切勿盲目用泛型。
+Go语言里`interface`和`reflect`可以在某种程度上实现泛型，我们在处理多种类型的时候，要考虑具体的使用场景，切勿盲目用泛型。
 
 想更加深入了解Go泛型设计原理的可以参考Go泛型设计作者Ian和Robert写的Go Proposal：
 
