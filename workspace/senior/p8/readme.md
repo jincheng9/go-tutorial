@@ -141,7 +141,7 @@ func append(slice []Type, elems ...Type) []Type
 
 ### slice扩容机制
 
-
+`slice`的扩容机制随着`Go`的版本迭代，是有变化的
 
 ## 答案
 
@@ -149,7 +149,7 @@ func append(slice []Type, elems ...Type) []Type
 
 ## 加餐：copy机制
 
-src/builtin/builtin.go
+Go的内置函数`copy`可以把一个切片里的元素拷贝到另一个切片，源码定义在`src/builtin/builtin.go`，代码如下：
 
 ```go
 // The copy built-in function copies elements from a source slice into a
@@ -158,6 +158,25 @@ src/builtin/builtin.go
 // returns the number of elements copied, which will be the minimum of
 // len(src) and len(dst).
 func copy(dst, src []Type) int
+```
+
+`copy`会从原切片`src`拷贝 `min(len(dst), len(src))`个元素到目标切片`dst`，
+
+因为拷贝的元素个数`min(len(dst), len(src))`不会超过目标切片的长度`len(dst)`，所以`copy`执行后，目标切片的长度不会变，容量不会变。
+
+**注意**：原切片和目标切片的内存空间可能会有重合，`copy`后可能会改变原切片的值，参考下例。
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+	a := []int{1, 2, 3}
+	b := a[1:] // [2 3]
+	copy(a, b) // a和b内存空间有重叠
+	fmt.Println(a, b) // [2 3 3] [3 3]
+}
 ```
 
 
@@ -188,7 +207,7 @@ func copy(dst, src []Type) int
 
 ## 开源地址
 
-文章和代码开源地址在GitHub: https://github.com/jincheng9/go-tutorial
+文章和示例代码开源地址在GitHub: https://github.com/jincheng9/go-tutorial
 
 公众号：coding进阶
 
@@ -196,7 +215,30 @@ func copy(dst, src []Type) int
 
 
 
+## 思考题
+
+留下一道思考题，欢迎大家在评论区留下你们的答案。
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+	a := []int{1, 2}
+	b := append(a, 3)
+
+	c := append(b, 4)
+	d := append(b, 5)
+
+	fmt.Println(a, b, c[3], d[3])
+}
+```
+
+
+
 ## References
 
 * https://go101.org/quizzes/slice-1.html
 * https://go.dev/blog/slices-intro
+* https://github.com/golang/go/blob/master/src/runtime/slice.go#L156

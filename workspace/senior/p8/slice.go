@@ -22,6 +22,11 @@ func test2() {
 	}
 }
 
+func test3() {
+	a := []int{1, 2}
+	fmt.Println(append(a, 3))
+}
+
 func main() {
 	test2()
 	var s []int

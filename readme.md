@@ -129,6 +129,25 @@
 
 
 
+## Go Video
+
+### YouTube
+
+* [Basics, Intermediate, Advanced Go Tutorials](https://www.youtube.com/c/BitfieldConsulting)
+* [GopherCon Talks Since 2014](https://www.youtube.com/c/GopherAcademy/videos)
+
+
+
+## Go Book
+
+* [Go语言高级编程-chai2010.gitbooks.io](https://chai2010.gitbooks.io/advanced-go-programming-book/content/)
+* [Go语言设计与实现-draveness.me](https://draveness.me/golang/)
+* [深入解析Go-tiancaiamao.gitbooks.io](https://tiancaiamao.gitbooks.io/go-internals/content/zh/)
+* [码农桃花源-qcrao91.gitbook.io](https://qcrao91.gitbook.io/go/)
+* [英文Go书籍list](https://github.com/dariubs/GoBooks)
+
+
+
 ## Go Blog
 
 * [Jincheng's Blog](https://jincheng9.github.io/)
@@ -163,29 +182,13 @@
 
 * [Amit Saha](https://echorand.me/)
 
+* [qcrao-manongtaohuayuan](https://qcrao.com/)
+
 * [topgoer](https://www.topgoer.com/)
 
-* [jianyu](https://eddycjy.com/)
+* [jianyu chen](https://eddycjy.com/)
 
   
-
-## Go Video
-
-### YouTube
-
-* [Basics, Intermediate, Advanced Go Tutorials](https://www.youtube.com/c/BitfieldConsulting)
-* [GopherCon Talks Since 2014](https://www.youtube.com/c/GopherAcademy/videos)
-
-
-
-## Go Book
-
-* [Go语言高级编程-chai2010.gitbooks.io](https://chai2010.gitbooks.io/advanced-go-programming-book/content/)
-* [Go语言设计与实现-draveness.me](https://draveness.me/golang/)
-* [深入解析Go-tiancaiamao.gitbooks.io](https://tiancaiamao.gitbooks.io/go-internals/content/zh/)
-* [英文Go书籍list](https://github.com/dariubs/GoBooks)
-
-
 
 ## 微信公众号
 
