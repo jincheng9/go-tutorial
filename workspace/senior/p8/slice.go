@@ -24,26 +24,12 @@ func test2() {
 
 func test3() {
 	a := make([]int, 1, 4)
-	fmt.Println(&a[0])
 	b := append(a, 1)
-	fmt.Println(&b[0])
 	fmt.Println(a, b)
-	fmt.Println(append(a, 2), a, b)
-	c := a[1:4]
-	fmt.Println(len(c), cap(c), c)
-}
-
-func test4() {
-	a := make([]int, 0, 4)
-	b := a[:]  // 等价于 b := a[0:0], b的长度是0，容量是4
-	c := a[:1] // 等价于 c := a[0:1], b的长度是1，容量是4
-	// d := a[1:]  // 编译报错 panic: runtime error: slice bounds out of range
-	e := a[1:4] // e的长度3，容量3
-	fmt.Println(cap(b), cap(c), cap(e))
 }
 
 func main() {
-	test4()
+	test3()
 	// var s []int
 	// fmt.Println(len(s), cap(s))
 	// a := [...]int{0, 1, 2, 3}

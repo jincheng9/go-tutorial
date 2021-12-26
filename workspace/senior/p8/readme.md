@@ -171,6 +171,84 @@ func append(slice []Type, elems ...Type) []Type
 
 这里明确告诉大家，这个结论是**错误**的。
 
+`slice`扩容的源码实现在`src/runtime/slice.go`里的`growslice`函数，源码地址：https://github.com/golang/go/blob/master/src/runtime/slice.go。
+
+Go 1.18的扩容实现代码如下，et是切片里的元素类型，old是原切片，cap等于原切片的长度+append新增的元素个数。
+
+```go
+func growslice(et *_type, old slice, cap int) slice {
+	// ...
+	newcap := old.cap
+	doublecap := newcap + newcap
+	if cap > doublecap {
+		newcap = cap
+	} else {
+		const threshold = 256
+		if old.cap < threshold {
+			newcap = doublecap
+		} else {
+			// Check 0 < newcap to detect overflow
+			// and prevent an infinite loop.
+			for 0 < newcap && newcap < cap {
+				// Transition from growing 2x for small slices
+				// to growing 1.25x for large slices. This formula
+				// gives a smooth-ish transition between the two.
+				newcap += (newcap + 3*threshold) / 4
+			}
+			// Set newcap to the requested cap when
+			// the newcap calculation overflowed.
+			if newcap <= 0 {
+				newcap = cap
+			}
+		}
+	}
+
+	var overflow bool
+	var lenmem, newlenmem, capmem uintptr
+	// Specialize for common values of et.size.
+	// For 1 we don't need any division/multiplication.
+	// For sys.PtrSize, compiler will optimize division/multiplication into a shift by a constant.
+	// For powers of 2, use a variable shift.
+	switch {
+	case et.size == 1:
+		lenmem = uintptr(old.len)
+		newlenmem = uintptr(cap)
+		capmem = roundupsize(uintptr(newcap))
+		overflow = uintptr(newcap) > maxAlloc
+		newcap = int(capmem)
+	case et.size == goarch.PtrSize:
+		lenmem = uintptr(old.len) * goarch.PtrSize
+		newlenmem = uintptr(cap) * goarch.PtrSize
+		capmem = roundupsize(uintptr(newcap) * goarch.PtrSize)
+		overflow = uintptr(newcap) > maxAlloc/goarch.PtrSize
+		newcap = int(capmem / goarch.PtrSize)
+	case isPowerOfTwo(et.size):
+		var shift uintptr
+		if goarch.PtrSize == 8 {
+			// Mask shift for better code generation.
+			shift = uintptr(sys.Ctz64(uint64(et.size))) & 63
+		} else {
+			shift = uintptr(sys.Ctz32(uint32(et.size))) & 31
+		}
+		lenmem = uintptr(old.len) << shift
+		newlenmem = uintptr(cap) << shift
+		capmem = roundupsize(uintptr(newcap) << shift)
+		overflow = uintptr(newcap) > (maxAlloc >> shift)
+		newcap = int(capmem >> shift)
+	default:
+		lenmem = uintptr(old.len) * et.size
+		newlenmem = uintptr(cap) * et.size
+		capmem, overflow = math.MulUintptr(et.size, uintptr(newcap))
+		capmem = roundupsize(capmem)
+		newcap = int(capmem / et.size)
+	}
+	// ...
+	return slice{p, old.len, newcap}
+}
+```
+
+newcap是扩容后的容量，先根据原切片的长度、容量和要添加的元素个数确定newcap大小，最后再对newcap做内存对齐得到最后的newcap。
+
 
 
 ## 答案
@@ -224,26 +302,28 @@ func main() {
 
 ## 总结
 
-> 对于slice，时刻想着对slice做了修改后，slice里的3个字段：指针，长度，容量是怎么变的
+> 对于slice，时刻想着对slice做了修改后，slice里的3个字段：指针，长度，容量是怎么变的。
 
-* `slice`是一个结构体类型，里面包含3个字段：指向数组的指针，长度和容量。
+* `slice`是一个结构体类型，里面包含3个字段：指向数组的`array`指针，长度`len`和容量`cap`。给slice赋值是对`slice`里的指针，长度和容量3个字段分别赋值。
 
-* `:`分割操作符的结果是一个新切片，指向被分割的数组或者被分割的切片的底层数组，共享内存空间。
+* `:`分割操作符的结果是一个新切片，**新`slice`结构体里的`array`指针指向原数组或者原`slice`的底层数组，新切片的长度是`：`右边的数值减去左边的数值，新切片的容量是原切片的容量减去`:`左边的数值。**
 
 * `:`分割操作符右边的数值上限有2种情况：
 
   * 如果分割的是数组，那上限是是被分割的数组的长度。
-  * 如果分割的是切片，那上限是被分割的切片的容量。**注意**，这个和下标操作不一样，如果使用下标索引访问切片，下标索引的最大值是(切片的长度-1)，而不是切片的容量。拷贝赋值
+  * 如果分割的是切片，那上限是被分割的切片的容量。**注意**，这个和下标操作不一样，如果使用下标索引访问切片，下标索引的最大值是(切片的长度-1)，而不是切片的容量。
 
-* append后如果原
+* 对于`append`操作和`copy`操作，要清楚背后的执行逻辑。
 
-* 给slice复制：指针赋值，是不是指向新地址， 长度赋值，容量赋值
+* 打印`slice`时，是根据`slice`的长度来打印的
 
-* copy机制
+  ```go
+  a := make([]int, 1, 4) // a的长度是1，容量是4
+  b := append(a, 1) // 往a的末尾添加元素1，b=[0 1], a的长度还是1，a和b指向同一个底层数组
+  fmt.Println(a, b) // [0] [0 1]
+  ```
 
-* 打印只根据len长度来打印
-
-* Go没有传引用这个说法，都是传值，可以参考我之前的文章xxx
+* Go在函数传参时，没有传引用这个说法，只有传值。网上有些文章写Go的`slice`，`map`，`channel`作为参数是传引用，这是错误的，可以参考我之前的文章[Go有引用变量和引用传递么？](https://github.com/jincheng9/go-tutorial/tree/main/workspace/senior/p3)
 
   
 
