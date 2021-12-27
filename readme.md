@@ -142,6 +142,7 @@
 
 * [Go语言高级编程-chai2010.gitbooks.io](https://chai2010.gitbooks.io/advanced-go-programming-book/content/)
 * [Go语言设计与实现-draveness.me](https://draveness.me/golang/)
+* [Go设计模式-Tamer Tas@google](https://github.com/tmrts/go-patterns)
 * [深入解析Go-tiancaiamao.gitbooks.io](https://tiancaiamao.gitbooks.io/go-internals/content/zh/)
 * [码农桃花源-qcrao91.gitbook.io](https://qcrao91.gitbook.io/go/)
 * [英文Go书籍list](https://github.com/dariubs/GoBooks)
