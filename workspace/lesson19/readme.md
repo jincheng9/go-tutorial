@@ -91,7 +91,7 @@
   ch8 := make(chan struct_type)
   ```
 
-* 使用：channel有3种操作，发送数据，接收数据和关闭channel。发送和接收都是用**<-**符号
+* 使用：channel有3种操作，发送数据，接收数据和关闭channel。发送和接收都是用`<-`符号
 
   * 发送值到通道：channel <- value
 
@@ -104,11 +104,11 @@
 
     ```go
     ch := make(chan int)
-    x := <-ch // 从通道ch里接收值，并复制给变量x
+    x := <-ch // 从通道ch里接收值，并赋值给变量x
     <-ch // 从通道里接收值，不做其它处理
     ```
 
-  * 关闭通道
+  * 关闭通道: close(channel)，关闭nil channel会触发`panic: close of nil channel `
 
     ```go
     ch := make(chan int)
@@ -254,7 +254,7 @@
   * for死循环不断获取channel里的数据，如果channel的值取完后，继续从channel里获取，会存在2种情况
 
     * 如果channel已经被close了，继续从channel里获取值会拿到对应channel里数据类型的零值
-    * 如果channel没有被close，也不在继续往channel里发送数据，接收方会阻塞报错
+    * 如果channel没有被close，也不再继续往channel里发送数据，接收方会阻塞报错
 
     ```go
     package main
@@ -306,7 +306,7 @@
 
     ```go
     chan <- int // 只写，只能往channel写数据，不能从channel读数据
-    <- chan int // 只读，只能往channel读数据，不能从channel写数据
+    <- chan int // 只读，只能从channel读数据，不能往channel写数据
     ```
 
   * 实例
@@ -390,7 +390,7 @@
   }
   ```
   
-  在for循环里，用到了goroutine和闭包，每个闭包共享变量**i**，在闭包真正执行的时候，闭包里面用到的变量**i**的值可能已经被改了，所以闭包里调用worker的时候的传参i就不是想象中的从0到9。
+  在for循环里，用到了goroutine和闭包，每个闭包共享变量`i`，在闭包真正执行的时候，闭包里面用到的变量**i**的值可能已经被改了，所以闭包里调用worker的时候的传参i就不是想象中的从0到9。
   
   有2种方法规避
   

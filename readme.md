@@ -68,12 +68,13 @@
 ## 进阶篇
 
 1. [被defer的函数一定会执行么？](./workspace/senior/p2)
-2. [Go有引用变量和引用传递么？](./workspace/senior/p3)
+2. [Go有引用变量和引用传递么？map,channel和slice作为函数参数是引用传递么？](./workspace/senior/p3)
 3. [new和make的使用区别是什么？](./workspace/senior/p4)
 3. [一文读懂Go匿名结构体的使用场景](./workspace/senior/p5)
 3. [官方教程：Go泛型入门](./workspace/senior/p6)
 3. [一文读懂Go泛型设计和使用场景](./workspace/senior/p7)
 3. [Go Quiz: 从Go面试题看slice的底层原理和注意事项](./workspace/senior/p8)
+3. [Go Quiz: 从Go面试题看channel的注意事项](./workspace/senior/p9)
 
 
 
