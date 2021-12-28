@@ -110,7 +110,25 @@
   }
   ```
 
+* 方法4。只适用于`interface`的类型判断，而且`{`要和`switch`在同一行，`{`前面不能有分号`;`。
 
+  ```go
+  package main
+  
+  import "fmt"
+  
+  func main() {
+  	var i interface{} = 10
+  	switch t := i.(type) {
+  	case bool:
+  		fmt.Println("I'm a bool")
+  	case int:
+  		fmt.Println("I'm an int")
+  	default:
+  		fmt.Printf("Don't know type %T\n", t)
+  	}
+  }
+  ```
 
 ## References
 
