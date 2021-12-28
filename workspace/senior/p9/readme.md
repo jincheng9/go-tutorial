@@ -54,8 +54,17 @@ func main() {
    | 关闭channel       | panic | 关闭成功 | 关闭成功 | 关闭成功 |
 
 3. `channel`被关闭后：
+
    * 往被关闭的`channel`发送数据会触发panic。
+
    * 从被关闭的`channel`接收数据，会先读完`channel`里的数据。如果数据读完了，继续从`channel`读数据会拿到`channel`里存储的元素类型的零值。
+
+     ```go
+     data, ok := <- c 
+     ```
+
+     对于上面的代码，如果channel `c`关闭了，继续从`c`里读数据，当`c`里还有数据时，`data`就是对应读到的值，`ok`的值是`true`。如果`c`的数据已经读完了，那`data`就是零值，`ok`的值是`false`。
+
    * `channel`被关闭后，如果再次关闭，会引发panic。
 
 4. `select`的运行机制如下：
