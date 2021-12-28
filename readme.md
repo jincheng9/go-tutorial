@@ -75,7 +75,7 @@
 3. [一文读懂Go泛型设计和使用场景](./workspace/senior/p7)
 3. [Go Quiz: 从Go面试题看slice的底层原理和注意事项](./workspace/senior/p8)
 3. [Go Quiz: 从Go面试题看channel的注意事项](./workspace/senior/p9)
-3. [Go Quiz: 从Go面试题看switch的注意事项](./workspace/senior/p10)
+3. [Go Quiz: 从Go面试题看分号规则和switch的注意事项](./workspace/senior/p10)
 
 
 
