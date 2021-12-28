@@ -80,9 +80,22 @@
   		// plan9, windows...
   		fmt.Printf("%s.\n", os)
   }
+  
+  // 上面的写法和这个等价
+  os := runtime.GOOS
+  switch os {
+  	case "darwin":
+  		fmt.Println("OS X.")
+  	case "linux":
+  		fmt.Println("Linux.")
+  	default:
+  		// freebsd, openbsd,
+  		// plan9, windows...
+  		fmt.Printf("%s.\n", os)
+  }
   ```
   
-* 方法3
+* 方法3。case分支的每个condition结果必须是一个bool值，要么为true，要么为false
 
   ```go
   switch {
@@ -96,3 +109,9 @@
     	do sth
   }
   ```
+
+
+
+## References
+
+* https://yourbasic.org/golang/switch-statement/

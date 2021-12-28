@@ -156,6 +156,8 @@
 
 * [Russ Cox](https://research.swtch.com/)
 
+* [CS Prof Nilsson from KTH-Golang and Algo](https://yourbasic.org/golang/)
+
 * [Go Documentation](https://go.dev/doc/)
 
 * [Golang GitHub Wiki](https://github.com/golang/go/wiki)
