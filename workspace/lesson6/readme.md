@@ -80,7 +80,7 @@
   Second case
   ```
 
-* 方法1
+* switch使用方法1
 
   ```go
   switch variable {
@@ -97,7 +97,7 @@
   }
   ```
 
-* 方法2
+* switch使用方法2
 
   ```go
   switch os := runtime.GOOS; os {
@@ -125,7 +125,7 @@
   }
   ```
   
-* 方法3。case分支的每个condition结果必须是一个bool值，要么为true，要么为false
+* switch使用方法3。case分支的每个condition结果必须是一个bool值，要么为true，要么为false
 
   ```go
   switch {
@@ -140,7 +140,7 @@
   }
   ```
 
-* 方法4。只适用于`interface`的类型判断，而且`{`要和`switch`在同一行，`{`前面不能有分号`;`
+* switch使用方法4。只适用于`interface`的类型判断，而且`{`要和`switch`在同一行，`{`前面不能有分号`;`
 
   ```go
   package main
