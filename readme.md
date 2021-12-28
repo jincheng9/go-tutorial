@@ -18,7 +18,7 @@
 
 * [lesson7: 循环语句for/goto/break/continue](./workspace/lesson7)
 
-* [lesson8: 函数和方法](./workspace/lesson8)
+* [lesson8: 函数，闭包和方法](./workspace/lesson8)
 
 * [lesson9: 变量作用域](./workspace/lesson9)
 

@@ -162,7 +162,6 @@
    invoked, not when the "defer" statement is executed.
    ```
 
-   
 
 
 ## References
