@@ -1,10 +1,10 @@
-# Go Quiz: 从Go面试题看switch的注意事项
+# Go Quiz: 从Go面试题看分号规则和switch的注意事项
 
 ## 面试题
 
-这是Go Quiz系列的第3篇，关于`switch`的特性。
+这是Go Quiz系列的第3篇，关于Go语言的分号规则和`switch`的特性。
 
-这道题比较tricky，通过这道题可以加深我们对Go语言里的分号`:`规则和`switch`的理解。
+这道题比较tricky，通过这道题可以加深我们对Go语言里的分号`:`规则和`switch`特性的理解。
 
 ```go
 package main
@@ -48,7 +48,7 @@ func main() {
 
 如果你在代码里显示地加上分号，编译器是不会报错的，只是Go不需要也不建议显示加分号，一切交给编译器去自动完成。
 
-**那编译器是怎么往我们代码里插入分号`:`的呢？规则是什么？**我们看看官方文档的说法：
+**那编译器是怎么往我们代码里插入分号`:`的呢？规则是什么**？我们看看官方文档的说法：
 
 > 1. When the input is broken into tokens, a semicolon is automatically inserted into the token stream immediately after a line's final token if that token is
 >    - an [identifier](https://go.dev/ref/spec#Identifiers)
