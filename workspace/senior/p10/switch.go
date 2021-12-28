@@ -5,7 +5,8 @@ func f() bool {
 }
 
 func main() {
-	switch f(); {
+	switch f(); 
+	{
 	case true:
 		println(1)
 	case false:
@@ -13,4 +14,6 @@ func main() {
 	default:
 		println(-1)
 	}
+	a := 1
+	fmt.println(a++)
 }
