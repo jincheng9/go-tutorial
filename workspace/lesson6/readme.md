@@ -44,7 +44,7 @@
 
 ## switch
 
-* 每一个case分支都是唯一的，从上往下逐一判断，知道匹配为止。如果某些case分支条件重复了，编译会报错
+* 每一个case分支都是唯一的，从上往下逐一判断，直到匹配为止。如果某些case分支条件重复了，编译会报错
 
 * 默认情况下每个case分支最后自带break效果，匹配成功就不会执行其它case。
 
@@ -68,6 +68,21 @@
   ```
 
 * 方法2
+
+  ```go
+  switch os := runtime.GOOS; os {
+  	case "darwin":
+  		fmt.Println("OS X.")
+  	case "linux":
+  		fmt.Println("Linux.")
+  	default:
+  		// freebsd, openbsd,
+  		// plan9, windows...
+  		fmt.Printf("%s.\n", os)
+  }
+  ```
+  
+* 方法3
 
   ```go
   switch {
