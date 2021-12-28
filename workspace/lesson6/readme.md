@@ -48,7 +48,37 @@
 
 * 默认情况下每个case分支最后自带break效果，匹配成功就不会执行其它case。
 
-  如果需要执行后面的case，可以使用fallthrough。使用 fallthrough 会强制执行紧接着的下一个 case 语句，fallthrough 不会判断紧接着的下一条 case 的表达式结果是否为 true。
+  如果需要执行后面的case，可以使用fallthrough。
+
+  使用 fallthrough 会强制执行紧接着的下一个 case 语句，不过fallthrough 不会去分析紧接着的下一条 case 的表达式结果是否满足条件，而是直接执行case里的语句块。
+
+  ```go
+  // Foo prints and returns n.
+  func Foo(n int) int {
+      fmt.Println(n)
+      return n
+  }
+  
+  func main() {
+      switch Foo(2) {
+      case Foo(1), Foo(2), Foo(3):
+          fmt.Println("First case")
+          fallthrough
+      case Foo(4):
+          fmt.Println("Second case")
+      }
+  }
+  ```
+
+  比如上面的例子，执行结果如下，并不会去执行`fallthrough`的下一个case分支里的表达式`Foo(4)`
+
+  ```markdown
+  2
+  1
+  2
+  First case
+  Second case
+  ```
 
 * 方法1
 
@@ -110,7 +140,7 @@
   }
   ```
 
-* 方法4。只适用于`interface`的类型判断，而且`{`要和`switch`在同一行，`{`前面不能有分号`;`。
+* 方法4。只适用于`interface`的类型判断，而且`{`要和`switch`在同一行，`{`前面不能有分号`;`
 
   ```go
   package main
