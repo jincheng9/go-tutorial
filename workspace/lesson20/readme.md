@@ -11,7 +11,9 @@
   defer method([parameter_list]) // 延迟执行方法
   ```
 
-  defer本身是在某个函数体内执行，比如在函数A内调用了defer func_name()，只要defer func_name()这行代码被执行到了，那func_name这个函数就会**被延迟到函数A return之前执行，并且一定会执行**。 
+  defer本身是在某个函数体内执行，比如在函数A内调用了defer func_name()，只要defer func_name()这行代码被执行到了，那func_name这个函数就会**被延迟到函数A return或者panic之前执行**。
+
+  **注意**：如果是函数是因为调用了`os.Exit()`而退出，那`defer`就不会被执行了。参见[Go语言里被defer的函数一定会执行么？](https://github.com/jincheng9/go-tutorial/tree/main/workspace/senior/p2) 
 
   ```go
   defer func_name([parameter_list])

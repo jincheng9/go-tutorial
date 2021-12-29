@@ -126,7 +126,9 @@ main end
 查看os.Exit的说明如下：
 
 ```go
-Exit causes the current program to exit with the given status code. Conventionally, code zero indicates success, non-zero an error. The program terminates immediately; deferred functions are not run.
+Exit causes the current program to exit with the given status code. 
+Conventionally, code zero indicates success, non-zero an error. 
+The program terminates immediately; deferred functions are not run.
 
 For portability, the status code should be in the range [0, 125].
 ```
