@@ -115,9 +115,9 @@
     * rune：等价于int32，数据范围-2147483648-2147483647
       * 字符串里的每一个字符的类型就是rune类型，或者说int32类型
     * uint：32位或64位
-    * uintptr: 无符号整数，是内存地址的整数表示形式，应用代码一般用不到（https://stackoverflow.com/questions/59042646/whats-the-difference-between-uint-and-uintptr-in-golang）
+    * uintptr: 无符号整数，是内存地址的十进制整数表示形式，应用代码一般用不到（https://stackoverflow.com/questions/59042646/whats-the-difference-between-uint-and-uintptr-in-golang）
     
-* reflect包的TypeOf函数或者fmt.Printf的%T可以用来获取数据的类型
+* reflect包的`TypeOf`函数或者`fmt.Printf`的`%T`可以用来获取数据的类型
 
     ```go
     var b byte = 10
