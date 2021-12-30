@@ -128,3 +128,5 @@ recover是Go的内置函数，可以捕获panic异常。程序正常执行过程
 
 * https://golang.google.cn/ref/spec#Run_time_panics
 * https://go.dev/blog/defer-panic-and-recover
+* https://go.dev/ref/spec#Handling_panics
+* https://draveness.me/golang/docs/part2-foundation/ch05-keyword/golang-panic-recover/
