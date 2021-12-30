@@ -135,27 +135,27 @@ func main() {
 
 本文再总结下本题目涉及的`defer`语义另外2大注意事项：
 
-1. 被defer的函数值(function value)在执行到defer语句的时候就被确定下来了。
+* 被defer的函数值(function value)在执行到defer语句的时候就被确定下来了。
 
-   ```go
-   package main
-   
-   import "fmt"
-   
-   func main() {
-   	defer func() {
-   		r := recover()
-   		fmt.Println(r)
-   	}()
-   	var f func(int) // f没有初始化赋值，默认值是nil
-   	defer f(1) // 函数变量f的值已经确定下来是nil了
-   	f = func(a int) {}
-   }
-   ```
+  ```go
+  package main
+  
+  import "fmt"
+  
+  func main() {
+  	defer func() {
+  		r := recover()
+  		fmt.Println(r)
+  	}()
+  	var f func(int) // f没有初始化赋值，默认值是nil
+  	defer f(1) // 函数变量f的值已经确定下来是nil了
+  	f = func(a int) {}
+  }
+  ```
 
-2. 如果被`defer`的函数或方法的值是nil，在执行`defer`这条语句的时候不会报错，但是最后调用nil函数或方法的时候就引发`panic: runtime error: invalid memory address or nil pointer dereference`。
+* 如果被`defer`的函数或方法的值是nil，在执行`defer`这条语句的时候不会报错，但是最后调用nil函数或方法的时候就引发`panic: runtime error: invalid memory address or nil pointer dereference`。
 
-   
+
 
 ## 思考题
 
