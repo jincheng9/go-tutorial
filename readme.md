@@ -8,7 +8,7 @@
 
 * [lesson2: 数据类型：数字，字符串，bool](./workspace/lesson2)
 
-* [lesson3: 变量类型和变量定义：全局变量，局部变量，多变量](./workspace/lesson3)
+* [lesson3: 变量类型定义：全局变量，局部变量，多变量，零值](./workspace/lesson3)
 
 * [lesson4: 常量和枚举](./workspace/lesson4)
 
