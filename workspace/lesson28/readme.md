@@ -90,7 +90,7 @@ recover是Go的内置函数，可以捕获panic异常。recover必须结合defer
 
   * panic的参数是nil。这种情况recover捕获后，拿到的返回值也是nil。
   * goroutine没有panic产生。没有panic，那当然recover拿到的也就是nil了。
-  * recover不是在被defer的函数里面被直接调用执行。
+  * recover不是**在被defer的函数里面**被**直接调用**执行。
 
 * 一个更复杂的示例
 
