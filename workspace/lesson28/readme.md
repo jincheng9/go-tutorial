@@ -23,15 +23,21 @@ panic和recover是Go的2个内置函数，用于程序运行期抛出异常(pani
 * 如果在函数F里，显示调用了panic或者函数F执行过程中出现运行期错误，那F的执行会终止，接下来会有以下行为依次产生：
 
   * F里被defer的函数会执行。
-  * F的上一级函数，也就是调用F的函数，假设是函数E。对函数E而言，F的调用就类似调用了panic，函数E里被defer的函数被执行
+  * F的上一级函数，也就是调用F的函数，假设是函数E。对函数E而言，对F的调用就等同于调用了panic，函数E里被defer的函数被执行
   * 如果函数E还有上一级函数，就继续往上，每一级函数里被defer的函数都被执行，直到没有上一级函数。
   * 经过了以上步骤，panic的错误就会被抛出来，整个程序结束。
 
 * 既然可以用panic来抛运行期异常，那就有相应办法可以捕获异常，让程序正常往下执行。Go通过结合内置函数recover和defer语义，来实现捕获运行期异常。
 
+* **对于标准Go编译期，有些致命错误是无法被recover捕捉的，比如栈溢出(stack overflow)或者内存超限(out of memory)，遇到这种情况程序就会crash。**
+
 ## recover
 
-recover是Go的内置函数，可以捕获panic异常。程序正常执行过程中，调用recover函数会返回nil，除此之外，没有其它任何效果。如果当前goroutine触发了panic，可以在代码的适当位置调用recover函数捕获异常，让程序继续正常执行，而不是异常终止。
+recover是Go的内置函数，可以捕获panic异常。recover必须结合defer一起使用才能生效。
+
+程序正常执行过程中，调用recover函数会返回nil，除此之外，没有其它任何效果。
+
+如果当前goroutine触发了panic，可以在代码的适当位置调用recover函数捕获异常，让程序继续正常执行，而不是异常终止。
 
 * 定义
 
@@ -84,7 +90,7 @@ recover是Go的内置函数，可以捕获panic异常。程序正常执行过程
 
   * panic的参数是nil。这种情况recover捕获后，拿到的返回值也是nil。
   * goroutine没有panic产生。没有panic，那当然recover拿到的也就是nil了。
-  * recover不是在被defer的函数里面被调用执行。recover必须结合defer一起使用才能生效。
+  * recover不是在被defer的函数里面被直接调用执行。
 
 * 一个更复杂的示例
 
@@ -126,8 +132,10 @@ recover是Go的内置函数，可以捕获panic异常。程序正常执行过程
 
 ## References
 
-* https://golang.google.cn/ref/spec#Run_time_panics
+* https://go.dev/ref/spec#Run_time_panics
 * https://go.dev/blog/defer-panic-and-recover
 * https://go.dev/ref/spec#Handling_panics
+* https://go101.org/article/control-flows-more.html
 * https://go101.org/article/panic-and-recover-more.html
 * https://draveness.me/golang/docs/part2-foundation/ch05-keyword/golang-panic-recover/
+
