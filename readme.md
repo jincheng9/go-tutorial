@@ -103,9 +103,9 @@
 
 #### gRPC
 
-* [gRPC入门指引](./rpc/01)
+* [gRPC入门指引](./workspace/rpc/01)
 
-* [gRPC-Go入门教程](./rpc/01)
+* [gRPC-Go入门教程](./workspace/rpc/02)
 
   
 
