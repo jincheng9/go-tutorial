@@ -65,7 +65,7 @@ m := min[int](2, 3)
 注意：
 
 1. 使用`constraints.Ordered`类型，需要`import constraints`。
-2. `min[int](2, 3)`是在对泛型函数`min`实例化(instantiation)，在编译期将泛型函数里的类型参数`T`替换为`int`。
+2. `min[int](2, 3)`在编译期会对泛型函数`min`实例化(instantiation)，将泛型函数里的类型参数`T`替换为`int`，在运行期就是实例化之后的函数调用了，不是泛型函数调用了。
 
 ### instantiation(实例化)
 
