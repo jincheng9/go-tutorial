@@ -217,3 +217,4 @@ func main() {
 * https://github.com/jincheng9/go-tutorial/tree/main/workspace/senior/p11
 * https://github.com/jincheng9/go-tutorial/tree/main/workspace/senior/p2
 * https://golang.google.cn/ref/spec#Defer_statements
+* https://chai2010.gitbooks.io/advanced-go-programming-book/content/appendix/appendix-a-trap.html

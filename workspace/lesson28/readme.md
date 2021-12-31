@@ -135,7 +135,7 @@ recover是Go的内置函数，可以捕获panic异常。recover必须结合defer
 * https://go.dev/ref/spec#Run_time_panics
 * https://go.dev/blog/defer-panic-and-recover
 * https://go.dev/ref/spec#Handling_panics
+* https://chai2010.gitbooks.io/advanced-go-programming-book/content/appendix/appendix-a-trap.html
 * https://go101.org/article/control-flows-more.html
 * https://go101.org/article/panic-and-recover-more.html
 * https://draveness.me/golang/docs/part2-foundation/ch05-keyword/golang-panic-recover/
-

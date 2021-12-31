@@ -8,6 +8,8 @@ func test() {
 }
 
 func main() {
+	var s []int
+	fmt.Println(len(s), cap(s))
 	defer func() {
 		//defer recover()
 		test()
