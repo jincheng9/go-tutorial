@@ -222,7 +222,7 @@ cd grpc-go/examples/helloworld
 
 * `gRPC`官方学习地址：
 
-  https://grpc.io/docs/languages/go/
+  * https://grpc.io/docs/languages/go/
 
   
 
