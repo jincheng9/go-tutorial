@@ -97,19 +97,134 @@ import "google.golang.org/grpc"
 
 ## 官方示例
 
+### 下载代码
 
+以`grpc-go`的v1.41.0版本为例，下载代码并进入到`grpc-go/examples/helloworld`目录：
+
+```bash
+git clone -b v1.41.0 https://github.com/grpc/grpc-go
+cd grpc-go/examples/helloworld
+```
+
+### 运行代码
+
+* 启动服务端
+
+  ```bash
+  go run greeter_server/main.go
+  ```
+
+  终端会打印如下内容，表示服务端已经启动并且在监听`50051`端口
+
+  ```bash
+  2022/01/02 13:01:08 server listening at [::]:50051
+  ```
+
+* 启动客户端。客户端会发送`SayHello`请求给服务端
+
+  ```bash
+  go run greeter_client/main.go
+  ```
+
+  终端会打印如下内容，表示收到了服务端的响应。
+
+  ```bash
+  2022/01/02 13:01:25 Greeting: Hello world
+  ```
+
+  
 
 ## 工程开发
 
+自己在使用`protobuf`和`grpc-go`开发的时候，按照如下步骤来操作：
+
+* 定义`.proto`文件，包括消息体和rpc服务接口定义
+* 使用`protoc`命令来编译`.proto`文件，用于生成`xx.pb.go`和`xx_grpc.pb.go`文件
+* 在服务端实现rpc里定义的方法
+* 客户端调用rpc方法，获取响应结果
+
+我们通过对上面的`grpc-go/examples/helloworld`做修改，来说明上述步骤。
+
+* 第一步，在`helloworld.proto`里增加一个rpc方法`SayHelloAgain`，参数和返回值和`SayHello`保持一样。
+
+  ```protobuf
+  // The greeting service definition.
+  service Greeter {
+    // Sends a greeting
+    rpc SayHello (HelloRequest) returns (HelloReply) {}
+    // send another greeting
+    rpc SayHelloAgain (HelloRequest) returns (HelloReply) {}
+  }
+  ```
+
+* 第二步，在`grpc-go/examples/helloworld`目录使用`protoc`命令编译`.proto`文件，生成新的`helloworld.pb.go`和`helloword_grpc.pb.go`文件。命令如下：
+
+  ```bash
+  protoc --go_out=. --go_opt=paths=source_relative \
+      --go-grpc_out=. --go-grpc_opt=paths=source_relative \
+      helloworld/helloworld.proto
+  ```
+
+* 第三步，在服务端实现rpc里新定义的方法`SayHelloAgain`。在`greeter_server/main.go`添加如下代码：
+
+  ```go
+  func (s *server) SayHelloAgain(ctx context.Context, in *pb.HelloRequest) (*pb.HelloReply, error) {
+  	log.Printf("Received: %v", in.GetName())
+  	return &pb.HelloReply{Message: "Hello again " + in.GetName()}, nil
+  }
+  ```
+
+* 第四步，在客户端调用新定义的rpc方法，获取响应结果。在`greeter_client/main.go`添加如下代码：
+
+  ```go
+  r2, err2 := c.SayHelloAgain(ctx, &pb.HelloRequest{Name: name})
+  if err2 != nil {
+  	log.Fatalf("could not greet: %v", err2)
+  }
+  log.Printf("Greeting: %s", r2.GetMessage())
+  ```
+
+* 第五步，运行程序
+
+  * 先启动服务端
+
+    ```bash
+    go run greeter_server/main.go
+    ```
+
+  * 再启动客户端
+
+    ```bash
+    go run greeter_client/main.go Alice
+    ```
+
+客户端会打印如下内容：
+
+```bash
+2022/01/02 13:37:58 Greeting: Hello alice
+2022/01/02 13:37:58 Greeting: Hello again alice
+```
+
+至此，我们就对如何在Go工程里使用`protobuf`和`gRPC`有了一个初步的了解和入门。
 
 
-## proto3语法
 
-https://developers.google.com/protocol-buffers/docs/proto3
+## 进阶学习
 
-https://developers.google.com/protocol-buffers/docs/reference/proto3-spec
+想要进一步学习，主要是深入了解`protobuf`和`gRPC`在Go语言里的使用技巧和原理
 
+* `protobuf`官方学习地址：
 
+  * https://developers.google.com/protocol-buffers/docs/proto3
+  * https://developers.google.com/protocol-buffers/docs/gotutorial
+  * https://developers.google.com/protocol-buffers/docs/reference/go-generated
+  * https://developers.google.com/protocol-buffers/docs/reference/proto3-spec
+
+* `gRPC`官方学习地址：
+
+  https://grpc.io/docs/languages/go/
+
+  
 
 ## 开源地址
 
