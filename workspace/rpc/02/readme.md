@@ -15,13 +15,13 @@
 
 * Go语言的`protobuf`插件和`runtime library`有过2个版本：
 
-  * 第1个版本开源地址：https://github.com/golang/protobuf，包含有插件`proto-gen-go`，可以生成`xx.pb.go`和`xx_grpc.pb.go`。Go工程里导入该版本的`protobuf runtime`的方式如下：
+  * 第1个版本开源地址：[https://github.com/golang/protobuf](https://github.com/golang/protobuf)，包含有插件`proto-gen-go`，可以生成`xx.pb.go`和`xx_grpc.pb.go`。Go工程里导入该版本的`protobuf runtime`的方式如下：
 
     ```go
     import "github.com/golang/protobuf"
     ```
 
-  * 第2个版本开源地址：https://github.com/protocolbuffers/protobuf-go，同样包含有插件`proto-gen-go`。不过该项目的`proto-gen-go`从`v1.20`版本开始，不再支持生成gRPC服务定义，也就是`xx_grpc.pb.go`文件。要生成gRPC服务定义需要使用`grpc-go`里的`progo-gen-go-grpc`插件。Go工程里导入该版本的`protobuf runtime`的方式如下：
+  * 第2个版本开源地址：[https://github.com/protocolbuffers/protobuf-go](https://github.com/protocolbuffers/protobuf-go)，同样包含有插件`proto-gen-go`。不过该项目的`proto-gen-go`从`v1.20`版本开始，不再支持生成gRPC服务定义，也就是`xx_grpc.pb.go`文件。要生成gRPC服务定义需要使用`grpc-go`里的`progo-gen-go-grpc`插件。Go工程里导入该版本的`protobuf runtime`的方式如下：
 
     ```go
     import "google.golang.org/protobuf"
