@@ -58,7 +58,7 @@
    export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
    ```
 
-   设置完后执行`source ~/.bash_profile`让设置生效，再执行`go1.18beta1`就不报错了。
+   `GOROOT`和`GOPATH`的值可以通过`go env`命令查看，设置完后执行`source ~/.bash_profile`让设置生效，再执行`go1.18beta1`就不报错了。
 
 3. 使用beta版本的go命令，不要去使用release版本的go命令
 
