@@ -50,6 +50,16 @@
    $ go1.18beta1 download
    ```
 
+   **注意**：如果在MAC或者Linux上执行`go1.18beta1`提示`command not found`，需要设置`bash`或者`zsh`对应的profile环境变量文件。`bash`设置在`~/.bash_profile`文件里，内容为：
+
+   ```bash
+   export GOROOT=/usr/local/opt/go/libexec
+   export GOPATH=$HOME/go
+   export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
+   ```
+
+   设置完后执行`source ~/.bash_profile`让设置生效，再执行`go1.18beta1`就不报错了。
+
 3. 使用beta版本的go命令，不要去使用release版本的go命令
 
    你可以通过直接使用`go1.18beta1`命令或者给`go1.18beta1`起一个简单的别名
