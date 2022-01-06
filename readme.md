@@ -131,7 +131,7 @@
 
 2. [GoLand常用快捷键](./workspace/senior/p1/readme2.md)
 
-2. [Go Mac开发环境常见问题汇总]("./workspace/senior/p1/readme3.md")
+2. [Go Mac开发环境常见问题汇总](./workspace/senior/p1/readme3.md)
 
    
 
