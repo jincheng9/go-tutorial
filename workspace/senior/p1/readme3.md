@@ -37,7 +37,7 @@ export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
 
 * `cat file.txt | pbcopy`，在terminal里执行该命令
 
-​	执行后，就可以使用Ctrl+V把剪切板里的内容拷贝到其它地方
+​	执行后，就可以使用CMD+V把剪切板里的内容拷贝到其它地方
 
 * `pbpaste`：在terminal里执行该命令
 
