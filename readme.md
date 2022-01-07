@@ -118,7 +118,7 @@
 
 ### Docker/K8s
 
-* [Docker入门教程101：用途，架构，安装和使用](https://github.com/jincheng9/disributed-system-notes/tree/main/docker/01)
+* [Docker入门教程101: 用途，架构，安装和使用](https://github.com/jincheng9/disributed-system-notes/tree/main/docker/01)
 * [Docker入门教程101: 基于Docker部署Go项目](https://github.com/jincheng9/disributed-system-notes/tree/main/docker/02)
 
 
