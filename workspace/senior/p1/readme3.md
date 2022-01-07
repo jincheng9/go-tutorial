@@ -43,3 +43,13 @@ export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
 
 ​	执行后，可以把内容拷贝到终端上
 
+
+
+## Mac安装homebrew
+
+官网：https://brew.sh/，在terminal里执行如下命令：
+
+```bash
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+```
+
