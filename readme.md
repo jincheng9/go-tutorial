@@ -110,7 +110,11 @@
 
 #### MySQL
 
-* [Tutorial of go-sql-driver/mysql](./workspace/mysql/01/readme.md)
+* [Tutorial of go-sql-driver/mysql](./workspace/mysql/01/)
+
+#### Redis
+
+* [Tutorial of go-redis/redis](./workspace/redis/01/)
 
 ### Docker/K8s
 
