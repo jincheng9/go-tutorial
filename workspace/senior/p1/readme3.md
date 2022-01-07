@@ -47,7 +47,7 @@ export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
 
 ## Mac安装homebrew
 
-官网：https://brew.sh/，在terminal里执行如下命令：
+官网：[https://brew.sh/](https://brew.sh/)，在terminal里执行如下命令：
 
 ```bash
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
