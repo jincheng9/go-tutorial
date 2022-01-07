@@ -53,3 +53,27 @@ export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 ```
 
+
+
+## Mac安装MySQL
+
+1. 使用homebrew安装
+
+```bash
+brew install mysql
+```
+
+2. 默认安装后root用户登录是不需要密码的，可以如下命令给root用户设置密码：
+
+```bash
+mysql_secure_installation
+```
+
+3. 升级后重启mysql
+
+```bash
+brew services restart mysql
+```
+
+
+
