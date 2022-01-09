@@ -77,3 +77,18 @@ brew services restart mysql
 
 
 
+## Mac安装Redis
+
+1. 使用homebrew安装
+
+   ```bash
+   brew install redis
+   ```
+
+2. 升级后重启redis
+
+   ```bash
+   brew services restart redis
+   ```
+
+   
