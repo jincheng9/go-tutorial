@@ -79,6 +79,9 @@ brew services restart mysql
 
 ## Mac安装Redis
 
+* `redis.conf`路径：/usr/local/etc/redis.conf
+* `redis-server`路径：/usr/local/opt/redis/bin/redis-server
+
 1. 使用homebrew安装
 
    ```bash
@@ -89,6 +92,18 @@ brew services restart mysql
 
    ```bash
    brew services restart redis
+   ```
+
+3. 关闭redis
+
+   ```bash
+   brew services stop redis
+   ```
+
+4. 启动redis
+
+   ```bash
+   brew services start redis
    ```
 
    
