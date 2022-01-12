@@ -1,8 +1,8 @@
 # gin-swagger常见问题
 
-### Fetch error *Internal Server Error doc*.*json*
+## Fetch error Internal Server Error doc*.*json
 
-需要在Gin路由设置的源文件导入`swag init`命令生成的docs包
+需要导入`swag init`命令生成的docs包
 
 ```go
 import _  module_name/docs
