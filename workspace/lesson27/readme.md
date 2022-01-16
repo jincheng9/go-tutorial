@@ -201,6 +201,79 @@ go mod tidy
 
 首先，Go官方并不推荐这种用法。import本地的module需要借助`replace`指令来实现。
 
+举个例子，本地有2个模块`module1`和`module2`，`module1`要使用`module2`里的`Add`函数，目录结构为：
+
+```
+replace_module_demo
+|
+|------module1
+|        |---main.go
+|        |---go.mod        
+|------module2
+|        |---func.go
+|        |---go.mod
+```
+
+`module1`要使用`module2`里的`Add`函数，需要做2个事情：
+
+* 在`module1`代码里添加对 `module2`的import。具体表现为下面的代码示例里module1/main.go里import了`module2`。
+* 在`module1`的`go.mod`里添加`require`和`replace`指令，把对`module2`的import通过`replace`指令指向本地的`module2`路径。具体参考module1/go.mod里的require和replace指令。
+
+代码如下：
+
+module1/main.go
+
+```go
+package main
+
+import (
+	"fmt"
+	// 模块module1要使用本地模块module2里的Add函数
+	// 这里被import的本地模块的名称要和module2/go.mod里保持一致
+	"module2"
+)
+
+func main() {
+	a := 1
+	b := 2
+	sum := module2.Add(a, b)
+	fmt.Printf("sum of %d and %d is %d\n", a, b, sum)
+}
+```
+
+module1/go.mod，**注意require后面的module必须指定版本号**
+
+```go
+module module1
+
+go 1.16
+
+require module2 v1.0.0
+
+replace module2 => ../module2
+
+```
+
+module2/func.go
+
+```go
+package module2
+
+func Add(a, b int) int {
+	return a + b
+}
+```
+
+module2/go.mod
+
+```go
+module module2
+
+go 1.16
+```
+
+代码开源地址：
+
 
 
 ## init函数
@@ -229,4 +302,5 @@ init函数没有参数，没有返回值。
 * https://www.callicoder.com/golang-packages/
 * https://www.liwenzhou.com/posts/Go/import_local_package_in_go_module/
 * https://maelvls.dev/go111module-everywhere/#go111module-with-go-116
+* https://go.dev/ref/mod#go-mod-file-replace
 
