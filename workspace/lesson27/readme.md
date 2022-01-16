@@ -272,7 +272,13 @@ module module2
 go 1.16
 ```
 
-代码开源地址：
+在module1路径下执行`go run main.go`，结果为
+
+```markdown
+sum of 1 and 2 is 3
+```
+
+代码开源地址：https://github.com/jincheng9/go-tutorial/tree/main/workspace/lesson27/replace_module_demo
 
 
 
