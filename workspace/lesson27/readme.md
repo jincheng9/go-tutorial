@@ -1,6 +1,6 @@
-# 包package
+# 包package和模块Module
 
-## 定义
+## package定义
 
 package本质上就是一个目录，目录里包含有一个或者多个Go源程序文件，或者package。也就是说package里面还可以嵌套包含子package。
 
@@ -145,7 +145,7 @@ Go 1.11开始，有了Go Modules，工程项目可以建在任何地方，代码
 
 
 
-### 开启GO111MODULES时import本地package
+### 开启GO111MODULES时import本项目里的package
 
 1. 项目可以建在任何地方
 
@@ -157,7 +157,7 @@ Go 1.11开始，有了Go Modules，工程项目可以建在任何地方，代码
 
 3. import项目本地的package时指定go.mod文件里的模块名称
 
-   比如module_name是project，在这个模块里，main.go使用了本地的util包，那在main.go里按照如下格式import这个package
+   比如module_name叫project，在这个模块里，main.go使用了本项目里的util包，那在main.go里按照如下格式import这个package
 
    ```go
    import "project/util" // project是模块名称, util是这个模块下的本地package
@@ -189,11 +189,17 @@ Go 1.11开始，有了Go Modules，工程项目可以建在任何地方，代码
    import "github.com/gin-gonic/gin"
    ```
 
-**tips**: ’go mod tidy‘命令可以更新go.mod里的依赖内容，比如go.mod里少写了依赖的packages，就可以执行该命令自动更新go.mod，在go.mod所在目录执行如下命令即可：
+**tips**: `go mod tidy`命令可以更新go.mod里的依赖内容，比如go.mod里少写了依赖的module，就可以执行该命令自动更新go.mod，在go.mod所在目录执行如下命令即可：
 
 ```go
 go mod tidy
 ```
+
+
+
+###  开启GO111MODULES时import本地的Module
+
+首先，Go官方并不推荐这种用法。import本地的module需要借助`replace`指令来实现。
 
 
 
