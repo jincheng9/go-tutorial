@@ -20,11 +20,12 @@ package里的变量、函数、结构体、方法等如果要被本package外的
 
 **注意**：这里说的是同一个package，不是同一个文件。同一个package下，如果有多个源程序文件是声明的该package，那这些源程序文件里的变量、函数、结构体等，即使不是首字母大写，也可以互相跨文件直接调用，不用额外import。
 
-package的使用分为3类情况：
+package的使用分为4类情况：
 
 * 使用Go标准库自带的package，比如fmt。
-* 使用go get获取到的第三方package
-* 使用工程本地的package
+* 使用go get获取到的第三方package/module
+* 使用项目内部的package
+* 使用其它项目的package/module
 
 
 
