@@ -279,7 +279,7 @@ go 1.16
 sum of 1 and 2 is 3
 ```
 
-代码开源地址：[demo for use local module](https://github.com/jincheng9/go-tutorial/tree/main/workspace/lesson27/replace_module_demo)
+代码开源地址：[demo for using local module](https://github.com/jincheng9/go-tutorial/tree/main/workspace/lesson27/replace_module_demo)
 
 
 
