@@ -173,7 +173,7 @@ func append(slice []Type, elems ...Type) []Type
 
 `slice`扩容的源码实现在`src/runtime/slice.go`里的`growslice`函数，源码地址：https://github.com/golang/go/blob/master/src/runtime/slice.go。
 
-Go 1.18的扩容实现代码如下，et是切片里的元素类型，old是原切片，cap等于原切片的长度+append新增的元素个数。
+Go 1.18的扩容实现代码如下，`growslice`的参数et是切片里的元素类型，old是原切片，cap等于原切片的长度+append新增的元素个数。(**注意第3个参数cap的值是原切片的长度+append新增元素个数，不是原切片容量+新增元素个数，可以在growslice里打印cap的值来验证**)
 
 ```go
 func growslice(et *_type, old slice, cap int) slice {
