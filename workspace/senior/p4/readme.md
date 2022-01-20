@@ -128,12 +128,25 @@ ptr := &t
 
   答案：对于nil slice，append会对slice的底层数组做扩容，通过调用mallocgc向Go的内存管理器申请内存空间，再赋值给原来的nil slice。
 
+* slice用make创建的时候，如果指定的长度len>0，则make创建的slice下标索引从0到len-1的值都是对应slice里元素类型的零值。参考下例：
 
+  ```go
+  package main
+  
+  import "fmt"
+  
+  func main() {
+  	s := make([]int, 2, 3)
+  	fmt.Println(s) // [0 0]
+  }
+  ```
+
+  
 
 ## 最佳实践
 
 1. 尽量不使用new
-2. 对于slice, map和chan的定义和初始化，固定使用make函数
+2. 对于slice, map和chan的定义和初始化，优先使用make函数
 
 
 
