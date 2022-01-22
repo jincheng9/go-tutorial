@@ -106,7 +106,7 @@ for i := 0; i < len(y); i++ {
 > ​																																		zen of go
 
 * 对切片`x`做range遍历，实际上是对`x`的拷贝(假设为`y`)做range遍历，`y`的值(包括`y`结构体里指向底层数组的指针的值，`y`的长度和容量)都在执行`for`循环前确定下来了。
-* 切片的扩容时机和机制，如果有不清的，参考我写的[slice底层原理篇](https://mp.weixin.qq.com/s?__biz=Mzg2MTcwNjc1Mg==&mid=2247483741&idx=1&sn=486066a3a582faf457f91b8397178f64&chksm=ce124e32f965c72411e2f083c22531aa70bb7fa0946c505dc886fb054b2a644abde3ad7ea6a0&token=609026015&lang=zh_CN#rd)
+* 切片的底层数据结构、扩容时机和机制，如果有不清楚的，参考我写的[slice底层原理篇](https://mp.weixin.qq.com/s?__biz=Mzg2MTcwNjc1Mg==&mid=2247483741&idx=1&sn=486066a3a582faf457f91b8397178f64&chksm=ce124e32f965c72411e2f083c22531aa70bb7fa0946c505dc886fb054b2a644abde3ad7ea6a0&token=609026015&lang=zh_CN#rd)。
 
 
 
