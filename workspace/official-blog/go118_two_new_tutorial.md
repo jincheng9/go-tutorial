@@ -35,7 +35,17 @@ Go 1.18 Beta 1版本上个月已经发布了，大家可以从[官方下载地�
 本人针对Go泛型写了2篇通俗易懂的入门文章，一个是官方英文教程的中文翻译，一个是本人整理的Go泛型设计思想和使用场景解析，建议感兴趣的可以重点参考。
 
 * Go 泛型官方教程中文版本：[官方教程：Go泛型入门](https://mp.weixin.qq.com/s?__biz=Mzg2MTcwNjc1Mg==&mid=2247483720&idx=1&sn=57ec4877dfd364a59deacf1e74a4fb66&chksm=ce124e27f965c731432dcc89d1e0563cf84baaef482eaa068a91bee61f10cf85b433923b83b4&token=802267677&lang=zh_CN#rd)
-* Go 泛型设计思想和关键知识点解析：[一文读懂Go泛型设计和使用场景](https://mp.weixin.qq.com/s?__biz=Mzg2MTcwNjc1Mg==&mid=2247483731&idx=1&sn=b2258b28e2f3c16b065a5a1b22c15b0d&chksm=ce124e3cf965c72a6a22e0ed15deda8238567407bbd7157a79753fc8b605727ab2153009493c&token=802267677&lang=zh_CN#rd)
+* Go 泛型设计思想和最佳实践解析：[一文读懂Go泛型设计和使用场景](https://mp.weixin.qq.com/s?__biz=Mzg2MTcwNjc1Mg==&mid=2247483731&idx=1&sn=b2258b28e2f3c16b065a5a1b22c15b0d&chksm=ce124e3cf965c72a6a22e0ed15deda8238567407bbd7157a79753fc8b605727ab2153009493c&token=802267677&lang=zh_CN#rd)
+
+近期，我也会针对Go Fuzzing写一篇技术分享文章，欢迎大家关注。
+
+
+
+## 开源地址
+
+GitHub: https://github.com/jincheng9/go-tutorial
+
+公众号：coding进阶
 
 
 
