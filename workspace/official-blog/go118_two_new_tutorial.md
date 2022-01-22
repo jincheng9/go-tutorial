@@ -1,4 +1,4 @@
-## 官方博文：Go 1.18的2个新教程
+## Go官方推出了Go 1.18的2个新教程
 
 ## 前言
 
@@ -49,6 +49,8 @@ GitHub: https://github.com/jincheng9/go-tutorial
 
 公众号：coding进阶
 
+个人网站：https://jincheng9.github.io/
+
 
 
 ## References
@@ -59,14 +61,3 @@ GitHub: https://github.com/jincheng9/go-tutorial
 * https://jincheng9.github.io/post/go-generics-best-practice/
 
 * https://www.youtube.com/watch?v=35eIxI_n5ZM&t=1755s
-
-
-
-
-
-
-
-
-
-
-
