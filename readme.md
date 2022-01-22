@@ -214,6 +214,8 @@
 
 * [Go By Example](https://gobyexample.com/)
 
+* [Golang By Example](https://golangbyexample.com/)
+
 * [golang.design](https://golang.design/)
 
 * [halfrost-Dezhi Yu](https://halfrost.com/)
