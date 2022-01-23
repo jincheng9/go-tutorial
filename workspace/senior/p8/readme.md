@@ -300,7 +300,7 @@ func main() {
 
 
 
-## slice打印
+## slice打印和底层数组地址
 
 打印要弄清楚3个问题：
 
@@ -351,6 +351,7 @@ func main() {
   a := make([]int, 1, 4) // a的长度是1，容量是4
   b := append(a, 1) // 往a的末尾添加元素1，b=[0 1], a的长度还是1，a和b指向同一个底层数组
   fmt.Println(a, b) // [0] [0 1]
+  fmt.Printf("%p %p\n", a, b) // 切片a和b的底层数组地址相同
   ```
 
 * Go在函数传参时，没有传引用这个说法，只有传值。网上有些文章写Go的`slice`，`map`，`channel`作为函数参数是传引用，这是错误的，可以参考我之前的文章[Go有引用变量和引用传递么？](https://github.com/jincheng9/go-tutorial/tree/main/workspace/senior/p3)
