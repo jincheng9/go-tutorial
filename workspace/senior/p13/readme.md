@@ -166,3 +166,4 @@ for i := 0; i < len(y); i++ {
 * https://go101.org/quizzes/slice-2.html
 * https://mp.weixin.qq.com/s?__biz=Mzg2MTcwNjc1Mg==&mid=2247483741&idx=1&sn=486066a3a582faf457f91b8397178f64&chksm=ce124e32f965c72411e2f083c22531aa70bb7fa0946c505dc886fb054b2a644abde3ad7ea6a0&token=609026015&lang=zh_CN#rd
 * https://jincheng9.github.io/post/go-slice-principle/
+* "For statements with `range` clause"： https://go.dev/ref/spec
