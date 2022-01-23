@@ -76,6 +76,7 @@
 3. [Go Quiz: 从Go面试题看slice的底层原理和注意事项](./workspace/senior/p8)
 3. [Go Quiz: 从Go面试题搞懂slice range遍历的坑](./workspace/senior/p13)
 3. [Go Quiz: 从Go面试题看channel的注意事项](./workspace/senior/p9)
+3. [Go Quiz: 从Go面试题看channel在select场景下的注意事项](./workspace/senior/p14)
 3. [Go Quiz: 从Go面试题看分号规则和switch的注意事项](./workspace/senior/p10)
 3. [Go Quiz: 从Go面试题看defer语义的底层原理和注意事项](./workspace/senior/p11)
 3. [Go Quiz: 从Go面试题看defer的注意事项第2篇](./workspace/senior/p12)
