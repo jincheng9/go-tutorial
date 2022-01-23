@@ -93,6 +93,7 @@ for i := 0; i < len(y); i++ {
 | print(i, s, ",")                | 第一次for循环，`i`的值是0，`s`的值是切片`y`里下标索引为0的元素，值为"A"，打印0A |
 | x[i+1] = "M"                    | 执行x[1] = "M"，因为切片`x`和`y`现在指向同一个底层数组，切片`y`里下标索引为1的元素的值也被改成了"M"，`y`指向的底层数组的值为["A", "M", "C"] |
 | x = append(x, "Z")              | 给切片`x`添加新元素"Z"，因为当前切片`x`的长度为3，容量为3，容量已满，不足以承载新增加的元素，所以要对`x`的底层数组做扩容，`x`指向新的底层数组，新底层数组的值是["A", "M", "C", "Z"]，`y`还是指向原来的底层数组，`y`指向的底层数组的值是["A", "M", "C"] |
+| x[i+1] = "Z"                    | 切片`x`指向的底层数组的值变为["A", "Z", "C", "Z"]，切片`y`指向的底层数组的值不变，还是["A", "M", "C"] |
 | 后续for循环                     | 因为从第2次for循环开始，`x`和`y`指向了不同的底层数组，所以对切片`x`的修改不会影响到`y`，因此后面打印的结果依次是1M,2C |
 
 所以本题的答案是 0A, 1M, 2C。
@@ -167,3 +168,4 @@ for i := 0; i < len(y); i++ {
 * https://mp.weixin.qq.com/s?__biz=Mzg2MTcwNjc1Mg==&mid=2247483741&idx=1&sn=486066a3a582faf457f91b8397178f64&chksm=ce124e32f965c72411e2f083c22531aa70bb7fa0946c505dc886fb054b2a644abde3ad7ea6a0&token=609026015&lang=zh_CN#rd
 * https://jincheng9.github.io/post/go-slice-principle/
 * "For statements with `range` clause"： https://go.dev/ref/spec
+
