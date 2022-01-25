@@ -18,9 +18,9 @@
 
 我们很快就会发布Go 1.18版本，这个版本会引入一些新的概念。我们已经发布了2个官方教程来帮助大家熟悉这些新的feature。
 
-第一篇教程是帮助大家熟悉Go泛型。这个教程会带着大家一步一步实现一个能处理多个类型的泛型函数，并且在代码里调用泛型函数。一旦你实现了泛型函数，你就会学到关于类型约束(type constraint)的知识，并且在你的函数里用到它。同时，也建议大家查阅最近GopherCon上Robert Greisemer和Ian Lance Taylor关于泛型的[技术分享](https://www.youtube.com/watch?v=35eIxI_n5ZM&t=1755s)，可以学到更多关于Go泛型的知识。
+第一篇教程是帮助大家熟悉Go泛型，地址[https://go.dev/doc/tutorial/generics](https://go.dev/doc/tutorial/generics)。这个教程会带着大家一步一步实现一个能处理多个类型的泛型函数，并且在代码里调用泛型函数。一旦你实现了泛型函数，你就会学到关于类型约束(type constraint)的知识，并且在你的函数里用到它。同时，也建议大家查阅最近GopherCon上Robert Greisemer和Ian Lance Taylor关于泛型的[技术分享](https://www.youtube.com/watch?v=35eIxI_n5ZM&t=1755s)，可以学到更多关于Go泛型的知识。
 
-第二篇教程是关于Go fuzzing的介绍。这个教程展示了如何利用Fuzzing来帮助查找代码里的bug，带你一起利用Fuzzing来诊断和修复代码问题。同时，你也会在这个教程里写一些有bug的代码，利用Fuzzing来发现，修复和验证这些bug。特别感谢Beth Brown写了这篇教程。
+第二篇教程是关于Go fuzzing的介绍，地址[https://go.dev/doc/tutorial/fuzz](https://go.dev/doc/tutorial/fuzz)。这个教程展示了如何利用Fuzzing来帮助查找代码里的bug，带你一起利用Fuzzing来诊断和修复代码问题。同时，你也会在这个教程里写一些有bug的代码，利用Fuzzing来发现，修复和验证这些bug。特别感谢Beth Brown写了这篇教程。
 
 Go 1.18 Beta 1版本上个月已经发布了，大家可以从[官方下载地址](https://go.dev/dl/#go1.18beta1)进行下载。
 
