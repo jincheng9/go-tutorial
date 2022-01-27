@@ -125,7 +125,7 @@ func main() {
 
    上例中，输出的结果是3210，后defer的先执行。
 
-5. 被defer的函数可以对defer语句所在的函数的命名返回值做读取和修改操作。
+5. 被defer的函数可以对defer语句所在的函数的命名返回值(named return value)做读取和修改操作。
 
    ```go
    // f returns 42
