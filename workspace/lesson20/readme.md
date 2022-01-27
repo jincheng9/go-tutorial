@@ -1,6 +1,6 @@
 ## defer语义
 
-## 含义
+## defer含义
 
 * defer是延迟的意思，在Go里可以放在某个函数或者方法调用的前面，让该函数或方法延迟执行
 
@@ -22,9 +22,9 @@
 
 * 如果在函数内调用了**多次defer**，那在函数return之前，defer的函数调用满足LIFO原则，先defer的函数后执行，后defer的函数先执行。比如在函数A内先后执行了defer f1(), defer f2(), defer f3()，那函数A return之前，会按照f3(), f2(), f1()的顺序执行，再return。
 
-* defer的用途？
+## defer的用途？
 
-  Answer：defer常用于成对的操作，比如文件打开后要关闭、锁的申请和释放、sync.WaitGroup跟踪的goroutine的计数器的释放等。为了确保资源被释放，可以结合defer一起使用，避免在代码的各种条件分支里去释放资源，容易遗漏和出错。
+Answer：defer常用于成对的操作，比如文件打开后要关闭、锁的申请和释放、sync.WaitGroup跟踪的goroutine的计数器的释放等。为了确保资源被释放，可以结合defer一起使用，避免在代码的各种条件分支里去释放资源，容易遗漏和出错。
 
 * 示例1
 
