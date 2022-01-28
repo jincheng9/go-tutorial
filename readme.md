@@ -223,7 +223,9 @@
 
 * [ChangkunOu-欧长坤](https://changkun.de/blog/)
 
-* [ShushanChai-柴树杉](https://chai2010.cn/about/)
+* [chai2010-柴树杉](https://chai2010.cn/about/)
+
+* [cch123-曹春晖](https://xargin.com/)
 
 * [halfrost-Dezhi Yu](https://halfrost.com/)
 
