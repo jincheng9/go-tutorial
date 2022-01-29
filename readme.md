@@ -217,7 +217,7 @@
 
 * [Amit Saha](https://echorand.me/)
 
-* [WenmaiYang-TalkGo发起人](https://maiyang.me/)
+* [TalkGo发起人-杨文](https://maiyang.me/)
 
 * [smallest-rpcx作者](https://colobu.com/)
 
