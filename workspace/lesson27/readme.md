@@ -142,7 +142,7 @@ Go 1.11开始，有了Go Modules，工程项目可以建在任何地方，代码
 1. 项目建在$GOPATH/src下面
 2. import package的时候路径从$GOPATH/src往下找
 
-使用说明参考[gopath package demo](./gopath/)
+使用说明参考[gopath package demo](https://github.com/jincheng9/go-tutorial/tree/main/workspace/lesson27/gopath/)
 
 
 
@@ -164,7 +164,7 @@ Go 1.11开始，有了Go Modules，工程项目可以建在任何地方，代码
    import "project/util" // project是模块名称, util是这个模块下的本地package
    ```
 
-使用说明参考[module package demo](./module)
+使用说明参考[module package demo](https://github.com/jincheng9/go-tutorial/tree/main/workspace/lesson27/module)
 
 
 
