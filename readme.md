@@ -205,6 +205,8 @@
 
 * [Go101.org](https://go101.org/article/101.html)
 
+* [Valentin Deleplace](https://medium.com/@val_deleplace)
+
 * [Medium: A Journey with Go](https://medium.com/a-journey-with-go)
 
 * [Teiva Harsanyi](https://teivah.medium.com/)
