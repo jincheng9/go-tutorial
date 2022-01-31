@@ -1,4 +1,4 @@
-# Go Quiz: Google工程师的Go语言题目
+# Go Quiz: Google工程师的Go语言面试题
 
 ## 面试题
 
