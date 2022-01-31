@@ -25,8 +25,9 @@ func main()
 
 - A: [a a a]
 - B: [a a b]
-- C: [b c c]
-- D: panic
+- C: [a a b c]
+- D: [b c c]
+- E: panic
 
 这道题主要考察Go语言里对切片`slice`使用copy函数的注意事项。
 
