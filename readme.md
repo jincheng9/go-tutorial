@@ -68,19 +68,30 @@
 ## 进阶篇
 
 1. [被defer的函数一定会执行么？](./workspace/senior/p2)
+
 2. [Go有引用变量和引用传递么？map,channel和slice作为函数参数是引用传递么？](./workspace/senior/p3)
+
 3. [new和make的使用区别和最佳实践是什么？](./workspace/senior/p4)
-3. [一文读懂Go匿名结构体的使用场景](./workspace/senior/p5)
-3. [官方教程：Go泛型入门](./workspace/senior/p6)
-3. [一文读懂Go泛型设计和使用场景](./workspace/senior/p7)
-3. [Go Quiz: 从Go面试题看slice的底层原理和注意事项](./workspace/senior/p8)
-3. [Go Quiz: 从Go面试题搞懂slice range遍历的坑](./workspace/senior/p13)
+
+4. [一文读懂Go匿名结构体的使用场景](./workspace/senior/p5)
+
+5. [官方教程：Go泛型入门](./workspace/senior/p6)
+
+6. [一文读懂Go泛型设计和使用场景](./workspace/senior/p7)
+
+   
+
+## Go Quiz
+
+1. [Go Quiz: 从Go面试题看slice的底层原理和注意事项](./workspace/senior/p8)
+2. [Go Quiz: 从Go面试题搞懂slice range遍历的坑](./workspace/senior/p13)
 3. [Go Quiz: 从Go面试题看channel的注意事项](./workspace/senior/p9)
-3. [Go Quiz: 从Go面试题看channel在select场景下的注意事项](./workspace/senior/p14)
-3. [Go Quiz: 从Go面试题看分号规则和switch的注意事项](./workspace/senior/p10)
-3. [Go Quiz: 从Go面试题看defer语义的底层原理和注意事项](./workspace/senior/p11)
-3. [Go Quiz: 从Go面试题看defer的注意事项第2篇](./workspace/senior/p12)
-3. [Go Quiz: 从Go面试题看defer的注意事项第3篇](./workspace/senior/p15)
+4. [Go Quiz: 从Go面试题看channel在select场景下的注意事项](./workspace/senior/p14)
+5. [Go Quiz: 从Go面试题看分号规则和switch的注意事项](./workspace/senior/p10)
+6. [Go Quiz: 从Go面试题看defer语义的底层原理和注意事项](./workspace/senior/p11)
+7. [Go Quiz: 从Go面试题看defer的注意事项第2篇](./workspace/senior/p12)
+8. [Go Quiz: 从Go面试题看defer的注意事项第3篇](./workspace/senior/p15)
+9. [Go Quiz: Google工程师的Go语言题目](./workspace/senior/p16)
 
 
 
