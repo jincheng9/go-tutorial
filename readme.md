@@ -149,6 +149,8 @@
 
 2. [官方教程：Go泛型入门](./workspace/senior/p6)
 
+2. [官方博文：Go 1.18 Beta 2发布](./workspace/official-blog/go118_beta2.md)
+
 2. [官方博文：Go官方推出了Go 1.18的2个新教程](./workspace/official-blog/go118_two_new_tutorial.md)
 
 3. [官方博文：支持泛型的Go 1.18 Beta 1版本正式发布](./workspace/official-blog/go118beta1.md)
