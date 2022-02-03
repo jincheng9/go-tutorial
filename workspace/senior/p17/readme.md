@@ -64,7 +64,7 @@ string a
 
 ## 现状
 
-Go官方团队的技术负责人Russ Cox在2022.01.25提议将`constraints`包从Go标准库里移除，放到`x/exp`项目下。Russ Cox给出的理由如下：
+Go官方团队的技术负责人Russ Cox在2022.01.25[提议](https://github.com/golang/go/issues/50792)将`constraints`包从Go标准库里移除，放到`x/exp`项目下。Russ Cox给出的理由如下：
 
 > There are still questions about the the constraints package. To start with, although many people are happy with the name, [many are not](https://github.com/golang/go/issues/50348). On top of that, it is unclear exactly which interfaces are important and should be present and which should be not. More generally, all the considerations that [led us to move slices and maps to x/exp](https://groups.google.com/g/golang-dev/c/iuB22_G9Kbo/m/7B1jd1I3BQAJ) apply to constraints as well.
 >
@@ -86,16 +86,16 @@ Russ Cox将这个提议在GitHub公布后，社区成员没有反对意见，因
 
 **备注**:
 
-* `golang.org/x`下所有package的源码独立于Go源码的主干分支，也不在Go的二进制安装包里。如果需要需要使用到`golang.org/x`下的package，可以使用`go get`来安装。
+* `golang.org/x`下所有package的源码独立于Go源码的主干分支，也不在Go的二进制安装包里。如果需要使用`golang.org/x`下的package，可以使用`go get`来安装。
 * `golang.org/x/exp`下的所有package都属于实验性质或者被废弃的package，不建议使用。
 
 
 
-## 原因
+## 移除原因
 
-第一个支持泛型的Go 1.18 Beta 1发布以来，围绕着`constraints`包的争议很多。
+支持泛型的Go 1.18 Beta 1版本发布以来，围绕着`constraints`包的争议很多。
 
-主要是以下因素，导致Russ Cox决定提议从Go标准库移除`constraints`。
+主要是以下因素，导致Russ Cox决定从Go标准库中移除`constraints`包。
 
 * `constraints`名字太长，代码写起来比较繁琐。
 * 大多数泛型的代码只用到了`any`和`comparable`这2个类型约束。`constaints`包里只有`constraints.Ordered`使用比较广泛，其它很少用。所以完全可以把`Ordered`设计成和`any`以及`comparable`一样，都作为Go的预声明标识符，不用单独弄一个`constraints`包。
@@ -137,13 +137,13 @@ Russ Cox将这个提议在GitHub公布后，社区成员没有反对意见，因
 
 ## 开源地址
 
-文章和示例代码开源在GitHub: [Go语言初级、中级和高级教程](https://github.com/jincheng9/go-tutorial)
+文章和示例代码开源在GitHub: [Go语言初级、中级和高级教程](https://github.com/jincheng9/go-tutorial)。
 
 公众号：coding进阶。关注公众号可以获取最新Go面试题和技术栈。
 
-个人网站：[Jincheng's Blog](https://jincheng9.github.io/)
+个人网站：[Jincheng's Blog](https://jincheng9.github.io/)。
 
-知乎：[无忌](https://www.zhihu.com/people/thucuhkwuji)
+知乎：[无忌](https://www.zhihu.com/people/thucuhkwuji)。
 
 
 
@@ -151,4 +151,5 @@ Russ Cox将这个提议在GitHub公布后，社区成员没有反对意见，因
 
 * https://github.com/golang/go/issues/50792
 * https://github.com/golang/go/issues/50348
+
 * https://pkg.go.dev/golang.org/x
