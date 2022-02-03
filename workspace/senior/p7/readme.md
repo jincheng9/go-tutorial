@@ -245,6 +245,8 @@ type constraint既可以提前定义好，也可以在type parameter list里直�
 
 ## constraints包
 
+**update 2022.02.03**：Russ Cox在2022.02.03宣布Go 1.18正式版本会从标准库移除`constraints`包，所以这个章节大家可以快速跳过。
+
 `constraints`包定义了一些常用的类型限制，整个包除了测试代码，就1个`constraints.go`文件，50行代码，源码地址：
 
 https://github.com/golang/go/blob/master/src/constraints/constraints.go

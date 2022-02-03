@@ -75,9 +75,11 @@
 
 4. [一文读懂Go匿名结构体的使用场景](./workspace/senior/p5)
 
-5. [官方教程：Go泛型入门](./workspace/senior/p6)
+5. [泛型：Go泛型入门官方教程](./workspace/senior/p6)
 
-6. [一文读懂Go泛型设计和使用场景](./workspace/senior/p7)
+6. [泛型：一文读懂Go泛型设计和使用场景](./workspace/senior/p7)
+
+7. [泛型：Go 1.18正式版本将从标准库移除constraints包](./workspace/senior/p17)
 
    
 

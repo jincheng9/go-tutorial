@@ -56,7 +56,7 @@ func test3() {
 	var mm map[int]int
 	go func() {
 		mm = m
-		fmt.Println(mm)
+		// fmt.Println(mm)
 		wg.Done()
 	}()
 
@@ -84,6 +84,11 @@ func test4() {
 
 	wg.Wait()
 }
+
+//region
+
 func main() {
 	test4()
 }
+
+//endregion
