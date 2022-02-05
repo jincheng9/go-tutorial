@@ -79,7 +79,7 @@
 
 6. [泛型：一文读懂Go泛型设计和使用场景](./workspace/senior/p7)
 
-7. [泛型：Go 1.18正式版本将从标准库移除constraints包](./workspace/senior/p17)
+7. [泛型：Go 1.18正式版本将从标准库中移除constraints包](./workspace/senior/p17)
 
    
 
