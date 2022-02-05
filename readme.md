@@ -232,7 +232,9 @@
 
 * [golang.design](https://golang.design/)
 
-* [Amit Saha](https://echorand.me/)
+* [Amit Saha-Atlassian Engineer](https://echorand.me/)
+
+* [Paschalis Tsilias-Grafana Engineer](https://tpaschalis.github.io/)
 
 * [TalkGo发起人-杨文](https://maiyang.me/)
 
