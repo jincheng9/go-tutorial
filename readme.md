@@ -226,6 +226,10 @@
 
 * [Teiva Harsanyi](https://teivah.medium.com/)
 
+* [Go Documentation](https://go.dev/doc/)
+
+* [Golang GitHub Wiki](https://github.com/golang/go/wiki)
+
 * [Go By Example](https://gobyexample.com/)
 
 * [Golang By Example](https://golangbyexample.com/)
@@ -259,10 +263,6 @@
 * [topgoer](https://www.topgoer.com/)
 
 * [jianyu chen](https://eddycjy.com/)
-
-* [Go Documentation](https://go.dev/doc/)
-
-* [Golang GitHub Wiki](https://github.com/golang/go/wiki)
 
   
 
