@@ -35,7 +35,7 @@ panic和recover是Go的2个内置函数，用于程序运行期抛出异常(pani
 
 recover是Go的内置函数，可以捕获panic异常。recover必须结合defer一起使用才能生效。
 
-程序正常执行过程中，调用recover函数会返回nil，除此之外，没有其它任何效果。
+程序正常执行过程中，没有panic产生，这时调用recover函数会返回nil，除此之外，没有其它任何效果。
 
 如果当前goroutine触发了panic，可以在代码的适当位置调用recover函数捕获异常，让程序继续正常执行，而不是异常终止。
 
