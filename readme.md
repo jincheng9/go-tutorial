@@ -90,10 +90,11 @@
 3. [Go Quiz: 从Go面试题看channel的注意事项](./workspace/senior/p9)
 4. [Go Quiz: 从Go面试题看channel在select场景下的注意事项](./workspace/senior/p14)
 5. [Go Quiz: 从Go面试题看分号规则和switch的注意事项](./workspace/senior/p10)
-6. [Go Quiz: 从Go面试题看defer语义的底层原理和注意事项](./workspace/senior/p11)
+6. [Go Quiz: 从Go面试题看defer语义的底层原理和注意事项第1篇](./workspace/senior/p11)
 7. [Go Quiz: 从Go面试题看defer的注意事项第2篇](./workspace/senior/p12)
 8. [Go Quiz: 从Go面试题看defer的注意事项第3篇](./workspace/senior/p15)
 9. [Go Quiz: Google工程师的Go语言题目](./workspace/senior/p16)
+9. [Go Quiz: 从Go面试题看panic注意事项第1篇](./workspace/senior/p18)
 
 
 
