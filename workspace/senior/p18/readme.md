@@ -4,8 +4,6 @@
 
 这是Go Quiz系列里关于`panic`的第1篇，主要考察同一个goroutine在多次`panic`场景下`recover`的机制。
 
-### 题目：
-
 ```go
 // quiz0.go
 package main
