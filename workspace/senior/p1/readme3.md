@@ -25,7 +25,6 @@
 可以把`GOROOT/bin`和`GOPATH/bin`都加入到环境变量设置里，参考如下：
 
 ```bash
-PATH="/Library/Frameworks/Python.framework/Versions/3.9/bin:${PATH}"
 export GOROOT=/usr/local/opt/go/libexec
 export GOPATH=$HOME/go
 export PATH=$PATH:$GOROOT/bin:$GOPATH/bin

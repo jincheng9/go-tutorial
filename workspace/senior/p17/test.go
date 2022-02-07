@@ -7,7 +7,7 @@ import (
 )
 
 // return the min value
-func min[T constraints.Ordered](a, b T) T {
+func min[T constraints.Ordered](a, b T /*"T constraints.Ordered"*/) T {
 	fmt.Printf("%T ", a)
 	if a < b {
 		return a
