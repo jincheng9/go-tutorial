@@ -85,10 +85,16 @@ func test4() {
 	wg.Wait()
 }
 
-//region
-
-func main() {
-	test4()
+func test5() {
+	func() {
+		fmt.Println(1)
+	}()
 }
 
-//endregion
+//#region
+
+func main() {
+	test5()
+}
+
+//#endregion
