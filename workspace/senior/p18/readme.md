@@ -20,8 +20,8 @@ func main() {
 }
 ```
 
-- A: 2 <nil>
-- B: 1 <nil>
+- A: 2 `<nil>`
+- B: 1 `<nil>`
 - C: 2 1 
 - D: 1 2 
 - E: 直接panic
