@@ -113,7 +113,7 @@ switch f();true {
 
    ```go
    if i := 0; i < 1 {
-   		println(i)
+   	println(i)
    }
    
    switch os := runtime.GOOS; os {
@@ -133,7 +133,7 @@ switch f();true {
    ```go
    i := 0
    if i < 1 {
-   		println(i)
+     println(i)
    }
    
    os := runtime.GOOS
