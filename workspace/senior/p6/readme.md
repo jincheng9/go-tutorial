@@ -22,9 +22,9 @@
 4. 调用泛型函数的时候移除类型实参
 5. 声明类型限制(type constraint)
 
-**注意**：关于Go的其它教程，大家可以参考https://go.dev/doc/tutorial/。
+**注意**：关于Go的其它教程，大家可以参考[https://go.dev/doc/tutorial/](https://go.dev/doc/tutorial/)。
 
-**注意**：大家可以使用Go playground的Go dev branch模式来编写和运行你的泛型代码，地址https://go.dev/play/?v=gotip。
+**注意**：大家可以使用Go playground的Go dev branch模式来编写和运行你的泛型代码，地址[https://go.dev/play/?v=gotip](https://go.dev/play/?v=gotip)。
 
 
 
