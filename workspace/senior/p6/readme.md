@@ -114,7 +114,7 @@
    $ go mod init example/generics
    ```
 
-   **注意**：对于生产代码，你可以根据项目实际情况来指定module路径，如果想了解更多，可以参考https://go.dev/doc/modules/managing-dependencies。
+   **注意**：对于生产代码，你可以根据项目实际情况来指定module路径，如果想了解更多，可以参考[Go Module依赖管理](https://go.dev/doc/modules/managing-dependencies)。
 
 接下来，我们来使用map写一些简单的代码。
 

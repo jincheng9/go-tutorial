@@ -172,6 +172,8 @@
 
 2. [Go testing缓存导致测试没执行的问题](./workspace/senior/p1/readme4.md)
 
+2. [go install安装的不同Go版本的可执行程序和源码存放在哪里](./workspace/senior/p1/readme5.md)
+
    
 
 ## Go News
