@@ -40,7 +40,7 @@
 
 * [lesson18: 接口interface](./workspace/lesson18)
 
-* [lesson19: goroutine和channel](./workspace/lesson19)
+* [lesson19: 协程goroutine和管道channel](./workspace/lesson19)
 
 * [lesson20: defer语义](./workspace/lesson20)
 
