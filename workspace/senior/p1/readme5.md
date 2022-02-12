@@ -2,9 +2,9 @@
 
 ## 使用场景
 
-有新的Go版本出来后，我们通常使用`go install`来进行安装。
+有新的Go版本出来后，我们通常使用`go install`来进行安装，我们以安装go 1.18 beta 2版本为例进行说明。
 
-比如下面的示例：使用`go install`安装`go1.18beta2`的最新版本
+使用`go install`安装`go1.18beta2`的最新版本
 
 ```bash
 go install golang.org/dl/go1.18beta2@latest
@@ -37,6 +37,8 @@ go install golang.org/dl/go1.18beta2@latest
 ```bash
 go env GOPATH
 ```
+
+安装完之后可以去对应目录查看是否存在`go1.18beta2` 文件。
 
 
 
