@@ -2,8 +2,9 @@ package util
 
 import (
 	"fmt"
+	"example.com/main"
 )
 
 func Test() {
-	fmt.Println("util")
+	fmt.Println(main.CommonValue)
 }
