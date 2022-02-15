@@ -81,6 +81,8 @@
 
 7. [泛型：Go 1.18正式版本将从标准库中移除constraints包](./workspace/senior/p17)
 
+7. [Go语言中fmt.Println(true)的结果一定是true么？](./workspace/senior/p19)
+
    
 
 ## Go Quiz
