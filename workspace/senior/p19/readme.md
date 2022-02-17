@@ -38,7 +38,7 @@ func main() {
 
 大家觉得这段代码是会编译报错呢，还是正常执行？
 
-实际执行结果是打印`true`，并不会编译报错。
+实际执行结果是打印`false`，并不会编译报错。
 
 因此本文开头的代码`fmt.Println("What is truth?", true)`是可能打印`What is truth? false`的。
 
