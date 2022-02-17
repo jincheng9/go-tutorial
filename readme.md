@@ -195,6 +195,7 @@
 
 * [Basics, Intermediate, Advanced Go Tutorials](https://www.youtube.com/c/BitfieldConsulting)
 * [GopherCon Talks Since 2014](https://www.youtube.com/c/GopherAcademy/videos)
+* [TutorialEdge Golang Development](https://www.youtube.com/watch?v=W5b64DXeP0o&list=PLzUGFf4GhXBL4GHXVcMMvzgtO8-WEJIoY)
 
 
 
