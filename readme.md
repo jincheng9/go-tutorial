@@ -97,6 +97,7 @@
 8. [Go Quiz: 从Go面试题看defer的注意事项第3篇](./workspace/senior/p15)
 9. [Go Quiz: Google工程师的Go语言题目](./workspace/senior/p16)
 9. [Go Quiz: 从Go面试题看panic注意事项第1篇](./workspace/senior/p18)
+9. [Go Quiz: 从Go面试题看函数命名返回值的注意事项](./workspace/senior/p20)
 
 
 
