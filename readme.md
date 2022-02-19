@@ -83,6 +83,8 @@
 
 7. [Go语言中fmt.Println(true)的结果一定是true么？](./workspace/senior/p19)
 
+7. [Go语言中命名函数参数和命名函数返回值的注意事项](./workspace/senior/p21)
+
    
 
 ## Go Quiz
