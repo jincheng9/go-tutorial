@@ -2,7 +2,10 @@ package main
 
 import "fmt"
 
+func test() (a int) {
+	a = 10
+	return func() int { return a }()
+}
 func main() {
-	true := false
-	fmt.Println(true)
+	fmt.Println(test())
 }
