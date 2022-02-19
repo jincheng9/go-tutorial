@@ -287,3 +287,4 @@ func main() {
 
 * https://yourbasic.org/golang/named-return-values-parameters/
 * https://golangshowcase.com/question/mixed-named-and-unnamed-parameters-in-golang
+* https://www.geeksforgeeks.org/named-return-parameters-in-golang/
