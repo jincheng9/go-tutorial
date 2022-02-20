@@ -79,9 +79,9 @@ func main() {
 
 正如上面代码里的注释说明，这段程序同样会进入无限递归直到栈溢出。
 
-如果函数`test`最后return的闭包`func() { fmt.Println("test"); done() }`里的`done`是被提前解析了的话，因为`done`是一个函数类型，`done`的零值是`nil`，那闭包里的`done`的值就会是`nil`，执行`nil`函数是会引发panic的。
+如果函数`test`最后return的闭包`func() { fmt.Println("test"); done() }`里的`done`是被提前解析了的话，因为`done`是一个函数类型的变量，`done`的零值是`nil`，那闭包里的`done`的值就会是`nil`，执行`nil`函数是会引发panic的。
 
-但实际上Go设计是允许上面的代码正常执行的，因此函数`test`最后return的闭包里的`done`的值并不会提前解析，`test`函数执行完之后，实际上产生了下面的效果，返回的是一个递归函数，和本文开始的题目一样。
+**但实际上Go设计是允许上面的代码正常执行的(通过这种方式可以返回一个递归函数)**，因此函数`test`最后return的闭包里的`done`的值并不会提前解析，`test`函数执行完之后，实际上产生了下面的效果，返回的是一个递归函数，和本文开始的题目一样。
 
 ```go
 done := func() { fmt.Println("test"); done() }
