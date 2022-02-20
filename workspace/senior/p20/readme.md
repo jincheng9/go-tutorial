@@ -30,7 +30,7 @@ func main() {
 * A: `bbb: surprise!`
 * B: `bbb: surprise!aaa: done`
 * C: 编译报错
-* D: 陷入死循环
+* D: 递归栈溢出
 
 大家可以先思考下这段代码的输出结果是什么。
 
@@ -38,11 +38,56 @@ func main() {
 
 ## 解析
 
-这里其实涉及Go的2个知识点
+在函数`bbb`最后执行return语句，会对返回值变量`done`进行赋值，
 
-1. 命名返回值闭包调用自己陷入递归死循环
+```go
+done := func() { print("bbb: surprise!"); done() }
+```
 
-所以本题的答案是`D` ，会陷入死循环，不断打印`bbb: surprise!`。
+**注意**：闭包`func() { print("bbb: surprise!"); done() }`里的`done`并不会被替换成`done, err := aaa()`里的`done`的值。
+
+因此函数`bbb`执行完之后，返回值之一的`done`实际上成为了一个递归函数，先是打印`"bbb: surprise!"`，然后再调用自己，这样就会陷入无限递归，直到栈溢出。因此本题的答案是`D`。
+
+那为什么函数`bbb`最后return的闭包`func() { print("bbb: surprise!"); done() }`里的`done`并不会被替换成`done, err := aaa()`里的`done`的值呢？如果替换了，那本题的答案就是`B`了。
+
+
+
+这个时候就要搬出一句老话了：
+
+> This is a feature, not a bug
+
+
+
+我们可以看下面这个更为简单的例子，来帮助我们理解：
+
+```go
+// named_return1.go
+package main
+
+import "fmt"
+
+func test() (done func()) {
+	return func() { fmt.Println("test"); done() }
+}
+
+func main() {
+	done := test()
+	// 下面的函数调用会进入死循环，不断打印test
+	done()
+}
+```
+
+正如上面代码里的注释说明，这段程序同样会进入无限递归直到栈溢出。
+
+如果函数`test`最后return的闭包`func() { fmt.Println("test"); done() }`里的`done`是被提前解析了的话，因为`done`是一个函数类型，`done`的零值是`nil`，那闭包里的`done`的值就会是`nil`，执行`nil`函数是会引发panic的。
+
+但实际上Go设计是允许上面的代码正常执行的，因此函数`test`最后return的闭包里的`done`的值并不会提前解析，`test`函数执行完之后，实际上产生了下面的效果，返回的是一个递归函数，和本文开始的题目一样。
+
+```go
+done := func() { fmt.Println("test"); done() }
+```
+
+因此也会进入无限递归，直到栈溢出。
 
 
 
@@ -52,7 +97,7 @@ func main() {
 
 想了解国外Go开发者对这个题目的讨论详情可以参考[Go Named Return Parameters Discussion](https://twitter.com/bwplotka/status/1494362886738780165)。
 
-另外题目作者也给了如下所示的[详细解释](https://go.dev/play/p/ELPEi2AK0DP)：
+另外题目作者也给了如下所示的解释，原文地址可以参考[详细解释](https://go.dev/play/p/ELPEi2AK0DP)：
 
 ```go
 package main
@@ -98,13 +143,45 @@ func main() {
 > By using `:=` and not `=` we define a totally new variable with the same name in
 >  new, local function scope.
 
-对于`done, err := aaa()`，变量`done`并不是一个新的变量，而是和函数`bbb`的返回变量`done`是同一个变量。
+对于`done, err := aaa()`，返回变量`done`并不是一个新的变量，而是和函数`bbb`的返回变量`done`是同一个变量。
 
-**本人把这个错误反馈给了原作者，原作者同意了我的意见，删除了这块解释**。
+这里有一个小插曲：**本人把这个瑕疵反馈给了原作者，原作者同意了我的意见，删除了这块解释**。
 
 ![](../../../workspace/img/named_return_paramater.png) 
 
-最新版的英文解释可以参考[修正版解释](https://go.dev/play/p/9J5a3ZtIPnL)。
+最新版的英文解释如下，原文地址可以参考[修正版解释](https://go.dev/play/p/9J5a3ZtIPnL)。
+
+```go
+package main
+
+func aaa() (done func()) {
+	return func() { print("aaa: done") }
+}
+
+func bbb() (done func()) {
+	done = aaa()
+
+	// NOTE(bwplotka): In this closure (anonymous function), we might think we use `done` value assigned to aaa(),
+	// but we don't! This is because Go "return" as a side effect ASSIGNS returned values to
+	// our special "return arguments". If they are named, this means that after return we can refer
+	// to those values with those names during any execution after the main body of function finishes
+	// (e.g in defer or closures we created).
+	//
+	// What is happening here is that no matter what we do with our "done" variable, the special "return named"
+	// variable `done` will get assigned with whatever was returned when the function ends.
+	// Which in bbb case is this closure with "bbb:surprise" print. This means that anyone who runs
+	// this closure AFTER `return` did the assignment, will start infinite recursive execution.
+	//
+	// Note that it's a feature, not a bug. We use this often to capture
+	// errors (e.g https://github.com/efficientgo/tools/blob/main/core/pkg/errcapture/doc.go)
+	return func() { print("bbb: surprise!"); done() }
+}
+
+func main() {
+	done := bbb()
+	done()
+}
+```
 
 
 

@@ -1,4 +1,4 @@
-// named_return2.go
+// named_return3.go
 package main
 
 import "fmt"

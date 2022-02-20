@@ -1,3 +1,4 @@
+// named_return4.go
 package main
 
 func aaa() (done func()) {
