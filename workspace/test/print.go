@@ -36,4 +36,6 @@ func main() {
 	fmt.Println("test2:", test2())
 	fmt.Println("test3:", test3())
 	fmt.Println("test4:", test4())
+	var a func()
+	a()
 }

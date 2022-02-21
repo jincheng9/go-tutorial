@@ -96,6 +96,21 @@ syntax error: mixed named and unnamed function parameters
 
 
 
+## nil函数
+
+函数也是一种类型，函数变量的默认值是`nil`，执行`nil`函数会引发panic
+
+```go
+var f func()
+// f是一个函数类型，值是nil
+// 编译正常，运行报错panic: runtime error: invalid memory address or nil pointer dereference
+f() 
+```
+
+
+
+
+
 ## 函数参数传递
 
 **Go里的函数传参只有值传递这一种方式**：和C++里的传值一样，参加下例里的swap
