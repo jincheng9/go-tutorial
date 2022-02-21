@@ -26,11 +26,14 @@ func test4() (a int) {
 	return func() int { return a }()
 }
 
+func test5() int {
+	panic(0)
+	//return 1
+}
+
 func main() {
 	fmt.Println("test:", test())
 	fmt.Println("test2:", test2())
 	fmt.Println("test3:", test3())
 	fmt.Println("test4:", test4())
-	var a func()
-	a()
 }
