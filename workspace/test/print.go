@@ -31,11 +31,15 @@ func test5() int {
 	//return 1
 }
 
+func test6() {
+	ns := []int{010: 200, 005: 100}
+	fmt.Println(ns)
+	fmt.Println(len(ns))
+}
 func main() {
 	fmt.Println("test:", test())
 	fmt.Println("test2:", test2())
 	fmt.Println("test3:", test3())
 	fmt.Println("test4:", test4())
-	var a func()
-	a()
+	test6()
 }
