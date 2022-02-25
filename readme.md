@@ -155,6 +155,8 @@
 
 1. [GitHub最流行的golang-cheat-sheet中文版本](https://github.com/jincheng9/golang-cheat-sheet-cn)
 
+1. [官方教程：Go fuzzing入门](./workspace/senior/p22)
+
 2. [官方教程：Go泛型入门](./workspace/senior/p6)
 
 2. [官方博文：Go 1.18 Beta 2发布](./workspace/official-blog/go118_beta2.md)
