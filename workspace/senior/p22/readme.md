@@ -289,17 +289,17 @@ import (
 
    这个方式只会使用种子语料库，而不会生成随机测试数据。通过这种方式可以用来验证种子语料库的测试数据是否可以测试通过。
 
-   ```
+   ```bash
    $ go test
    PASS
    ok      example/fuzz  0.013s
    ```
 
-   `go test`默认会执行所有以`TestXxx`和`FuzzXxx`开头的测试函数。
+   如果`reverse_test.go`文件里有其它单元测试函数或者模糊测试函数，但是只想运行`FuzzReverse`模糊测试函数，我们可以执行`go test -run=FuzzReverse`命令。
 
-   如果`reverse_test.go`文件里有其它单元测试函数或者模糊测试函数，我们也可以执行`go test -run=FuzzReverse`命令来只运行`FuzzReverse`函数。
+   **注意**：`go test`默认会执行所有以`TestXxx`开头的单元测试函数和以`FuzzXxx`开头的模糊测试函数，默认不运行以`BenchmarkXxx`开头的性能测试函数，如果我们想运行 benchmark用例，则需要加上 `-bench` 参数。
 
-2. Run `FuzzReverse` with fuzzing, to see if any randomly generated string inputs will cause a failure. This is executed using `go test` with a new flag, `-fuzz`.
+2. 如果要基于种子语料库生成随机测试数据用于测试，需要给`go test`命令增加` -fuzz`参数，使用方法如下：
 
    ```
    $ go test -fuzz=Fuzz
@@ -318,12 +318,18 @@ import (
    FAIL    example/fuzz  0.030s
    ```
 
-   A failure occurred while fuzzing, and the input that caused the problem is written to a seed corpus file that will be run the next time `go test` is called, even without the `-fuzz` flag. To view the input that caused the failure, open the corpus file written to the testdata/fuzz/FuzzReverse directory in a text editor. Your seed corpus file may contain a different string, but the format will be the same.
+   上面的fuzzing测试结果是`FAIL`，引起`FAIL`的输入数据被写到了一个种子语料库文件里。下次运行`go test`命令的时候，即使没有`-fuzz`参数，这个种子语料库文件里的输入也会被用到。
+
+   可以用文本编辑器打开`testdata/fuzz/FuzzReverse`目录下的文件，看看引起Fuzzing测试失败的测试数据长什么样。下面是一个示例文件，你那边运行后得到的测试数据可能和这个不一样，但文件里的内容格式会是一样的。
 
    ```
    go test fuzz v1
    string("泃")
    ```
+
+   种子语料库文件里的第一行标识的是编码版本(说直白点，就是这个种子语料库文件里的内容格式)，虽然目前只有v1这1个版本，但是Fuzzing设计者考虑到未来可能引入新的编码版本，于是加了一个编码版本的概念。
+
+   接下来的每一行是具体的测试数据。因为本文的
 
    The first line of the corpus file indicates the encoding version. Each following line represents the value of each type making up the corpus entry. Since the fuzz target only takes 1 input, there is only 1 value after the version.
 
@@ -339,15 +345,15 @@ import (
    FAIL    example/fuzz  0.016s
    ```
 
-   Since our test has failed, it’s time to debug.
+   既然Go fuzzing测试没通过，那就需要我们调试代码来找出问题所在了。
 
 ## 修复2个bug
 
-In this section, you will debug the failure, and fix the bug.
+在这个章节，我们会调试程序，修复Go fuzzing测出来的bug。
 
-Feel free to spend some time thinking about this and trying to fix the issue yourself before moving on.
+你可以自己花一些时间思考下，先尝试自己解决问题。
 
-### Diagnose the error
+### 定位问题
 
 There are a few different ways you could debug this error. If you are using VS Code as your text editor, you can [set up your debugger](https://github.com/golang/vscode-go/blob/master/docs/debugging.md) to investigate.
 
@@ -363,7 +369,7 @@ The current `Reverse` function reverses the string byte-by-byte, and therein lie
 
 To examine why the input (in this case, the Chinese character `泃`) is causing `Reverse` to produce an invalid string when reversed, you can inspect the number of runes in the reversed string.
 
-#### Write the code
+#### 编写代码
 
 In your text editor, replace the fuzz target within `FuzzReverse` with the following.
 
@@ -383,7 +389,7 @@ f.Fuzz(func(t *testing.T, orig string) {
 
 This `t.Logf` line will print to the command line if an error occurs, or if executing the test with `-v`, which can help you debug this particular issue.
 
-#### Run the code
+#### 运行代码
 
 Run the test using go test
 
@@ -404,7 +410,7 @@ The entire seed corpus used strings in which every character was a single byte. 
 
 With a better understanding of the bug, correct the error in the `Reverse` function.
 
-### Fix the error
+### 修复问题
 
 To correct the `Reverse` function, let’s traverse the string by runes, instead of by bytes.
 
