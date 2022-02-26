@@ -8,13 +8,13 @@ Go 1.18在go工具链里引入了fuzzing模糊测试，可以帮助我们发现G
 
 本人对Go官方教程在翻译的基础上做了一些表述上的优化，以飨读者。
 
-**注意：**fuzzing模糊测试和Go已有的单元测试以及性能测试框架是互为补充的，并不是替代关系。
+**注意**：fuzzing模糊测试和Go已有的单元测试以及性能测试框架是互为补充的，并不是替代关系。
 
 
 
 ## 教程内容
 
-这篇教程会介绍Go fuzzing的入门基础知识。fuzzing可以构造随机数据来找出代码里的漏洞或者可能会导致程序崩溃的输入。通过fuzzing可以找出的漏洞包括SQL注入、缓存溢出、拒绝服务(Denial of Service)和XSS(cross-site scripting)攻击等。
+这篇教程会介绍Go fuzzing的入门基础知识。fuzzing可以构造随机数据来找出代码里的漏洞或者可能导致程序崩溃的输入。通过fuzzing可以找出的漏洞包括SQL注入、缓存溢出、拒绝服务(Denial of Service)攻击和XSS(cross-site scripting)攻击等。
 
 在这个教程里，你会给一个函数写一段fuzz test(模糊测试)程序，然后运行go命令来发现代码里的问题，最后通过调试来修复问题。
 
@@ -265,7 +265,10 @@ Go模糊测试和单元测试在语法上有如下差异：
 
 - Go模糊测试函数以 `*testing.F`作为入参，单元测试函数以`*testing.T`作为入参
 
-- Go模糊测试会调用`f.Add`函数和`f.Fuzz`函数。`f.Add`函数把指定输入作为模糊测试的种子语料库(seed corpus)，fuzzing基于种子语料库生成随机输入。`f.Fuzz`函数接收一个fuzz target函数作为入参。fuzz target函数有多个参数，第一个参数是`*testing.T`，其它参数是被模糊的类型(**注意:**被模糊的类型目前只支持部分内置类型, 列在 [Go Fuzzing docs](https://go.dev/doc/fuzz/#requirements)，未来会支持更多的内置类型)。
+- Go模糊测试会调用`f.Add`函数和`f.Fuzz`函数。
+
+  - `f.Add`函数把指定输入作为模糊测试的种子语料库(seed corpus)，fuzzing基于种子语料库生成随机输入。
+  - `f.Fuzz`函数接收一个fuzz target函数作为入参。fuzz target函数有多个参数，第一个参数是`*testing.T`，其它参数是被模糊的类型(**注意:**被模糊的类型目前只支持部分内置类型, 列在 [Go Fuzzing docs](https://go.dev/doc/fuzz/#requirements)，未来会支持更多的内置类型)。
 
   ![](../../img/fuzzing.png)
 
@@ -282,7 +285,9 @@ import (
 
 ### 运行模糊测试
 
-1. Run the fuzz test without fuzzing it to make sure the seed inputs pass.
+1. 执行如下命令来运行模糊测试。
+
+   这个方式只会使用种子语料库，而不会生成随机测试数据。通过这种方式可以用来验证种子语料库的测试数据是否可以测试通过。
 
    ```
    $ go test
@@ -290,7 +295,9 @@ import (
    ok      example/fuzz  0.013s
    ```
 
-   You can also run `go test -run=FuzzReverse` if you have other tests in that file, and you only wish to run the fuzz test.
+   `go test`默认会执行所有以`TestXxx`和`FuzzXxx`开头的测试函数。
+
+   如果`reverse_test.go`文件里有其它单元测试函数或者模糊测试函数，我们也可以执行`go test -run=FuzzReverse`命令来只运行`FuzzReverse`函数。
 
 2. Run `FuzzReverse` with fuzzing, to see if any randomly generated string inputs will cause a failure. This is executed using `go test` with a new flag, `-fuzz`.
 
