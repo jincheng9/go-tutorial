@@ -97,13 +97,13 @@ Go 1.18在go工具链里引入了fuzzing模糊测试，可以帮助我们发现G
 
    * 在Windows上执行如下命令
 
-     ```po
+     ```powershell
      C:\> cd %HOMEPATH%
      ```
 
 2. 在命令行终端，创建一个名为`fuzz`的目录，并进入该目录
 
-   ```bas
+   ```bash
    $ mkdir fuzz
    $ cd fuzz
    ```
@@ -203,7 +203,7 @@ reversed again: "The quick brown fox jumped over the lazy dog"
 
 使用`go test`命令来运行单元测试
 
-```
+```bash
 $ go test
 PASS
 ok      example/fuzz  0.013s
@@ -274,7 +274,7 @@ Go模糊测试和单元测试在语法上有如下差异：
 
 上面的`FuzzReverse`函数里用到了`utf8`这个package，因此要在`reverse_test.go`开头import这个package，参考如下代码：
 
-```
+```go
 package main
 
 import (
@@ -287,7 +287,7 @@ import (
 
 1. 执行如下命令来运行模糊测试。
 
-   这个方式只会使用种子语料库，而不会生成随机测试数据。通过这种方式可以用来验证种子语料库的测试数据是否可以测试通过。
+   **这个方式只会使用种子语料库，而不会生成随机测试数据**。通过这种方式可以用来验证种子语料库的测试数据是否可以测试通过。(fuzz test without fuzzing)
 
    ```bash
    $ go test
@@ -299,9 +299,9 @@ import (
 
    **注意**：`go test`默认会执行所有以`TestXxx`开头的单元测试函数和以`FuzzXxx`开头的模糊测试函数，默认不运行以`BenchmarkXxx`开头的性能测试函数，如果我们想运行 benchmark用例，则需要加上 `-bench` 参数。
 
-2. 如果要基于种子语料库生成随机测试数据用于测试，需要给`go test`命令增加` -fuzz`参数，使用方法如下：
+2. 如果要基于种子语料库生成随机测试数据用于模糊测试，需要给`go test`命令增加` -fuzz`参数。(fuzz test with fuzzing)
 
-   ```
+   ```bash
    $ go test -fuzz=Fuzz
    fuzz: elapsed: 0s, gathering baseline coverage: 0/3 completed
    fuzz: elapsed: 0s, gathering baseline coverage: 3/3 completed, now fuzzing with 8 workers
@@ -318,24 +318,41 @@ import (
    FAIL    example/fuzz  0.030s
    ```
 
-   上面的fuzzing测试结果是`FAIL`，引起`FAIL`的输入数据被写到了一个种子语料库文件里。下次运行`go test`命令的时候，即使没有`-fuzz`参数，这个种子语料库文件里的输入也会被用到。
+   上面的fuzzing测试结果是`FAIL`，引起`FAIL`的输入数据被写到了一个语料库文件里。下次运行`go test`命令的时候，即使没有`-fuzz`参数，这个种子语料库文件里的输入也会被用到。
 
    可以用文本编辑器打开`testdata/fuzz/FuzzReverse`目录下的文件，看看引起Fuzzing测试失败的测试数据长什么样。下面是一个示例文件，你那边运行后得到的测试数据可能和这个不一样，但文件里的内容格式会是一样的。
 
-   ```
+   ```markdown
    go test fuzz v1
    string("泃")
    ```
 
-   种子语料库文件里的第一行标识的是编码版本(说直白点，就是这个种子语料库文件里的内容格式)，虽然目前只有v1这1个版本，但是Fuzzing设计者考虑到未来可能引入新的编码版本，于是加了一个编码版本的概念。
+   语料库文件里的第1行标识的是编码版本(encoding version，说直白点，就是这个种子语料库文件里内容格式的版本)，虽然目前只有v1这1个版本，但是Fuzzing设计者考虑到未来可能引入新的编码版本，于是加了编码版本的概念。
 
-   接下来的每一行是具体的测试数据。因为本文的
+   从第2行开始，每一行数据对应的是语料库的每条测试数据(corpus entry)的其中一个参数，按照参数先后顺序排列。
 
-   The first line of the corpus file indicates the encoding version. Each following line represents the value of each type making up the corpus entry. Since the fuzz target only takes 1 input, there is only 1 value after the version.
-
-3. Run `go test` again without the` -fuzz` flag; the new failing seed corpus entry will be used:
-
+   ```go
+   f.Fuzz(func(t *testing.T, orig string) {
+   		rev := Reverse(orig)
+   		doubleRev := Reverse(rev)
+   		if orig != doubleRev {
+   			t.Errorf("Before: %q, after: %q", orig, doubleRev)
+   		}
+   		if utf8.ValidString(orig) && !utf8.ValidString(rev) {
+   			t.Errorf("Reverse produced invalid UTF-8 string %q %q", orig, rev)
+   		}
+   })
    ```
+
+   本文的`FuzzReverse`里的fuzz target函数`func(t *testing.T, orig string)`只有`orig`这1个参数作为真正的测试输入，也就是每条测试数据其实就1个输入，因此在上面示例的`testdata/fuzz/FuzzReverse`目录下的文件里只有`string("泃")`这一行。
+
+   如果每条测试数据有N个参数，那fuzzing找出的导致fuzz test失败的每条测试数据在`testdata`目录下的文件里会有N行，第`i`行对应第`i`个参数。
+
+3. 再次运行`go test`命令，这次不带`-fuzz`参数。
+
+   我们会发现虽然没有`-fuzz`参数，但是模糊测试的时候仍然用到了上面第2步找到的测试数据。
+
+   ```bash
    $ go test
    --- FAIL: FuzzReverse (0.00s)
        --- FAIL: FuzzReverse/af69258a12129d6cbba438df5d5f25ba0ec050461c116f777e77ea7c9a0d217a (0.00s)
@@ -355,25 +372,33 @@ import (
 
 ### 定位问题
 
-There are a few different ways you could debug this error. If you are using VS Code as your text editor, you can [set up your debugger](https://github.com/golang/vscode-go/blob/master/docs/debugging.md) to investigate.
+你可以使用不同的方法来调试上面发现的bug。
 
-In this tutorial, we will log useful debugging info to your terminal.
+如果你使用的是VS Code，那可以在VS Code里设置你的[Debug调试器](https://github.com/golang/vscode-go/blob/master/docs/debugging.md)来加断点进行调试。
 
-First, consider the docs for [`utf8.ValidString`](https://pkg.go.dev/unicode/utf8).
+本文里，我们会使用打印日志的方式进行调试。
 
-```
+运行模糊测试时的报错信息为：`reverse_test.go:20: Reverse produced invalid UTF-8 string "\x9c\xdd"`
+
+基于这个报错，我们来看看文档里对于 [`utf8.ValidString`](https://pkg.go.dev/unicode/utf8)的描述。
+
+```markdown
 ValidString reports whether s consists entirely of valid UTF-8-encoded runes.
 ```
 
-The current `Reverse` function reverses the string byte-by-byte, and therein lies our problem. In order to preserve the UTF-8-encoded runes of the original string, we must instead reverse the string rune-by-rune.
+我们实现的`Reverse`函数是按照字节(byte)为维度进行字符串反转，这就是问题所在。
 
-To examine why the input (in this case, the Chinese character `泃`) is causing `Reverse` to produce an invalid string when reversed, you can inspect the number of runes in the reversed string.
+比如中文里的字符 `泃`其实是由3个字节组成的，如果按照字节反转，反转后得到的就是一个无效的字符串了。
+
+因此为了保证字符串反转后得到的仍然是一个有效的UTF-8编码的字符串，我们要按照`rune`进行字符串反转。
+
+为了更好地方便大家理解中文里的字符 `泃`按照`rune`为维度有多少个`rune`，以及按照byte反转后得到的结果长什么样，我们对代码做一些修改。
 
 #### 编写代码
 
-In your text editor, replace the fuzz target within `FuzzReverse` with the following.
+按照如下方式修改`FuzzReverse`里的代码。
 
-```
+```go
 f.Fuzz(func(t *testing.T, orig string) {
     rev := Reverse(orig)
     doubleRev := Reverse(rev)
@@ -387,13 +412,9 @@ f.Fuzz(func(t *testing.T, orig string) {
 })
 ```
 
-This `t.Logf` line will print to the command line if an error occurs, or if executing the test with `-v`, which can help you debug this particular issue.
-
 #### 运行代码
 
-Run the test using go test
-
-```
+```bash
 $ go test
 --- FAIL: FuzzReverse (0.00s)
     --- FAIL: FuzzReverse/28f36ef487f23e6c7a81ebdaa9feffe2f2b02b4cddaa6252e87f69863046a5e0 (0.00s)
@@ -404,21 +425,21 @@ exit status 1
 FAIL    example/fuzz    0.598s
 ```
 
-The entire seed corpus used strings in which every character was a single byte. However, characters such as 泃 can require several bytes. Thus, reversing the string byte-by-byte will invalidate multi-byte characters.
+我们的种子语料库里每个符号都是单个字节。但是像 `泃`这样的中文符号由多个字节组成，如果以字节为维度进行反转，就会得到无效的结果。
 
-**Note:** If you’re curious about how Go deals with strings, read the blog post [Strings, bytes, runes and characters in Go](https://go.dev/blog/strings) for a deeper understanding.
+**注意**：如果你对于Go如何处理字符串感兴趣，可以阅读官方博客里的这篇文章 [Strings, bytes, runes and characters in Go](https://go.dev/blog/strings) 来加深理解。
 
-With a better understanding of the bug, correct the error in the `Reverse` function.
+既然我们明确了问题，那我们就可以修复这个bug了。
 
 ### 修复问题
 
-To correct the `Reverse` function, let’s traverse the string by runes, instead of by bytes.
+以`rune`为维度进行字符串反转。
 
-#### Write the code
+#### 编写代码
 
-In your text editor, replace the existing Reverse() function with the following.
+修改`Reverse`函数的实现如下：
 
-```
+```go
 func Reverse(s string) string {
     r := []rune(s)
     for i, j := 0, len(r)-1; i < len(r)/2; i, j = i+1, j-1 {
@@ -428,23 +449,21 @@ func Reverse(s string) string {
 }
 ```
 
-The key difference is that `Reverse` is now iterating over each `rune` in the string, rather than each `byte`.
+#### 运行代码
 
-#### Run the code
+1. 运行命令：`go test`
 
-1. Run the test using `go test`
-
-   ```
+   ```bash
    $ go test
    PASS
    ok      example/fuzz  0.016s
    ```
 
-   The test now passes!
+   测试通过啦!(别高兴太早，这个只是通过了种子语料库和之前)
 
-2. Fuzz it again with `go test -fuzz`, to see if there are any new bugs.
+2. 再次运行 `go test -fuzz`，看看我们是否会发现新的bug
 
-   ```
+   ```bash
    $ go test -fuzz=Fuzz
    fuzz: elapsed: 0s, gathering baseline coverage: 0/37 completed
    fuzz: minimizing 506-byte failing input file...
@@ -461,29 +480,25 @@ The key difference is that `Reverse` is now iterating over each `rune` in the st
    FAIL    example/fuzz  0.032s
    ```
 
-   We can see that the string is different from the original after being reversed twice. This time the input itself is invalid unicode. How is this possible if we’re fuzzing with strings?
+   通过上面的报错，我们发现对一个字符串做了2次反转后得到的和原字符串不一样。
 
-   Let’s debug again.
+   这次测试输入本身是非法的unicode，但是为什么会2次反转后得到的字符串还不一样呢？
 
-## Fix the double reverse error
+   我们继续调试。
 
-In this section, you will debug the double reverse failure and fix the bug.
+## 修复2次字符串反转的bug
 
-Feel free to spend some time thinking about this and trying to fix the issue yourself before moving on.
+### 定位问题
 
-### Diagnose the error
+对于这个问题，加断点调试会很好定位。为了方便讲解，本文使用加日志的方式进行调试。
 
-Like before, there are several ways you could debug this failure. In this case, using a [debugger](https://github.com/golang/vscode-go/blob/master/docs/debugging.md) would be a great approach.
+我们可以仔细观察原字符串第一次反转后得到的结果来定位问题。
 
-In this tutorial, we will log useful debugging info in the `Reverse` function.
+#### 编写代码
 
-Look closely at the reversed string to spot the error. In Go, [a string is a read only slice of bytes](https://go.dev/blog/strings), and can contain bytes that aren’t valid UTF-8. The original string is a byte slice with one byte, `'\x91'`. When the input string is set to `[]rune`, Go encodes the byte slice to UTF-8, and replaces the byte with the UTF-8 character �. When we compare the replacement UTF-8 character to the input byte slice, they are clearly not equal.
+1. 修改 `Reverse` 函数。
 
-#### Write the code
-
-1. In your text editor, replace the `Reverse` function with the following.
-
-   ```
+   ```go
    func Reverse(s string) string {
        fmt.Printf("input: %q\n", s)
        r := []rune(s)
@@ -495,13 +510,15 @@ Look closely at the reversed string to spot the error. In Go, [a string is a rea
    }
    ```
 
-   This will help us understand what is going wrong when converting the string to a slice of runes.
+   这可以帮助我们理解把原字符串转成`rune`切片后发生了什么。
 
-#### Run the code
+#### 运行代码
 
-This time, we only want to run the failing test in order to inspect the logs. To do this, we will use `go test -run`.
+这一次，我们只运行让fuzz test失败的测试数据，使用 `go test -run`命令。
 
-```
+运行FuzzXxx/testdata目录下指定的语料库测试数据，可以给`-run`参数指定值 {FuzzTestName}/{filename} ，这可以让我们聚焦在让fuzz test失败的测试数据上。
+
+```bash
 $ go test -run=FuzzReverse/28f36ef487f23e6c7a81ebdaa9feffe2f2b02b4cddaa6252e87f69863046a5e0
 input: "\x91"
 runes: ['�']
@@ -516,19 +533,23 @@ exit status 1
 FAIL    example/fuzz    0.145s
 ```
 
-To run a specific corpus entry within FuzzXxx/testdata, you can provide {FuzzTestName}/{filename} to `-run`. This can be helpful when debugging.
+首先我们要了解：在Go语言里，字符串是只读的字节切片(In Go, a string is a read only slice of bytes)，字节切片里的每个字节不一定都是有效的UTF-8编码的字节，详情可以参考[a string is a read only slice of bytes](https://go.dev/blog/strings)。
 
-Knowing that the input is invalid unicode, let’s fix the error in our `Reverse` function.
+上面的例子里，输入的字符串是只有1个byte的字节切片，这1个byte是`\x91`。
 
-### Fix the error
+当我们把这个输入的字符串转成`[]rune`时，Go会把字节切片编码为UTF-8，于是就把`\x91`替换成了'�'，'�'饭庄后还是'�'，一次就导致原字符串`\x91`反转后得到的字符串是'�'了。
 
-To fix this issue, let’s return an error if the input to `Reverse` isn’t valid UTF-8.
+现在问题明确了，是因为输入的数据是非法的unicode。那接下来我们就可以修正`Reverse`函数的实现了。
 
-#### Write the code
+### 修复问题
 
-1. In your text editor, replace the existing `Reverse` function with the following.
+修复方式为：在`Reverse`里检查输入是否为合法的UTF-8编码字符串，如果非法，就返回eror。
 
-   ```
+#### 编写代码
+
+1. 修改`Reverse` 实现如下：
+
+   ```go
    func Reverse(s string) (string, error) {
        if !utf8.ValidString(s) {
            return s, errors.New("input is not valid UTF-8")
@@ -541,11 +562,9 @@ To fix this issue, let’s return an error if the input to `Reverse` isn’t val
    }
    ```
 
-   This change will return an error if the input string contains characters which are not valid UTF-8.
+2. 由于`Reverse`函数现在会返回error，因此要修改`main.go`里的对应代码，修改如下：
 
-2. Since the Reverse function now returns an error, modify the `main` function to discard the extra error value. Replace the existing `main` function with the following.
-
-   ```
+   ```go
    func main() {
        input := "The quick brown fox jumped over the lazy dog"
        rev, revErr := Reverse(input)
@@ -556,11 +575,11 @@ To fix this issue, let’s return an error if the input to `Reverse` isn’t val
    }
    ```
 
-   These calls to `Reverse` should return a nil error, since the input string is valid UTF-8.
+   因为`main`函数里都是有效的UTF-8编码字符串，所以对`Reverse`的调用会返回一个值为nil的error。
 
-3. You will need to import the errors and the unicode/utf8 packages. The import statement in main.go should look like the following.
+3. 由于`Reverse`函数用到了`errors`和`utf8`这2个package，因此在`main.go`的开头要import这2个package。
 
-   ```
+   ```go
    import (
        "errors"
        "fmt"
@@ -568,9 +587,9 @@ To fix this issue, let’s return an error if the input to `Reverse` isn’t val
    )
    ```
 
-4. Modify the reverse_test.go file to check for errors and skip the test if errors are generated by returning.
+4. 同样，我们需要修改`reverse_test.go`文件，对于非法的字符串输入，可以直接跳过测试。
 
-   ```
+   ```go
    func FuzzReverse(f *testing.F) {
        testcases := []string {"Hello, world", " ", "!12345"}
        for _, tc := range testcases {
@@ -595,11 +614,11 @@ To fix this issue, let’s return an error if the input to `Reverse` isn’t val
    }
    ```
 
-   Rather than returning, you can also call `t.Skip()` to stop the execution of that fuzz input.
+   除了使用return，你还可以调用 `t.Skip()` 来跳过当前的测试输入，继续下一轮测试输入。
 
-#### Run the code
+#### 运行代码
 
-1. Run the test using go test
+1. 运行测试代码
 
    ```
    $ go test
@@ -607,7 +626,7 @@ To fix this issue, let’s return an error if the input to `Reverse` isn’t val
    ok      example/fuzz  0.019s
    ```
 
-2. Fuzz it with `go test -fuzz=Fuzz`, then after a few seconds has passed, stop fuzzing with `ctrl-C`.
+2. 运行模糊测试 `go test -fuzz=Fuzz`，执行几秒后，使用 `ctrl-C` 结束测试。
 
    ```
    $ go test -fuzz=Fuzz
@@ -623,9 +642,11 @@ To fix this issue, let’s return an error if the input to `Reverse` isn’t val
    ok      example/fuzz  228.000s
    ```
 
-   The fuzz test will run until it encounters a failing input unless you pass the `-fuzztime` flag. The default is to run forever if no failures occur, and the process can be interrupted with `ctrl-C`.
+   fuzz test如果没有遇到错误，默认会一直运行下去，需要使用 `ctrl-C` 结束测试。
 
-3. Fuzz it with `go test -fuzz=Fuzz -fuzztime 30s` which will fuzz for 30 seconds before exiting if no failure was found.
+   也可以传递`-fuzztime`参数来指定测试时间，这样就不用 `ctrl-C` 了。
+
+3. 指定测试时间。 `go test -fuzz=Fuzz -fuzztime 30s` 如果没有遇到错误会执行30s后自动结束。
 
    ```
    $ go test -fuzz=Fuzz -fuzztime 30s
@@ -646,23 +667,23 @@ To fix this issue, let’s return an error if the input to `Reverse` isn’t val
    ok      example/fuzz  31.025s
    ```
 
-   Fuzzing passed!
+   Fuzzing测试通过！
 
-   In addition to the `-fuzz` flag, several new flags have been added to `go test` and can be viewed in the [documentation](https://go.dev/doc/fuzz/#custom-settings).
+   除了`-fuzz`参数外，有几个新的参数也被引入到了`go test`命令，具体可以参考 [documentation](https://go.dev/doc/fuzz/#custom-settings)。
 
 ## 总结
 
-Nicely done! You’ve just introduced yourself to fuzzing in Go.
+目前你已经学会了Go fuzzing的使用方法。
 
-The next step is to choose a function in your code that you’d like to fuzz, and try it out! If fuzzing finds a bug in your code, consider adding it to the [trophy case](https://github.com/golang/go/wiki/Fuzzing-trophy-case).
+接下来，你可以在自己写过的代码里，尝试使用fuzzing来发现代码里的bug。
 
-If you experience any problems or have an idea for a feature, [file an issue](https://github.com/golang/go/issues/new/?&labels=fuzz).
+如果你真的发现了bug，请考虑把案例提交到了[trophy case](https://github.com/golang/go/wiki/Fuzzing-trophy-case)。
 
-For discussion and general feedback about the feature, you can also participate in the [#fuzzing channel](https://gophers.slack.com/archives/CH5KV1AKE) in Gophers Slack.
+如果你发现了Go fuzzing的任何问题或者想提feature，可以在这里反馈[file an issue](https://github.com/golang/go/issues/new/?&labels=fuzz)。
 
-Check out the documentation at [go.dev/doc/fuzz](https://go.dev/doc/fuzz/#requirements) for further reading.
+查看文档 [go.dev/doc/fuzz](https://go.dev/doc/fuzz/#requirements)了解更多Go Fuzzing的知识。
 
-本文的完整代码参考：
+本文的完整代码参考[Go Fuzzing示例代码](https://github.com/jincheng9/go-tutorial/tree/main/workspace/senior/p22/fuzz)。
 
 
 
@@ -680,6 +701,6 @@ Check out the documentation at [go.dev/doc/fuzz](https://go.dev/doc/fuzz/#requir
 
 ## References
 
-* https://go.dev/doc/tutorial/fuzz
-* https://github.com/golang/go/issues/44551
-* https://go.dev/doc/fuzz/
+* Fuzzing教程：https://go.dev/doc/tutorial/fuzz
+* Fuzzing提案：https://github.com/golang/go/issues/44551
+* Fuzzing介绍：https://go.dev/doc/fuzz/
