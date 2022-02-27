@@ -85,7 +85,7 @@
 
 7. [Go语言中命名函数参数和命名函数返回值的注意事项](./workspace/senior/p21)
 
-7. [官方教程：Go fuzzing入门](./workspace/senior/p22)
+7. [官方教程：Go fuzzing模糊测试](./workspace/senior/p22)
 
    
 
@@ -157,7 +157,7 @@
 
 1. [GitHub最流行的golang-cheat-sheet中文版本](https://github.com/jincheng9/golang-cheat-sheet-cn)
 
-1. [官方教程：Go fuzzing入门](./workspace/senior/p22)
+1. [官方教程：Go fuzzing模糊测试](./workspace/senior/p22)
 
 2. [官方教程：Go泛型入门](./workspace/senior/p6)
 

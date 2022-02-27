@@ -1,4 +1,4 @@
-# 官方教程：Go fuzzing入门
+# 官方教程：Go fuzzing模糊测试
 
 ## 前言
 
