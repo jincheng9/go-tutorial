@@ -85,6 +85,8 @@
 
 7. [Go语言中命名函数参数和命名函数返回值的注意事项](./workspace/senior/p21)
 
+7. [官方教程：Go fuzzing入门](./workspace/senior/p22)
+
    
 
 ## Go Quiz
