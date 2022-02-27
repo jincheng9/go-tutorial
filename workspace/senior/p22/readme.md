@@ -14,7 +14,7 @@ Go 1.18在go工具链里引入了fuzzing模糊测试，可以帮助我们发现G
 
 ## 教程内容
 
-这篇教程会介绍Go fuzzing的入门基础知识。fuzzing可以构造随机数据来找出代码里的漏洞或者可能导致程序崩溃的输入。通过fuzzing可以找出的漏洞包括SQL注入、缓存溢出、拒绝服务(Denial of Service)攻击和XSS(cross-site scripting)攻击等。
+这篇教程会介绍Go fuzzing的入门基础知识。fuzzing可以构造随机数据来找出代码里的漏洞或者可能导致程序崩溃的输入。通过fuzzing可以找出的漏洞包括SQL注入、缓冲区溢出、拒绝服务(Denial of Service)攻击和XSS(cross-site scripting)攻击等。
 
 在这个教程里，你会给一个函数写一段fuzz test(模糊测试)程序，然后运行go命令来发现代码里的问题，最后通过调试来修复问题。
 
@@ -38,7 +38,7 @@ Go 1.18在go工具链里引入了fuzzing模糊测试，可以帮助我们发现G
 
 ### 安装和使用beta版本
 
-这个教程需要使用Go 1.18 Beta 1版本了的泛型功能。使用如下步骤，安装beta版本 
+这个教程需要使用Go 1.18 Beta 1或以上版本的泛型功能。使用如下步骤，安装beta版本 
 
 1. 使用下面的命令安装beta版本
 
@@ -318,7 +318,7 @@ import (
    FAIL    example/fuzz  0.030s
    ```
 
-   上面的fuzzing测试结果是`FAIL`，引起`FAIL`的输入数据被写到了一个语料库文件里。下次运行`go test`命令的时候，即使没有`-fuzz`参数，这个种子语料库文件里的输入也会被用到。
+   上面的fuzzing测试结果是`FAIL`，引起`FAIL`的输入数据被写到了一个语料库文件里。下次运行`go test`命令的时候，即使没有`-fuzz`参数，这个语料库文件里的测试数据也会被用到。
 
    可以用文本编辑器打开`testdata/fuzz/FuzzReverse`目录下的文件，看看引起Fuzzing测试失败的测试数据长什么样。下面是一个示例文件，你那边运行后得到的测试数据可能和这个不一样，但文件里的内容格式会是一样的。
 
