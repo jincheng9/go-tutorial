@@ -219,7 +219,7 @@ fuzzing的优点之一是可以基于开发者代码里指定的测试输入作�
 
 在这个章节，我们会把单元测试转换成模糊测试，这样可以更轻松地生成更多的测试输入。
 
-**注意：**你可以把单元测试、性能测试和模糊测试放在同一个`*_test.go`文件里。
+**注意**：你可以把单元测试、性能测试和模糊测试放在同一个`*_test.go`文件里。
 
 ### 编写模糊测试
 
@@ -268,7 +268,7 @@ Go模糊测试和单元测试在语法上有如下差异：
 - Go模糊测试会调用`f.Add`函数和`f.Fuzz`函数。
 
   - `f.Add`函数把指定输入作为模糊测试的种子语料库(seed corpus)，fuzzing基于种子语料库生成随机输入。
-  - `f.Fuzz`函数接收一个fuzz target函数作为入参。fuzz target函数有多个参数，第一个参数是`*testing.T`，其它参数是被模糊的类型(**注意:**被模糊的类型目前只支持部分内置类型, 列在 [Go Fuzzing docs](https://go.dev/doc/fuzz/#requirements)，未来会支持更多的内置类型)。
+  - `f.Fuzz`函数接收一个fuzz target函数作为入参。fuzz target函数有多个参数，第一个参数是`*testing.T`，其它参数是被模糊的类型(**注意**：被模糊的类型目前只支持部分内置类型, 列在 [Go Fuzzing docs](https://go.dev/doc/fuzz/#requirements)，未来会支持更多的内置类型)。
 
   ![](../../img/fuzzing.png)
 
