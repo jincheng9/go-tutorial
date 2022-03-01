@@ -36,10 +36,27 @@ func test6() {
 	fmt.Println(ns)
 	fmt.Println(len(ns))
 }
+
+func test7() {
+	m := map[string][]string{}
+	m["a"] = []string{"a"}
+	result := m["b"]
+	fmt.Println(result, result == nil)
+}
+
+func test8() {
+	if a, b := 1, 2; a != 10 {
+		fmt.Println(a, b)
+	}
+	a = 10
+	fmt.Println(a)
+}
+
 func main() {
-	fmt.Println("test:", test())
-	fmt.Println("test2:", test2())
-	fmt.Println("test3:", test3())
-	fmt.Println("test4:", test4())
-	test6()
+	// fmt.Println("test:", test())
+	// fmt.Println("test2:", test2())
+	// fmt.Println("test3:", test3())
+	// fmt.Println("test4:", test4())
+	// test6()
+	test7()
 }

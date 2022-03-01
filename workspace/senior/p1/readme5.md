@@ -10,11 +10,12 @@
 go install golang.org/dl/go1.18beta2@latest
 ```
 
-执行这条命令的结果是会下载`go1.18beta2`这个可执行程序文件到本地，那会有3个疑问：
+执行这条命令的结果是会下载`go1.18beta2`这个可执行程序文件到本地，那会有几个疑问：
 
 * `go1.18beta2` 可执行文件存放在哪里？
 * `go1.18beta2`要怎么使用？
-* `go1.18beta2`的源码存放在哪里？
+* `go1.18beta2`的源码存放在哪里？即`go1.18beta2`的`GOROOT`路径是什么？
+* `go1.18beta2`的`GOPATH`路径是什么？
 
 
 
@@ -133,6 +134,21 @@ Success. You may now run 'go1.18beta2'
 ```bash
 $ go1.18beta2 env GOROOT
 /Users/xxx/sdk/go1.18beta2
+```
+
+
+
+## `go1.18beta2`的`GOPATH`路径是什么？
+
+默认情况下，使用`go install`装的不同版本Go的`GOPATH`默认路径都是同一个：`$HOME/go`，如下所示：
+
+```bash
+C02G21KCMD6M:go-tutorial$ go env GOPATH
+/Users/xxx/go
+C02G21KCMD6M:go-tutorial$ go1.18beta1 env GOPATH
+/Users/xxx/go
+C02G21KCMD6M:go-tutorial$ echo $HOME
+/Users/xxx
 ```
 
 
