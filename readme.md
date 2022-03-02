@@ -1,4 +1,4 @@
-# Learning notes for go-lang
+# Learning notes for golang
 
 ## 基础篇
 
