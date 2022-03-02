@@ -87,6 +87,8 @@
 
 7. [官方教程：Go fuzzing模糊测试](./workspace/senior/p22)
 
+7. [Fuzzing: 一文搞懂Go Fuzzing原理](./workspace/senior/p23)
+
    
 
 ## Go Quiz
