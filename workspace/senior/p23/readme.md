@@ -14,6 +14,8 @@
 
 ## References
 
+* Internals of Go's New Fuzzing System: https://jayconrod.com/posts/123/internals-of-go-s-new-fuzzing-system
+
 * Fuzzing Tesing in Go in 8 Minutes: https://www.youtube.com/watch?v=w8STTZWdG9Y
 
 * Fuzzing教程：https://go.dev/doc/tutorial/fuzz
