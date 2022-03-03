@@ -105,7 +105,9 @@
 9. [Go Quiz: 从Go面试题看panic注意事项第1篇](./workspace/senior/p18)
 9. [Go Quiz: 从Go面试题看函数命名返回值的注意事项](./workspace/senior/p20)
 
+12. [Go questions-golang.design](https://golang.design/go-questions/)
 
+    
 
 
 ##  Go标准库
