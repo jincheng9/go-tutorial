@@ -239,7 +239,9 @@
 
 * [Go101.org](https://go101.org/article/101.html)
 
-* [Valentin Deleplace](https://medium.com/@val_deleplace)
+* [Valentin Deleplace-Google Engineer](https://medium.com/@val_deleplace)
+
+* [Jay Conrod-Ex Google Go Team Member](https://jayconrod.com/posts)
 
 * [Medium: A Journey with Go](https://medium.com/a-journey-with-go)
 
