@@ -187,6 +187,8 @@
 
 2. [go install安装的不同Go版本的可执行程序和源码存放在哪里](./workspace/senior/p1/readme5.md)
 
+2. [Mac系统查看Go开发相关的系统设置](./workspace/senior/p1/readme6.md)
+
    
 
 ## Go News
