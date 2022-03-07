@@ -247,7 +247,9 @@
 
 * [Medium: A Journey with Go](https://medium.com/a-journey-with-go)
 
-* [Teiva Harsanyi](https://teivah.medium.com/)
+* [Teiva Harsanyi-100 Go Mistakes author](https://teivah.medium.com/)
+
+* [Alex Edwards-A full stack Web Developer](https://www.alexedwards.net/blog)
 
 * [Go Documentation](https://go.dev/doc/)
 
