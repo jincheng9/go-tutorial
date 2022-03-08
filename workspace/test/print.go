@@ -48,8 +48,16 @@ func test8() {
 	if a, b := 1, 2; a != 10 {
 		fmt.Println(a, b)
 	}
+	// compile error: undefined a
 	a = 10
 	fmt.Println(a)
+}
+
+func test9() {
+	var a int = 10
+	var b int32 = 20
+	// compile error: mismatched types int and int32
+	fmt.Println(a == b)
 }
 
 func main() {
