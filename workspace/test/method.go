@@ -17,6 +17,6 @@ func (a *A) caller2() {
 
 func main() {
 	var a = new(A)
-	a.caller2()
+	a.caller1()
 	fmt.Println(a.x)
 }
