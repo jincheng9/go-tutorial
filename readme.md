@@ -206,8 +206,9 @@
 
 ### YouTube
 
-* [Basics, Intermediate, Advanced Go Tutorials](https://www.youtube.com/c/BitfieldConsulting)
+* [Basics, Intermediate, Advanced Go Tutorials-Bitfield Consulting](https://www.youtube.com/c/BitfieldConsulting)
 * [GopherCon Talks Since 2014](https://www.youtube.com/c/GopherAcademy/videos)
+* [GoLab Conference Since 2018](https://www.youtube.com/channel/UCMEvzoHTIdZI7IM8LoRbLsQ/featured)
 * [TutorialEdge Golang Development](https://www.youtube.com/watch?v=W5b64DXeP0o&list=PLzUGFf4GhXBL4GHXVcMMvzgtO8-WEJIoY)
 
 
