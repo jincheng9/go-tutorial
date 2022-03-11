@@ -2,9 +2,17 @@
 
 ## 背景
 
+Go 1.18除了引入泛型(generics)这个重大设计之外，Go官方团队在Go 1.18工具链里还引入了fuzzing模糊测试。
+
+Go fuzzing的主要开发者是Katie Hockman, Jay Conrod和Roland Shoemaker。
+
+**编者注**：Katie Hockman已于2022.02.19从Google离职，Jay Conrod也于2021年10月离开Google，
+
 
 
 ##  什么是Fuzzing
+
+Fuzzing是一项
 
 
 
