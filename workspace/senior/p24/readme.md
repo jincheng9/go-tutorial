@@ -124,6 +124,7 @@ Go语言里的锁和C++，Java里的不太一样，给大家总结了以下注�
 * Go的锁是不可重入的，没有递归锁
 * 允许一个goroutine加锁，另一个goroutine解锁，不要求加锁和解锁在同一个goroutine里
 * sync.Mutex的零值是没有加锁的Mutex，sync.RWMutex的零值是没有加锁的RWMutex
+* 更多细节可以参考References里Mutex和RWMutex的官方说明
 
 
 
