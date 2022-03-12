@@ -227,6 +227,7 @@
 
 ## Go Book
 
+* [The Go Programming Language-Go语言圣经](http://www.gopl.io/)
 * [Go语言高级编程-chai2010.gitbooks.io](https://chai2010.gitbooks.io/advanced-go-programming-book/content/)
 * [Go语言设计与实现-draveness.me](https://draveness.me/golang/)
 * [Go设计模式-Tamer Tas@google](https://github.com/tmrts/go-patterns)
