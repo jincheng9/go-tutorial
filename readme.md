@@ -94,16 +94,28 @@
 ## Go Quiz
 
 1. [Go Quiz: 从Go面试题看slice的底层原理和注意事项](./workspace/senior/p8)
+
 2. [Go Quiz: 从Go面试题搞懂slice range遍历的坑](./workspace/senior/p13)
+
 3. [Go Quiz: 从Go面试题看channel的注意事项](./workspace/senior/p9)
+
 4. [Go Quiz: 从Go面试题看channel在select场景下的注意事项](./workspace/senior/p14)
+
 5. [Go Quiz: 从Go面试题看分号规则和switch的注意事项](./workspace/senior/p10)
+
 6. [Go Quiz: 从Go面试题看defer语义的底层原理和注意事项第1篇](./workspace/senior/p11)
+
 7. [Go Quiz: 从Go面试题看defer的注意事项第2篇](./workspace/senior/p12)
+
 8. [Go Quiz: 从Go面试题看defer的注意事项第3篇](./workspace/senior/p15)
+
 9. [Go Quiz: Google工程师的Go语言题目](./workspace/senior/p16)
-9. [Go Quiz: 从Go面试题看panic注意事项第1篇](./workspace/senior/p18)
+
+10. [Go Quiz: 从Go面试题看panic注意事项第1篇](./workspace/senior/p18)
+
 9. [Go Quiz: 从Go面试题看函数命名返回值的注意事项](./workspace/senior/p20)
+
+9. [Go Quiz: 从Go面试题看锁的注意事项](./workspace/senior/p24)
 
 12. [Go questions-golang.design](https://golang.design/go-questions/)
 

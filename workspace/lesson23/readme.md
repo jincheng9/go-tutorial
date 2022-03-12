@@ -12,7 +12,7 @@ Mutex允许一个goroutine对其加锁，其它goroutine对其解锁，不要求
 
 Mutex结构体类型有2个方法
 
-* Lock()加锁。Lock()方法会把Mutex变量m锁住，如果m已经锁住了，如果再次调用Lock()就会阻塞，知道锁释放。
+* Lock()加锁。Lock()方法会把Mutex变量m锁住，如果m已经锁住了，如果再次调用Lock()就会阻塞，直到锁释放。
 
   ```go
   func (m *Mutex) Lock()
@@ -234,7 +234,7 @@ func main() {
 
 ## References
 
-https://pkg.go.dev/sync@go1.17.2#Mutex
+* https://pkg.go.dev/sync@go1.17.2#Mutex
 
-https://pkg.go.dev/sync@go1.17.2#RWMutex
+* https://pkg.go.dev/sync@go1.17.2#RWMutex
 
