@@ -22,7 +22,7 @@ Fuzzing中文含义是模糊测试，是一种自动化测试技术，可以生�
 
 
 
-## Go Fuzzing是怎么工作的
+## Go Fuzzing怎么使用
 
 Fuzzing在Go语言里并不是一个全新的概念，在Go官方团队发布Fuzzing工具之前，GitHub上已经有了类似的模糊测试工具[go-fuzz](https://github.com/dvyukov/go-fuzz)。Go官方团队的Fuzzing实现借鉴了go-fuzz的设计思想。
 
@@ -32,9 +32,9 @@ Go 1.18把Fuzzing整合到了`go test`工具链和`testing`包里。
 
 
 
-## Fuzzing底层是如何工作的
+## Go Fuzzing的实现
 
-
+Coordinator, workers
 
 ```bash
 MacBook-Air:go-tutorial $ ps aux | grep fuzz
@@ -73,3 +73,4 @@ xxx    13890   0.0  0.0  4989312   4008 s001  S+   10:12下午   0:00.01 go1.18b
 * Fuzzing教程：https://go.dev/doc/tutorial/fuzz
 * Fuzzing Tesing in Go in 8 Minutes: https://www.youtube.com/watch?v=w8STTZWdG9Y
 * GitHub开源工具go-fuzz: https://github.com/dvyukov/go-fuzz
+
