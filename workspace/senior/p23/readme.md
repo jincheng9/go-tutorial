@@ -12,19 +12,21 @@ Go fuzzing的主要开发者是Katie Hockman, Jay Conrod和Roland Shoemaker。
 
 ##  什么是Fuzzing
 
-Fuzzing中文含义是模糊测试，是一种自动化测试技术，可以生成测试所需要的随机数据，然后调用要测试的功能代码来检查功能是否符合预期。
+Fuzzing中文含义是模糊测试，是一种自动化测试技术，可以随机生成测试数据集，然后调用要测试的功能代码来检查功能是否符合预期。
 
 模糊测试(fuzz test)是对单元测试(unit test)的补充，并不是要替代单元测试。
 
-单元测试是检查指定的输入得到的结果是否和预期的输出结果一致，测试数据比较有限。
+单元测试是检查指定的输入得到的结果是否和预期的输出结果一致，测试数据集比较有限。
 
-模糊测试可以生成随机输入数据，找出单元测试覆盖不到的场景，进而发现程序的潜在bug和安全漏洞。
+模糊测试可以生成随机测试数据，找出单元测试覆盖不到的场景，进而发现程序的潜在bug和安全漏洞。
 
 
 
 ## Go Fuzzing怎么使用
 
-Fuzzing在Go语言里并不是一个全新的概念，在Go官方团队发布Fuzzing工具之前，GitHub上已经有了类似的模糊测试工具[go-fuzz](https://github.com/dvyukov/go-fuzz)。Go官方团队的Fuzzing实现借鉴了go-fuzz的设计思想。
+Fuzzing在Go语言里并不是一个全新的概念，在Go官方团队发布Fuzzing工具之前，GitHub上已经有了类似的模糊测试工具[go-fuzz](https://github.com/dvyukov/go-fuzz)。
+
+Go官方团队的Fuzzing实现借鉴了go-fuzz的设计思想。
 
 Go 1.18把Fuzzing整合到了`go test`工具链和`testing`包里。
 
