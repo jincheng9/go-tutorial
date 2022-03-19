@@ -1,4 +1,4 @@
-# Fuzzing: 一文搞懂Go Fuzzing原理
+# Fuzzing: 一文读懂Go Fuzzing设计和原理
 
 ## 背景
 

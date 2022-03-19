@@ -85,9 +85,9 @@
 
 7. [Go语言中命名函数参数和命名函数返回值的注意事项](./workspace/senior/p21)
 
-7. [官方教程：Go fuzzing模糊测试](./workspace/senior/p22)
+7. [Fuzzing: Go Fuzzing入门官方教程](./workspace/senior/p22)
 
-7. [Fuzzing: 一文搞懂Go Fuzzing原理](./workspace/senior/p23)
+7. [Fuzzing: 一文读懂Go Fuzzing设计和原理](./workspace/senior/p23)
 
    
 
