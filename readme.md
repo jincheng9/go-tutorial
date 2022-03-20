@@ -205,28 +205,6 @@
 
    
 
-## Go News
-
-* https://go.dev/blog/
-* https://twitter.com/_rsc
-* https://twitter.com/rob_pike
-* https://twitter.com/golang
-* https://twitter.com/golangweekly
-* https://twitter.com/GolangTrends
-
-
-
-## Go Video
-
-### YouTube
-
-* [Basics, Intermediate, Advanced Go Tutorials-Bitfield Consulting](https://www.youtube.com/c/BitfieldConsulting)
-* [GopherCon Talks Since 2014](https://www.youtube.com/c/GopherAcademy/videos)
-* [GoLab Conference Since 2018](https://www.youtube.com/channel/UCMEvzoHTIdZI7IM8LoRbLsQ/featured)
-* [TutorialEdge Golang Development](https://www.youtube.com/watch?v=W5b64DXeP0o&list=PLzUGFf4GhXBL4GHXVcMMvzgtO8-WEJIoY)
-
-
-
 ## Go Book
 
 * [The Go Programming Language-Go语言圣经](http://www.gopl.io/)
@@ -244,74 +222,64 @@
 ## Go Blog
 
 * [Jincheng's Blog](https://jincheng9.github.io/)
-
 * [Russ Cox](https://research.swtch.com/)
-
 * [CS Prof Nilsson from KTH-Golang and Algo](https://yourbasic.org/golang/)
-
 * [John Arundel](https://bitfieldconsulting.com/)
-
 * [Dave Cheney](https://dave.cheney.net/)
-
 * [Jaana Dogan-Pricipal Engineer at AWS](https://rakyll.org/about/)
-
 * [Go101.org](https://go101.org/article/101.html)
-
 * [Valentin Deleplace-Google Engineer](https://medium.com/@val_deleplace)
-
 * [Jay Conrod-Ex Google Go Team Member](https://jayconrod.com/posts)
-
 * [Medium: A Journey with Go](https://medium.com/a-journey-with-go)
-
 * [Teiva Harsanyi-100 Go Mistakes author](https://teivah.medium.com/)
-
 * [Alex Edwards-A full stack Web Developer](https://www.alexedwards.net/blog)
-
 * [Go Documentation](https://go.dev/doc/)
-
 * [Golang GitHub Wiki](https://github.com/golang/go/wiki)
-
 * [Go By Example](https://gobyexample.com/)
-
 * [Golang By Example](https://golangbyexample.com/)
-
 * [golang.design](https://golang.design/)
-
 * [Amit Saha-Atlassian Engineer](https://echorand.me/)
-
 * [Paschalis Tsilias-Grafana Engineer](https://tpaschalis.github.io/)
-
 * [TalkGo发起人-杨文](https://maiyang.me/)
-
 * [smallest-rpcx作者](https://colobu.com/)
-
 * [ChangkunOu-欧长坤](https://changkun.de/blog/)
-
 * [chai2010-柴树杉](https://chai2010.cn/about/)
-
 * [cch123-曹春晖](https://xargin.com/)
-
 * [halfrost-Dezhi Yu](https://halfrost.com/)
-
 * [draveness-左书祺](https://draveness.me/)
-
 * [unknwon无闻](https://unknwon.io/)
-
 * [strikefreedom-Andy Pan](https://strikefreedom.top/)
-
 * [qcrao-码农桃花源](https://qcrao.com/)
-
 * [极客兔兔](https://geektutu.com/)
-
 * [topgoer.com](https://www.topgoer.com/)
-
 * [topgoer.cn](https://topgoer.cn/)
-
+* [涛叔-taoshu.in](https://taoshu.in/)
 * [jianyu chen](https://eddycjy.com/)
-
 * [Zhiyun Luo- Tencent IEG Developer](https://www.luozhiyun.com/)
 
-  
+
+
+## Go Video
+
+### YouTube
+
+* [Basics, Intermediate, Advanced Go Tutorials-Bitfield Consulting](https://www.youtube.com/c/BitfieldConsulting)
+* [TutorialEdge Golang Development](https://www.youtube.com/watch?v=W5b64DXeP0o&list=PLzUGFf4GhXBL4GHXVcMMvzgtO8-WEJIoY)
+* [GopherCon Talks Since 2014](https://www.youtube.com/c/GopherAcademy/videos)
+* [GoLab Conference Since 2018](https://www.youtube.com/channel/UCMEvzoHTIdZI7IM8LoRbLsQ/featured)
+
+
+
+## Go News
+
+* https://go.dev/blog/
+* https://twitter.com/_rsc
+* https://twitter.com/rob_pike
+* https://twitter.com/golang
+* https://twitter.com/golangweekly
+* https://twitter.com/GolangTrends
+
+
 
 ## 微信公众号
 
