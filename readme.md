@@ -44,7 +44,7 @@
 
 * [lesson20: defer语义](./workspace/lesson20)
 
-* [lesson21: 并发编程之sync包介绍sync.WaitGroup](./workspace/lesson21)
+* [lesson21: 并发编程之sync.WaitGroup](./workspace/lesson21)
 
 * [lesson22:  并发编程之sync.Once](./workspace/lesson22)
 
