@@ -2,6 +2,14 @@
 
 
 
+## 背景
+
+## 命名函数参数
+
+## 命名函数返回值
+
+
+
 ## 开源地址
 
 文章和示例代码开源在GitHub: [Go语言初级、中级和高级教程](https://github.com/jincheng9/go-tutorial)。
