@@ -6,7 +6,7 @@ Go 1.18除了引入泛型(generics)这个重大设计之外，Go官方团队在G
 
 Go fuzzing的主要开发者是Katie Hockman, Jay Conrod和Roland Shoemaker。
 
-**编者注**：Katie Hockman已于2022.02.19从Google离职，Jay Conrod也于2021年10月离开Google
+**编者注**：Katie Hockman已于2022.02.19从Google离职，Jay Conrod也于2021年10月离开Google。
 
 
 
@@ -24,13 +24,28 @@ Fuzzing中文含义是模糊测试，是一种自动化测试技术，可以随�
 
 ## Go Fuzzing怎么使用
 
-Fuzzing在Go语言里并不是一个全新的概念，在Go官方团队发布Fuzzing工具之前，GitHub上已经有了类似的模糊测试工具[go-fuzz](https://github.com/dvyukov/go-fuzz)。
+Fuzzing在Go语言里并不是一个全新的概念，在Go官方团队发布Go Fuzzing之前，GitHub上已经有了类似的模糊测试工具[go-fuzz](https://github.com/dvyukov/go-fuzz)。
 
 Go官方团队的Fuzzing实现借鉴了go-fuzz的设计思想。
 
 Go 1.18把Fuzzing整合到了`go test`工具链和`testing`包里。
 
 下面举个例子说明下Fuzzing如何使用。
+
+对于如下的字符串反转函数`Reverse`，大家可以思考下这段代码有什么潜在问题？
+
+```go
+package fuzz
+
+func Reverse(s string) string {
+	bs := []byte(s)
+	length := len(bs)
+	for i := 0; i < length/2; i++ {
+		bs[i], bs[length-i-1] = bs[length-i-1], bs[i]
+	}
+	return string(bs)
+}
+```
 
 
 
