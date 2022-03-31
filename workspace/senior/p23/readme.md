@@ -30,11 +30,14 @@ Go官方团队的Fuzzing实现借鉴了go-fuzz的设计思想。
 
 Go 1.18把Fuzzing整合到了`go test`工具链和`testing`包里。
 
+### 示例
+
 下面举个例子说明下Fuzzing如何使用。
 
 对于如下的字符串反转函数`Reverse`，大家可以思考下这段代码有什么潜在问题？
 
 ```go
+// main.go
 package fuzz
 
 func Reverse(s string) string {
@@ -47,9 +50,12 @@ func Reverse(s string) string {
 }
 ```
 
-我们来写一个Fuzzing模糊测试函数，来发现上面代码的潜在问题
+### 编写Fuzzing模糊测试函数
+
+如果没有发现上面代码的bug，我们不妨来写一个Fuzzing模糊测试函数，来发现上面代码的潜在问题
 
 ```go
+// fuzz_test.go
 package fuzz
 
 import (
@@ -72,9 +78,34 @@ func FuzzReverse(f *testing.F) {
 			t.Errorf("reverse result is not utf8. str:%s, len: %d, rev_str1:%s", str, len(str), rev_str1)
 		}
 	})
-
 }
 ```
+
+### 执行Fuzzing测试
+
+执行如下命令可以进行Fuzzing测试
+
+```sh
+go1.18beta1 test -fuzz=Fuzz
+```
+
+使用的Go版本要求是`go 1.18beta 1`或以上版本，结果如下所示：
+
+```sh
+xxxMacBook-Air:fuzz$ go1.18beta1 test -fuzz=Fuzz
+fuzz: elapsed: 0s, gathering baseline coverage: 0/113 completed
+failure while testing seed corpus entry: FuzzReverse/ce9e8c80e2c2de2c96ab9e63b1a8cf18cea932b7d8c6c9c207d5978e0f19027a
+fuzz: elapsed: 0s, gathering baseline coverage: 3/113 completed
+--- FAIL: FuzzReverse (0.04s)
+    --- FAIL: FuzzReverse (0.00s)
+        fuzz_test.go:20: reverse result is not utf8. str:æ, len: 2, rev_str1:��
+    
+FAIL
+exit status 1
+FAIL    example/fuzz    0.253s
+```
+
+Fuzzing帮助我们发现了字符串反转函数`Reverse`的bug。
 
 
 
