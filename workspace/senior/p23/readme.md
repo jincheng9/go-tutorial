@@ -149,5 +149,6 @@ xxx    13890   0.0  0.0  4989312   4008 s001  S+   10:12下午   0:00.01 go1.18b
 * Fuzzing提案：https://github.com/golang/go/issues/44551
 * Fuzzing教程：https://go.dev/doc/tutorial/fuzz
 * Fuzzing Tesing in Go in 8 Minutes: https://www.youtube.com/watch?v=w8STTZWdG9Y
-* GitHub开源工具go-fuzz: https://github.com/dvyukov/go-fuzz
+* GitHub开源工具go-fuzz: https://github.com/dvyukov/go-fuz
+* Go fuzzing找bug示例：https://julien.ponge.org/blog/playing-with-test-fuzzing-in-go/
 
