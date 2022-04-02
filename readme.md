@@ -87,7 +87,7 @@
 
 7. [Fuzzing: Go Fuzzing入门官方教程](./workspace/senior/p22)
 
-7. [Fuzzing: 一文读懂Go Fuzzing设计和原理](./workspace/senior/p23)
+7. [Fuzzing: 一文读懂Go Fuzzing使用和原理](./workspace/senior/p23)
 
    
 
