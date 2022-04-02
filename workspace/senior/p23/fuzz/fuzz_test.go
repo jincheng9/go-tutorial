@@ -6,7 +6,7 @@ import (
 )
 
 func FuzzReverse(f *testing.F) {
-	str_slice := []string{"abc", "bb"}
+	str_slice := []string{"abc"}
 	for _, v := range str_slice {
 		f.Add(v)
 	}
