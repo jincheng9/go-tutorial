@@ -130,36 +130,30 @@ FAIL    example/fuzz    0.179s
 
 ## Go Fuzzing的底层机制
 
- `go test` 执行的时候，会为每个被测试的package先编译生成一个可执行文件，然后运行这个可执行文件得到对应package的`TestXXX`和`BenchmarkXXX`的测试结果。
+ `go test` 执行的时候，会为每个被测试的package先编译生成一个可执行文件，然后运行这个可执行文件得到对应package的`TestXXX`和`BenchmarkXXX`的测试结果。Go Fuzzing运行的模式和这个类似，但是也有一点区别。
 
-You may already know that `go test` builds a test executable for each package being tested, then runs those executables to get test and benchmark results. Fuzzing follows this pattern, though there are some differences.
+当`go test`执行的时候如果有`-fuzz`标记，`go test`会结合覆盖率工具来编译生成用于模糊测试的可执行文件。大部分的Fuzzing逻辑都实现在[internal/fuzz](https://pkg.go.dev/internal/fuzz)。
 
-When `go test` is invoked with the `-fuzz` flag, `go test` compiles the test executable with additional coverage instrumentation. The Go compiler already had instrumentation support for [libFuzzer](https://llvm.org/docs/LibFuzzer.html), so we reused that. The compiler adds an 8-bit counter to each basic block. The counter is fast and approximate: it wraps on overflow, and there's no synchronization across threads. (We had to tell the race detector not to complain about writes to these counters). The counter data is used at run-time by the [internal/fuzz](https://pkg.go.dev/internal/fuzz) package, where most of the fuzzing logic is.
+当`go test`编译生成了可执行文件后，该可执行文件就会运行起来，这个运行起来的进程叫做协调进程(coordinator process)。协调进程的启动参数里有`go test`命令的大部分标记，包括`-fuzz=pattern`这个标记，`-fuzz=pattern`用来识别对哪个模糊测试函数(fuzz test)进行Fuzzing测试。
 
-After `go test` builds an instrumented executable, it runs it as usual. This is called the coordinator process. This process is started with most of the flags that were passed to `go test`, including `-fuzz=pattern`, which it uses to identify which target to fuzz; for now, only one target may be fuzzed per `go test` invocation ([#46312](https://github.com/golang/go/issues/46312)). When that target calls [`F.Fuzz`](https://pkg.go.dev/testing@go1.18beta2#F.Fuzz), control is passed to [`fuzz.CoordinateFuzzing`](https://pkg.go.dev/internal/fuzz#CoordinateFuzzing), which initializes the fuzzing system and begins the coordinator event loop.
+目前，对于每一个`go test -fuzz=pattern`调用，只支持匹配一个模糊测试函数。如果`go test -fuzz=pattern`可以匹配多个`FuzzXXX`函数，就会报如下错误：
 
-The coordinator starts several worker processes, which run the same test executable and perform the actual fuzzing. Workers are started with an undocumented command line flag that tells them to be workers. Fuzzing must be done in separate processes so that if a worker process crashes entirely, the coordinator can still find and record the input that caused the crash.
+```sh
+$ go1.18beta1 test -v -fuzz=Fuzz
+testing: will not fuzz, -fuzz matches more than one fuzz test: [FuzzReverse FuzzReverse2]
+FAIL
+exit status 1
+FAIL    example/fuzz    0.752s
+```
 
-![Diagram showing the relationship between fuzzing processes. At the top is a box showing "go test (cmd/go)". An arrow points downward to a box labelled "coordinator (test binary)". From that, three arrows point downward to three boxes labelled "worker (test binary)".](https://jayconrod.com/images/fuzz-processes.svg)
+协调进程启动后，主要的程序逻辑都在[`fuzz.CoordinateFuzzing`](https://pkg.go.dev/internal/fuzz#CoordinateFuzzing)。[`fuzz.CoordinateFuzzing`](https://pkg.go.dev/internal/fuzz#CoordinateFuzzing)会初始化fuzzing系统，开启coordinator事件循环。
 
-The coordinator communicates with each worker using an improvised JSON-based RPC protocol over a pair of pipes. The protocol is pretty basic because we didn't need anything sophisticated like gRPC, and we didn't want to introduce anything new into the standard library. Each worker also keeps some state in a memory mapped temporary file, shared with the coordinator. Mostly this is just an iteration count and random number generator state. If the worker crashes entirely, the coordinator can recover its state from shared memory without requiring the worker to politely send a message over the pipes first.
+coordinator进程会启动多个worker进程，每个worker进程和coordinator进程运行相同的可执行程序，真正的fuzzing模糊测试由worker进程来完成。worker进程启动时带有一个标记参数`-test.fuzzworker`，表明这是一个worker进程。启动的worker进程数量等于GOMAXPROCS。
 
-After the coordinator starts the workers, it gathers baseline coverage by sending workers inputs from the seed corpus and the fuzzing cache corpus (in a subdirectory of `$GOCACHE`). Each worker runs its given input, then reports back with a snapshot of its coverage counters. The coordinator coarsens and merges these counters into a combined coverage array.
+这里我给了一个示例，大家可以在执行`go test -fuzz=pattern`的过程中，运行`ps aux | grep fuzz`来查看当前fuzzing相关的进程。
 
-Next, the coordinator sends out inputs from the seed corpus and cached corpus for fuzzing: each worker is given an input and a copy of the baseline coverage array. Each worker then randomly mutates its input (flipping bits, deleting or inserting bytes, etc.) and calls the fuzz function. In order to reduce communication overhead, each worker can keep mutating and calling for 100 ms without further input from the coordinator. After each call, the worker checks whether an error was reported (with [`T.Fail`](https://pkg.go.dev/testing@go1.18beta2#T.Fail)) or new coverage was found compared with the baseline coverage array. If so, the worker reports the "interesting" input back to the coordinator immediately.
-
-When the coordiantor receives an input that produces new coverage, it compares the worker's coverage to the current combined coverage array: it's possible that another worker already discovered an input that provides the same coverage. If so, the new input is discarded. If the new input actually does provide new coverage, the coordinator sends it back to a worker (perhaps a different worker) for minimization. Minimization is like fuzzing, but the worker performs random mutations to create a smaller input that still provides at least some new coverage. Smaller inputs tend to be faster, so it's worth spending the time to minimize up front to make the fuzzing process faster later. The worker process reports back when it's done minimizing, even if it failed to find anything smaller. The coordinator adds the minimized input to the cached corpus and continues. Later on, the coordinator may send the minimized input out to workers for further fuzzing. This is how the fuzzing system adapts to find new coverage.
-
-When the coordinator receives an input that causes an error, it again sends the input back to workers for minimization. In this case, a worker attempts to find a smaller input that still causes an error, though not necessarily the same error. After the input is minimized, the coordinator saves it into `testdata/corpus/$FuzzTarget`, shuts worker processes down gracefully, then exits with a non-zero status.
-
-![Diagram showing communication between coordinator and worker. Two arrows point down: the left is labelled "coordinator", the right is labelled "worker". Three pairs of horizontal arrows point from the coordinator to the worker and back. The top pair is labelled "baseline coverage", the middle is labelled "fuzz", the bottom is labelled "minimize".](https://jayconrod.com/images/fuzz-communication.svg)
-
-If a worker process crashes while fuzzing, the coordinator can recover the input that caused the crash using the input sent to the worker, and the worker's RNG state and iteration count (both left in shared memory). Crashing inputs are generally not minimized, since minimization is a highly stateful process, and each crash blows that state away. It is [theoretically possible](https://github.com/golang/go/issues/48163) but hasn't been done yet.
-
-Fuzzing usually continues until an error is discovered or the user interrupts the process by pressing Ctrl-C or the deadline set with the `-fuzztime` flag is passed. The fuzzing engine handles interrupts gracefully, whether they are delivered to the coordinator or worker processes. For example, if a worker is interrupted while minimizing an input that caused an error, the coordinator will save the unminimized input.
-
-```bash
-MacBook-Air:go-tutorial $ ps aux | grep fuzz
+```go
+$ ps aux | grep fuzz
 xxx    13913  84.3  1.0  5219184  85124 s001  R+   10:12下午   0:03.90 /var/folders/pv/_x849j6n22x37xxd9cstgwkr0000gn/T/go-build1953131131/b001/fuzz.test -test.fuzzworker -test.paniconexit0 -test.fuzzcachedir=/Users/xxx/Library/Caches/go-build/fuzz/example/fuzz -test.timeout=10m0s -test.fuzz=Fuzz
 xxx    13910  81.9  1.0  5221180  86200 s001  R+   10:12下午   0:03.94 /var/folders/pv/_x849j6n22x37xxd9cstgwkr0000gn/T/go-build1953131131/b001/fuzz.test -test.fuzzworker -test.paniconexit0 -test.fuzzcachedir=/Users/xxx/Library/Caches/go-build/fuzz/example/fuzz -test.timeout=10m0s -test.fuzz=Fuzz
 xxx    13912  78.3  1.0  5219964  84984 s001  R+   10:12下午   0:03.86 /var/folders/pv/_x849j6n22x37xxd9cstgwkr0000gn/T/go-build1953131131/b001/fuzz.test -test.fuzzworker -test.paniconexit0 -test.fuzzcachedir=/Users/xxx/Library/Caches/go-build/fuzz/example/fuzz -test.timeout=10m0s -test.fuzz=Fuzz
@@ -170,15 +164,74 @@ xxx    13891   0.0  0.2  5014396  16868 s001  S+   10:12下午   0:00.52 /Users/
 xxx    13890   0.0  0.0  4989312   4008 s001  S+   10:12下午   0:00.01 go1.18beta2 test -fuzz=Fuzz
 ```
 
+worker进程在运行模糊测试(fuzzing)的时候如果crash了，coordinator进程可以记录导致worker进程crash的测试数据。如果直接交给coordinator进程执行fuzzing，在遇到了会导致程序crash的输入时，coordinator进程本身就会crash，就没有办法记录导致程序crash的输入了(Failing input)。Go Fuzzing运行的模型如下所示：
+
+
+
+![Diagram showing the relationship between fuzzing processes. At the top is a box showing "go test (cmd/go)". An arrow points downward to a box labelled "coordinator (test binary)". From that, three arrows point downward to three boxes labelled "worker (test binary)".](https://jayconrod.com/images/fuzz-processes.svg)
+
+coordinator进程和worker进程通过一对管道进行通信，使用基于JSON的RPC通信协议。这个协议非常精简，因为我们并不需要gRPC一样复杂的RPC协议，我们也不希望给Go标准库引入任何新的依赖。
+
+每个worker进程在mmap文件里保存自己的状态，这个mmap文件和coordinator进程共享。大多数情况下，mmap里记录的只是迭代次数和随机数生成器的状态。如果worker进程crash了，那coordinator进程就可以从共享内存里恢复其状态，而不需要worker进程通过管道发送消息。
+
+整个Fuzzing过程分为3个阶段：
+
+![Diagram showing communication between coordinator and worker. Two arrows point down: the left is labelled "coordinator", the right is labelled "worker". Three pairs of horizontal arrows point from the coordinator to the worker and back. The top pair is labelled "baseline coverage", the middle is labelled "fuzz", the bottom is labelled "minimize".](https://jayconrod.com/images/fuzz-communication.svg)
+
+### 阶段1：Baseline coverage
+
+coordinator进程启动时，会拉起worker进程。coordinator进程会给worker进程发送种子语料(包括`f.Add`里添加的测试数据以及`testdata/fuzz`目录下的测试输入)和fuzzing缓存语料(cache corpus，位于`$GOCACHE`的子目录下)。
+
+每个worker进程运行指定的输入，然后给coordinator进程报告其覆盖率计数器的快照，coordinator会将收集到的worker的覆盖率数据合并为一个覆盖率数组。
+
+这个阶段叫基线覆盖率收集阶段，worker只会运行coordinator发送给它们的指定输入，不会生成随机测试数据。
+
+
+
+### 阶段2：Fuzzing模糊测试
+
+这个阶段，coordinator进程会再次发送种子语料(seed corpus)和缓存语料(cache corpus)给worker进程，用于真正的fuzzing。
+
+每个worker进程会收到一个coordinator发送的输入数据和基线覆盖率数组的拷贝。然后worker进程会随机对这个指定的输入做变异来得到新的测试数据。变异的方式有多种，可能是对bit位做反转，0改为1，1改为0，也可能是删除或者新增字节，等等。然后再把变异后的数据作为参数给到fuzz target函数去运行。
+
+为了减少coordinator进程和worker进程的通信开销，每个worker进程可以在100ms内一直变异拿到新的测试数据，然后调用fuzz target函数，而不需要coordinator进程的进一步输入。
+
+每次对生成的随机数据调用fuzz target函数后，worker进程会检查2种场景：
+
+* 和基线覆盖率数组相比，是否找到了新的覆盖率数据。
+* 是否有error产生，也就是代码里执行了[`T.Fail`](https://pkg.go.dev/testing@go1.18beta2#T.Fail)或[`T.FailNow`](https://pkg.go.dev/testing@go1.18beta2#T.FailNow)。**注意**：`T.Error`、`T.Errorf`会自动调用`T.Fail`,`T.Fatal`和`T.Fatalf`会自动调用`T.FailNow`。
+
+如果二者满足其一，worker进程就会把输入数据立即发送给coordinator进程。
+
+
+
+### 阶段3：Minimization最小化
+
+如果coordinator进程收到了worker进程发送过来的输入数据是场景1，也就是收到了会产生新覆盖率的输入，coordinator会把这个worker的覆盖率数据和当前组合的覆盖率数组做比较。
+
+因为有可能其它worker已经发现了会提供相同覆盖率的输入，如果是这样的话，那coordinator会直接ignore这个输入。如果这个新的输入的确提供了新的覆盖率，那coordinator会把这个输入发送给一个worker(很可能是不同的worker)用于最小化(minimization)。
+
+最小化有点像fuzzing，但是worker会通过随机变异来创建一个仍然会产生新覆盖率的更小输入。更小的输入通常会让fuzzing执行更快，因此值得在前面花时间让fuzzing处理过程更快。worker进程完成最小化后会报告给coordinator，即使它未来找到更小的输入。coordinator进程会把这个最小化的输入添加到缓存语料库(cache corpus)并继续执行Fuzzing。后续，coordinator可能会把这个最小化的输入发送给所有worker用于进一步fuzzing。这就是fuzzing系统如何自动调节找到新的覆盖率。
+
+如果coordinator进程收到了worker进程发送过来的输入数据是场景2：也就是`引发error的输入`，coordinator进程会把这个输入再次发送给worker进行最小化。在这种场景下，worker会试图找到一个会引发error的更小输入，尽管不一定是同一个error。在输入数据被最小化后，coordinator进程会把最小化后的数据存储到`testdata/fuzz/$FuzzTarget`，优雅关闭所有worker进程，然后以非0状态(non-zero status)退出。
+
+如果worker进程在fuzzing过程中crash了，那coordinator进程可以使用发送给worker的输入、worker的RNG状态和迭代次数(留在共享内存中)来恢复导致worker进程crash的输入。crash的输入通常没有被最小化，因为最小化是一个高度状态化的过程，而每次crash都会破坏这个状态。这在[理论](https://github.com/golang/go/issues/48163)上是可行的，但是目前还没能实现。
+
+Fuzzing通常遇到以下场景才会结束运行，否则会一直运行：
+
+* Fuzzing找到了error，也就是触发了你模糊测试函数里的error条件
+* 用户按Ctrl-C来中断程序
+* 运行时间达到了`-fuzztime`设定的时间
+
+fuzzing引擎会优雅处理中断，不管中断是被发送给了coordinator进程还是worker进程。举个例子，如果worker进程在最小化输入的时候遇到了中断，coordinator进程会保存没有被最小化的输入。
+
 
 
 ## 注意事项
 
-* FuzzXXX也是实现在xxx_test.go里
-* go test 不带-fuzz 会默认执行 FuzzXXX，带-fuzz会怎么样
-* seed corpus：包括f.Add里新增的，也包括Fuzzing找出来写到testdata下的
-
-
+* `FuzzXXX`的实现也是放在以`_test.go`结尾的go文件里。
+* seed corpus(种子语料)：既包含通过`f.Add`指定的输入，也包括`testdata/fuzz/$FuzzTarget`目录下的文件里面的输入。
+* `go test` 不带`-fuzz`标记会默认执行`TestXXX`和`FuzzXXX`开头的函数，对于`FuzzXXX`只会使用种子语料库里的输入，而不会生成随机数据。如果需要生成随机输入，要使用`go test -fuzz=pattern`。
 
 
 

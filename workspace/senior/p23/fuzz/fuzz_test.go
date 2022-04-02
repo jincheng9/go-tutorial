@@ -17,8 +17,8 @@ func FuzzReverse(f *testing.F) {
 			t.Errorf("fuzz test failed. str:%s, rev_str1:%s, rev_str2:%s", str, rev_str1, rev_str2)
 		}
 		if utf8.ValidString(str) && !utf8.ValidString(rev_str1) {
-			t.Errorf("reverse result is not utf8. str:%s, len: %d, rev_str1:%s", str, len(str), rev_str1)
+			t.FailNow()
+			//t.Errorf("reverse result is not utf8. str:%s, len: %d, rev_str1:%s", str, len(str), rev_str1)
 		}
 	})
-
 }
