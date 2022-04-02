@@ -124,7 +124,7 @@ FAIL    example/fuzz    0.179s
 
 感兴趣的朋友，可以看看如果对字符串"吃"，调用`Reverse` 函数，会得到怎样的结果。
 
-**注意**：如果Go Fuzzing运行过程中发现了你的bug，会把对应的输入数据写到`go test`所在目录下的`testdata/fuzz/FuzzXXX`子目录下。比如上面的例子里，`go1.18beta1 test -v -fuzz=Fuzz`的输出结果里打印了如下内容：`Failing input written to testdata/fuzz/FuzzReverse/ce9e8c80e2c2de2c96ab9e63b1a8cf18cea932b7d8c6c9c207d5978e0f19027a`，这就表示把这个测试输入写到了`testdata/fuzz/FuzzReverse/xxx`这个语料文件里。
+**注意**：如果Go Fuzzing运行过程中发现了你的bug，会把对应的输入数据写到`testdata/fuzz/FuzzXXX`目录下。比如上面的例子里，`go1.18beta1 test -v -fuzz=Fuzz`的输出结果里打印了如下内容：`Failing input written to testdata/fuzz/FuzzReverse/ce9e8c80e2c2de2c96ab9e63b1a8cf18cea932b7d8c6c9c207d5978e0f19027a`，这就表示把这个测试输入写到了`testdata/fuzz/FuzzReverse/xxx`这个语料文件里。
 
 
 
