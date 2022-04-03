@@ -242,7 +242,7 @@ func main() {
 }
 ```
 
-module1/go.mod，**注意require后面的module必须指定版本号**
+module1/go.mod，**注意require后面的module必须指定版本号**，版本号以 `v`开头，后面是由`.`分隔的3个整数组成，比如`v1.0.0`。3个整数从左往右，分别表示大版本号(major version)，小版本号(minor version)和补丁版本(patch version)。
 
 ```go
 module module1
@@ -302,6 +302,8 @@ init函数没有参数，没有返回值。
 
 * 禁止循环导入package。
 
+* Go Module版本号规则：https://go.dev/ref/mod#versions，版本号不符合规则就是非法版本，会导致编译失败。
+
   
 
 ## References
@@ -310,4 +312,5 @@ init函数没有参数，没有返回值。
 * https://www.liwenzhou.com/posts/Go/import_local_package_in_go_module/
 * https://maelvls.dev/go111module-everywhere/#go111module-with-go-116
 * https://go.dev/ref/mod#go-mod-file-replace
+* https://go.dev/ref/mod#versions
 
