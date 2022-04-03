@@ -89,6 +89,8 @@
 
 7. [Fuzzing: 一文读懂Go Fuzzing使用和原理](./workspace/senior/p23)
 
+7. [Go1.18：工作区模式workspace mode](./workspace/senior/p25)
+
    
 
 ## Go Quiz
