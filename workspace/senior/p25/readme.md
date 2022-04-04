@@ -1,4 +1,4 @@
-# Go1.18：工作区模式workspace mode
+# Go 1.18：工作区模式workspace mode
 
 ## 背景
 
