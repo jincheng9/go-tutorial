@@ -199,7 +199,7 @@ use (
 )
 ```
 
-在workspace目录下加执行命令即可自动生成`go.work`
+在workspace目录下执行如下命令即可自动生成`go.work`
 
 ```bash
 $ go1.18beta1 work init main util
