@@ -205,6 +205,10 @@ use (
 $ go1.18beta1 work init main util
 ```
 
+`go1.18beta1 work init`后面跟的`main`和`util`都是Module对应的目录。
+
+如果go命令执行的当前目录或者父目录有`go.work`文件，或者通过`GOWORK`环境变量指定了`go.work`的路径，那go命令就会进入工作区模式。在工作区模式下，go就可以通过`go.work`下的module路径找到并使用本地的module代码。
+
 在main目录或者workspace目录，都可以运行`main.go`，结果如下所示：
 
 ```bash
