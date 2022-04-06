@@ -91,6 +91,8 @@
 
 7. [Go 1.18：工作区模式workspace mode](./workspace/senior/p25)
 
+7. [Go工作区模式最佳实践](./workspace/official-blog/go1.18-workspace-best-practice.md)
+
    
 
 ## Go Quiz
@@ -174,6 +176,8 @@
 ## 外文翻译
 
 1. [GitHub最流行的golang-cheat-sheet中文版本](https://github.com/jincheng9/golang-cheat-sheet-cn)
+
+1. [官方博文：Go工作区模式最佳实践](./workspace/official-blog/go1.18-workspace-best-practice.md)
 
 1. [官方博文：Go 1.18发布啦！](./workspace/official-blog/go118_release.md)
 
