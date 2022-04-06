@@ -249,15 +249,15 @@
 * [cch123-曹春晖](https://xargin.com/)
 * [halfrost-Dezhi Yu](https://halfrost.com/)
 * [draveness-左书祺](https://draveness.me/)
-* [unknwon无闻](https://unknwon.io/)
+* [unknwon-无闻](https://unknwon.io/)
 * [strikefreedom-Andy Pan](https://strikefreedom.top/)
 * [qcrao-码农桃花源](https://qcrao.com/)
-* [极客兔兔](https://geektutu.com/)
+* [geektutu-极客兔兔](https://geektutu.com/)
 * [topgoer.com](https://www.topgoer.com/)
 * [topgoer.cn](https://topgoer.cn/)
 * [涛叔-taoshu.in](https://taoshu.in/)
 * [jianyu chen](https://eddycjy.com/)
-* [Zhiyun Luo- Tencent IEG Developer](https://www.luozhiyun.com/)
+* [Zhiyun Luo-Tencent IEG Developer](https://www.luozhiyun.com/)
 
 
 
