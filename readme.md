@@ -91,7 +91,7 @@
 
 7. [Go 1.18：工作区模式workspace mode](./workspace/senior/p25)
 
-7. [Go工作区模式最佳实践](./workspace/official-blog/go1.18-workspace-best-practice.md)
+7. [Go 1.18：工作区模式最佳实践](./workspace/official-blog/go1.18-workspace-best-practice.md)
 
    
 
