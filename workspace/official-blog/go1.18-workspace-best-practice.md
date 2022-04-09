@@ -163,7 +163,7 @@ To create a workspace for GOPATH:
 
 > Note: If you have projects without `go.mod` files that you want to add to the workspace, change into their project directory and run `go mod init`, then add the new module to your workspace with `go work use [path-to-module].`
 
-## Workspace commands
+## Workspace命令
 
 Along with `go work init` and `go use`, Go 1.18 introduces the following commands for workspaces:
 
@@ -189,29 +189,31 @@ go run
 go vet
 ```
 
-## Editor experience improvements
+## 代码编辑器体验优化
 
-We’re particularly excited about the upgrades to Go’s language server [gopls](https://pkg.go.dev/golang.org/x/tools/gopls) and the [VSCode Go extension](https://marketplace.visualstudio.com/items?itemName=golang.go) that make working with multiple modules in an LSP-compatible editor a smooth and rewarding experience.
+对于Go的语言服务器[gopls](https://pkg.go.dev/golang.org/x/tools/gopls) 和[VSCode Go 插件](https://marketplace.visualstudio.com/items?itemName=golang.go) 的升级，我们感到非常兴奋。这可以让我们在兼容LSP(Langugage Server Protocol，语言服务器协议)的代码编辑器上使用Go workspace的体验非常棒。
 
-Find references, code completion, and go to definitions work across modules within the workspace. Version [0.8.1](https://github.com/golang/tools/releases/tag/gopls%2Fv0.8.1) of `gopls` introduces diagnostics, completion, formatting, and hover for `go.work` files. You can take advantage of these gopls features with any [LSP](https://microsoft.github.io/language-server-protocol/)-compatible editor.
+`gopls`的 [0.8.1](https://github.com/golang/tools/releases/tag/gopls%2Fv0.8.1) 版本为`go.work`文件引入了诊断、代码补全、格式化和提示悬浮。你可以在任何兼容LSP的代码编辑器上享受到`gopls`的新功能。
 
-#### Editor specific notes
+#### 代码编辑器相关的使用细节
 
-- The latest [vscode-go release](https://github.com/golang/vscode-go/releases/tag/v0.32.0) allows quick access to your workspace’s `go.work` file via the Go status bar’s Quick Pick menu.
+- 最新的 [vscode-go 插件](https://github.com/golang/vscode-go/releases/tag/v0.32.0) 支持通过编辑器左下角的Go状态栏的快速访问菜单访问`go.work`文件。
 
 ![Access the go.work file via the Go status bar&rsquo;s Quick Pick menu](https://user-images.githubusercontent.com/4999471/157268414-fba63843-5a14-44ba-be82-d42765568856.gif)
 
-- [GoLand](https://www.jetbrains.com/go/) supports workspaces and has plans to add syntax highlighting and code completion for `go.work` files.
+- [GoLand](https://www.jetbrains.com/go/) 支持Workspace工作区模式，也有计划为`go.work`文件新增语法高亮和代码补全功能。
 
-For more information on using `gopls` with different editors see the `gopls`[ documentation](https://pkg.go.dev/golang.org/x/tools/gopls#readme-editors).
+更多关于不同编辑器使用`gopls`的信息，可以参考 `gopls`[文档](https://pkg.go.dev/golang.org/x/tools/gopls#readme-editors).
+
+
 
 ## 下一步做什么？
 
-- 下载和安装Go 1.18](https://go.dev/dl/).
-- Try using [workspaces](https://go.dev/ref/mod#workspaces) with the [Go workspaces Tutorial](https://go.dev/doc/tutorial/workspaces).
-- If you encounter any problems with workspaces, or want to suggest something, file an [issue](https://github.com/golang/go/issues/new/choose).
-- Read the [workspace maintenance documentation](https://pkg.go.dev/cmd/go#hdr-Workspace_maintenance).
-- Explore module commands for [working outside of a single module](https://go.dev/ref/mod#commands-outside) including `go work init`, `go work sync` and more.
+- 下载和安装[Go 1.18](https://go.dev/dl/).
+- 尝试跟着我们的[Go workspace教程](https://go.dev/doc/tutorial/workspaces)来学习使用[workspaces](https://go.dev/ref/mod#workspaces)。
+- 如果你有关于Go Workspace的任何问题或者建议，请提交[issue](https://github.com/golang/go/issues/new/choose)。
+- 阅读 [workspace说明文档](https://pkg.go.dev/cmd/go#hdr-Workspace_maintenance)。
+- 探索更多Go命令，包括 `go work init`, `go work sync` 等等。
 
 
 
