@@ -24,30 +24,60 @@ Go 1.18新增了工作区模式(workspace mode)，让你可以同时跨多个Go 
 
 ## 工作区(workspaces)
 
-Go 1.18引入的[工作区](https://go.dev/ref/mod#workspaces)模式，可以让你不用修改每个Go Module的`go.mod`，就能同时跨多个Go Module进行开发。工作区里的每个Go module在解析依赖的时候都被当做根module。
+Go 1.18引入的[工作区](https://go.dev/ref/mod#workspaces)模式，可以让你不用修改每个Go Module的`go.mod`，就能同时跨多个Go Module进行开发。工作区里的每个Go Module在解析依赖的时候都被当做根Module。
 
-在Go 1.18以前，如果遇到以下场景：`要给Module A新增一个feature，然后Module B使用Module A的这个feature`，你有2种方案：
+在Go 1.18以前，如果遇到以下场景：`Module A新增了一个feature，Module B需要使用Module A的这个新feature`，你有2种方案：
 
 * 发布Module A的修改到代码仓库，Module B更新依赖的Module A的版本即可
-* 修改Module B的`go.mod`，使用`replace`指令把对Module A的依赖指向你本地未发布的Module A所在目录。等Module A发布后，在发布Module B的时候，再删除`go.mod`里的`replace`指令。
+* 修改Module B的`go.mod`，使用`replace`指令把对Module A的依赖指向你本地未发布的Module A所在目录。等Module A发布后，在发布Module B的时候，再删除Module B的`go.mod`文件里的`replace`指令。
 
-有了Go工作区模式之后，你可以在工作区目录维护一个`go.work`文件来管理你的所有依赖。`go.work`里的`use`和`replace`指令会覆盖工作区目录下的每个Go Module的`go.mod`文件，因此没有必要去修改`go.mod`文件了。
+有了Go工作区模式之后，针对上述场景，我们有了更为简单的方案：你可以在工作区目录维护一个`go.work`文件来管理你的所有依赖。`go.work`里的`use`和`replace`指令会覆盖工作区目录下的每个Go Module的`go.mod`文件，因此没有必要去修改Go Module的`go.mod`文件了。
 
 
 
-You create a workspace by running `go work init` with a list of module directories as space-separated arguments. The workspace doesn’t need to contain the modules you’re working with. The` init` command creates a `go.work` file that lists modules in the workspace. If you run `go work init` without arguments, the command creates an empty workspace.
+#### go work init
 
-To add modules to the workspace, run `go work use [moddir]` or manually edit the `go.work` file. Run `go work use -r` to recursively add directories in the argument directory with a `go.mod` file to your workspace. If a directory doesn’t have a `go.mod` file, or no longer exists, the `use` directive for that directory is removed from your `go.work` file.
+你可以使用`go work init`来创建一个workspace，`go work init` 的语法如下所示：
 
-The syntax of a `go.work` file is similar to a `go.mod` file and contains the following directives:
+```bash
+go work init [moddirs]
+```
 
-- `go`: the go toolchain version e.g. `go 1.18`
+`moddirs`是Go Module所在的本地目录。如果有多个Go Module，就用空格分开。如果`go work init`后面没有参数，会创建一个空的workspace。
+
+执行`go work init`后会生成一个`go.work`文件，`go.work`里列出了该workspace需要用到的Go Module，workspace目录不需要包含你当前正在开发的Go Module。
+
+
+
+#### go work use
+
+如果要给workspace新增Go Module，可以使用如下命令：
+
+```bash
+go work use [-r] moddir
+```
+
+或者手动编辑`go work`文件。
+
+如果带有`-r`参数，会递归查找`-r`后面的路径参数下的所有子目录，把所有包含`go.mod`文件的子目录都添加到`go work`文件中。
+
+如果某个目录已经被加到`go.work`里了，后面该目录没有`go.mod`文件了或者该目录被删除了，那对该目录再次执行`go work use`命令，该目录的`use`指令会从`go.work`文件里自动移除。(**注意**：自动移除要从Go 1.18正式版本才会生效，Go 1.18beta1版本不会生效)
+
+
+
+#### go.work
+
+`go.work`的语法和`go.mod`类似，包含如下3个指令：
+
+- `go`: go的版本，例如 `go 1.18`
 - `use`: adds a module on disk to the set of main modules in a workspace. Its argument is a relative path to the directory containing the module’s `go.mod` file. A `use` directive doesn’t add modules in subdirectories of the specified directory.
 - `replace`: Similar to a `replace` directive in a `go.mod` file, a `replace` directive in a `go.work` file replaces the contents of a *specific version* of a module, or *all versions* of a module, with contents found elsewhere.
 
-## Workflows
 
-Workspaces are flexible and support a variety of workflows. The following sections are a brief overview of the ones we think will be the most common.
+
+## 最佳实践
+
+Workspace使用起来很灵活，接下来我们会介绍最常见的几种最佳实践。
 
 ### Add a feature to an upstream module and use it in your own module
 
@@ -175,13 +205,15 @@ Find references, code completion, and go to definitions work across modules with
 
 For more information on using `gopls` with different editors see the `gopls`[ documentation](https://pkg.go.dev/golang.org/x/tools/gopls#readme-editors).
 
-## What’s next?
+## 下一步做什么？
 
-- Download and install [Go 1.18](https://go.dev/dl/).
+- 下载和安装Go 1.18](https://go.dev/dl/).
 - Try using [workspaces](https://go.dev/ref/mod#workspaces) with the [Go workspaces Tutorial](https://go.dev/doc/tutorial/workspaces).
 - If you encounter any problems with workspaces, or want to suggest something, file an [issue](https://github.com/golang/go/issues/new/choose).
 - Read the [workspace maintenance documentation](https://pkg.go.dev/cmd/go#hdr-Workspace_maintenance).
 - Explore module commands for [working outside of a single module](https://go.dev/ref/mod#commands-outside) including `go work init`, `go work sync` and more.
+
+
 
 ## 后记
 
