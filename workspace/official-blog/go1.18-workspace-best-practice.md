@@ -70,14 +70,14 @@ go work use [-r] moddir
 `go.work`的语法和`go.mod`类似，包含如下3个指令：
 
 - `go`: go的版本，例如 `go 1.18`
-- `use`: adds a module on disk to the set of main modules in a workspace. Its argument is a relative path to the directory containing the module’s `go.mod` file. A `use` directive doesn’t add modules in subdirectories of the specified directory.
-- `replace`: Similar to a `replace` directive in a `go.mod` file, a `replace` directive in a `go.work` file replaces the contents of a *specific version* of a module, or *all versions* of a module, with contents found elsewhere.
+- `use`: 添加一个本地磁盘上的Go Module到workspace的主Module集合里。use后面的参数是包含`go.mod`目录的相对路径，例如`use ./main`。`use`指令不会添加指定目录的子目录下的Go Module到workspace的主Module集合里。
+- `replace`: 和`go.mod`里的 `replace`指令类似。`go.work`里的 `replace`指令可以替换某个Go Module的特定版本或者所有版本的内容。
 
 
 
-## 最佳实践
+## 使用场景和最佳实践
 
-Workspace使用起来很灵活，接下来我们会介绍最常见的几种最佳实践。
+Workspace使用起来很灵活，接下来会介绍最常见的几种使用场景和最佳实践。
 
 ### Add a feature to an upstream module and use it in your own module
 
