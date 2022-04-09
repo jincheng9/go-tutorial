@@ -79,21 +79,23 @@ go work use [-r] moddir
 
 Workspace使用起来很灵活，接下来会介绍最常见的几种使用场景和最佳实践。
 
-### Add a feature to an upstream module and use it in your own module
+### 使用场景1
 
-1. Create a directory for your workspace.
+**给上游模块新增feature，然后在你的Module里使用这个新feature**
 
-2. Clone the upstream module you want to edit. If you haven’t contributed to Go before, read the [contribution guide](https://go.dev/doc/contribute).
+1. 为你的workspace(工作区)创建一个目录。
 
-3. Add your feature to the local version of the upstream module.
+2. Clone一份你要修改的上游模块的代码到本地。
 
-4. Run `go work init [path-to-upstream-mod-dir]` in the workspace folder.
+3. 本地修改上游模块的代码，增加新的feature。
 
-5. Make changes to your own module in order to implement the feature added to the upstream module.
+4. 在workspace目录运行命令`go work init [path-to-upstream-mod-dir]`。
 
-6. Run `go work use [path-to-your-module]` in the workspace folder.
+5. 为了使用上游模块的新feature，修改你自己的Go Module。
 
-   The `go work use` command adds the path to your module to your `go.work` file:
+6. 在workspace目录运行命令 `go work use [path-to-your-module]` 。
+
+    `go work use` 命令会添加你的Go Module的路径到 `go.work` 文件里：
 
    ```
    go 1.18
@@ -104,11 +106,13 @@ Workspace使用起来很灵活，接下来会介绍最常见的几种使用场�
    )
    ```
 
-7. Run and test your module using the new feature added to the upstream module.
+7. 运行和测试你的Go Module。
 
-8. Publish the upstream module with the new feature.
+8. 发布上游模块的新feature。
 
-9. Publish your module using the new feature.
+9. 发布你自己的Go Module。
+
+### 使用场景2
 
 ### Work with multiple interdependent modules in the same repository
 
@@ -165,7 +169,7 @@ To create a workspace for GOPATH:
 
 ## Workspace命令
 
-Along with `go work init` and `go use`, Go 1.18 introduces the following commands for workspaces:
+除了 `go work init` 和 `go use`，Go 1.18还为Workspace引入了如下命令：
 
 - `go work sync`: pushes the dependencies in the `go.work` file back into the `go.mod` files of each workspace module.
 - `go work edit`: provides a command-line interface for editing `go.work`, for use primarily by tools or scripts.
@@ -176,7 +180,7 @@ Workspace mode is enabled if the `GOWORK` variable names a path to a file that e
 
 When workspace mode is enabled, the `go.work` file is parsed to determine the three parameters for workspace mode: A Go version, a list of directories, and a list of replacements.
 
-Some commands to try in workspace mode (provided you already know what they do!):
+工作区模式下可以尝试使用如下命令：
 
 ```
 go work init
@@ -188,6 +192,8 @@ go test
 go run
 go vet
 ```
+
+
 
 ## 代码编辑器体验优化
 
