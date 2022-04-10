@@ -1,4 +1,4 @@
-# 官方博文：Go工作区模式最佳实践
+# 官方博文：Go 1.18工作区模式最佳实践
 
 ## 前言
 
@@ -24,14 +24,14 @@ Go 1.18新增了工作区模式(workspace mode)，让你可以同时跨多个Go 
 
 ## 工作区(workspaces)
 
-Go 1.18引入的[工作区](https://go.dev/ref/mod#workspaces)模式，可以让你不用修改每个Go Module的`go.mod`，就能同时跨多个Go Module进行开发。工作区里的每个Go Module在解析依赖的时候都被当做根Module。
+Go 1.18引入的[工作区](https://go.dev/ref/mod#workspaces)模式，可以让你不用修改Go Module的`go.mod`，就能同时对多个有依赖的Go Module进行本地开发。
 
 在Go 1.18以前，如果遇到以下场景：`Module A新增了一个feature，Module B需要使用Module A的这个新feature`，你有2种方案：
 
-* 发布Module A的修改到代码仓库，Module B更新依赖的Module A的版本即可
+* 发布Module A的修改到代码仓库，Module B更新依赖的Module A的版本即可。
 * 修改Module B的`go.mod`，使用`replace`指令把对Module A的依赖指向你本地未发布的Module A所在目录。等Module A发布后，在发布Module B的时候，再删除Module B的`go.mod`文件里的`replace`指令。
 
-有了Go工作区模式之后，针对上述场景，我们有了更为简单的方案：你可以在工作区目录维护一个`go.work`文件来管理你的所有依赖。`go.work`里的`use`和`replace`指令会覆盖工作区目录下的每个Go Module的`go.mod`文件，因此没有必要去修改Go Module的`go.mod`文件了。
+有了Go工作区模式之后，针对上述场景，我们有了更为简单的方案：你可以在工作区目录维护一个`go.work`文件来管理所有依赖。`go.work`里的`use`和`replace`指令会覆盖工作区里指定的Go Module的`go.mod`文件，因此就无需修改Go Module的`go.mod`文件了。
 
 
 
@@ -45,7 +45,7 @@ go work init [moddirs]
 
 `moddirs`是Go Module所在的本地目录。如果有多个Go Module，就用空格分开。如果`go work init`后面没有参数，会创建一个空的workspace。
 
-执行`go work init`后会生成一个`go.work`文件，`go.work`里列出了该workspace需要用到的Go Module，workspace目录不需要包含你当前正在开发的Go Module。
+执行`go work init`后会生成一个`go.work`文件，`go.work`里列出了该workspace需要用到的Go Module所在的目录，workspace目录不需要包含你当前正在开发的Go Module代码。
 
 
 
@@ -61,7 +61,7 @@ go work use [-r] moddir
 
 如果带有`-r`参数，会递归查找`-r`后面的路径参数下的所有子目录，把所有包含`go.mod`文件的子目录都添加到`go work`文件中。
 
-如果某个目录已经被加到`go.work`里了，后面该目录没有`go.mod`文件了或者该目录被删除了，那对该目录再次执行`go work use`命令，该目录的`use`指令会从`go.work`文件里自动移除。(**注意**：自动移除要从Go 1.18正式版本才会生效，Go 1.18beta1版本不会生效)
+如果某个Go Module的目录已经被加到`go.work`里了，后面该目录没有`go.mod`文件了或者该目录被删除了，那对该目录再次执行`go work use`命令，该目录的`use`指令会从`go.work`文件里自动移除。(**注意**：自动移除要从Go 1.18正式版本才会生效，Go 1.18beta1版本有bug，自动删除不会生效)
 
 
 
@@ -70,14 +70,14 @@ go work use [-r] moddir
 `go.work`的语法和`go.mod`类似，包含如下3个指令：
 
 - `go`: go的版本，例如 `go 1.18`
-- `use`: 添加一个本地磁盘上的Go Module到workspace的主Module集合里。use后面的参数是包含`go.mod`目录的相对路径，例如`use ./main`。`use`指令不会添加指定目录的子目录下的Go Module到workspace的主Module集合里。
+- `use`: 添加一个本地磁盘上的Go Module到workspace的主Module集合里。use后面的参数是`go.mod`文件所在目录相对于workspace目录的相对路径，例如`use ./main`。`use`指令不会添加指定目录的子目录下的Go Module到workspace的主Module集合里。
 - `replace`: 和`go.mod`里的 `replace`指令类似。`go.work`里的 `replace`指令可以替换某个Go Module的特定版本或者所有版本的内容。
 
 
 
 ## 使用场景和最佳实践
 
-Workspace使用起来很灵活，接下来会介绍最常见的几种使用场景和最佳实践。
+Workspace使用起来很灵活，接下来会介绍最常见的几种使用场景及其最佳实践。
 
 ### 使用场景1
 
@@ -91,7 +91,7 @@ Workspace使用起来很灵活，接下来会介绍最常见的几种使用场�
 
 4. 在workspace目录运行命令`go work init [path-to-upstream-mod-dir]`。
 
-5. 为了使用上游模块的新feature，修改你自己的Go Module。
+5. 为了使用上游模块的新feature，修改你自己的Go Module代码。
 
 6. 在workspace目录运行命令 `go work use [path-to-your-module]` 。
 
@@ -110,25 +110,25 @@ Workspace使用起来很灵活，接下来会介绍最常见的几种使用场�
 
 8. 发布上游模块的新feature。
 
-9. 发布你自己的Go Module。
+9. 发布你自己的Go Module代码。
 
 ### 使用场景2
 
-### Work with multiple interdependent modules in the same repository
+**同一个代码仓库里有多个互相依赖的Go Module**
 
-While working on multiple modules in the same repository, the `go.work` file defines the workspace instead of using `replace` directives in each module’s `go.mod` file.
+当我们在同一个代码仓库里开发多个互相依赖的Go Module时，我们可以使用`go.work`，而不是在`go.mod`里使用`replace`指令。
 
-1. Create a directory for your workspace.
+1. 为你的workspace(工作区)创建一个目录。
 
-2. Clone the repository with the modules you want to edit. The modules don’t have to be in your workspace folder as you specify the relative path to each with the `use` directive.
+2. Clone仓库里的代码到你本地。代码存放的位置不一定要放在工作区目录下，因为你可以在`go.work`里使用`use`指令来指定Module的相对路径。
 
-3. Run `go work init [path-to-module-one] [path-to-module-two]` in your workspace directory.
+3. 在工作区目录运行 `go work init [path-to-module-one] [path-to-module-two]` 命令。
 
-   Example: You are working on `example.com/x/tools/groundhog` which depends on other packages in the `example.com/x/tools` module.
+   示例: 你正在开发 `example.com/x/tools/groundhog` 这个Module，该Module依赖 `example.com/x/tools` 下的其它Module。
 
-   You clone the repository and then run `go work init tools tools/groundhog` in your workspace folder.
+   你Clone仓库里的代码到你本地，然后在工作区目录运行命令 `go work init tools tools/groundhog` 。
 
-   The contents of your `go.work` file resemble the following:
+    `go.work` 文件里的内容如下所示：
 
    ```
    go 1.18
@@ -139,48 +139,59 @@ While working on multiple modules in the same repository, the `go.work` file def
    )
    ```
 
-   Any local changes made in the `tools` module will be used by `tools/groundhog` in your workspace.
+    `tools`路径下其它Module的本地代码修改都会被 `tools/groundhog` 直接使用到。
 
-### Switching between dependency configurations
+### 使用场景3：切换依赖配置
 
-To test your modules with different dependency configurations you can either create multiple workspaces with separate `go.work` files, or keep one workspace and comment out the `use` directives you don’t want in a single `go.work` file.
+如果要测试你开发的代码在不同的本地依赖配置下的场景，你有2种选择：
 
-To create multiple workspaces:
+* 创建多个workspace，每个workspace使用各自的`go.work`文件，每个`go.work`里指定一个版本的路径。
+* 创建一个workspace，在`go.work`里注释掉你不想要的`use`指令。
 
-1. Create separate directories for different dependency needs.
-2. Run `go work init` in each of your workspace directories.
-3. Add the dependencies you want within each directory via `go work use [path-to-dependency]`.
-4. Run `go run [path-to-your-module]` in each workspace directory to use the dependencies specified by its `go.work` file.
+对于创建多个workspace的方案：
 
-To test out different dependencies within the same workspace, open the `go.work` file and add or comment out the desired dependencies.
+1. 为每个workspace创建独立的目录。比如你开发的代码依赖了`example.com/util`这个Go Module，但是想测试`example.com/util`2个版本的区别，你可以创建2个workspace目录。
+2. 在各自的workspace目录运行 `go work init` 来初始化workspace。
+3. 在各自的workspace目录运行 `go work use [path-to-dependency]`来添加依赖的Go Module特定版本的目录。
+4. 在各自的workspace目录运行 `go run [path-to-your-module]` 来测试`go.work`里指定的依赖版本。
 
-### Still using GOPATH?
+对于使用同一个workspace的方案，可以直接编辑`go.work`文件，修改`use`指令后面的目录地址即可。
 
-Maybe using workspaces will change your mind. `GOPATH` users can resolve their dependencies using a `go.work` file located at the base of their `GOPATH` directory. Workspaces don’t aim to completely recreate all `GOPATH` workflows, but they can create a setup that shares some of the convenience of `GOPATH` while still providing the benefits of modules.
+### 还在使用GOPATH模式存放代码?
 
-To create a workspace for GOPATH:
+也许使用工作区会改变你的想法。 `GOPATH` 用户可以使用位于其`GOPATH` 目录底部的`go.work` 文件来解决他们的依赖关系。 工作区的目标不是完全重建 `GOPATH` 工作流程，而是创建一个可以共享 `GOPATH` 的便利和Go Module优点的设置。
 
-1. Run `go work init` in the root of your `GOPATH` directory.
-2. To use a local module or specific version as a dependency in your workspace, run `go work use [path-to-module]`.
-3. To replace existing dependencies in your modules' `go.mod` files use `go work replace [path-to-module]`.
-4. To add all the modules in your GOPATH or any directory, run `go work use -r` to recursively add directories with a `go.mod` file to your workspace. If a directory doesn’t have a `go.mod` file, or no longer exists, the `use` directive for that directory is removed from your `go.work` file.
+为GOPATH创建工作区：
 
-> Note: If you have projects without `go.mod` files that you want to add to the workspace, change into their project directory and run `go mod init`, then add the new module to your workspace with `go work use [path-to-module].`
+1. 在`GOPATH`目录的根目录下运行 `go work init`。
+2. 要在工作区中使用本地模块或特定版本作为依赖项，请运行`go work use [path-to-module]`。
+3. 要替换Go Module  `go.mod` 文件中的现有依赖项，请使用 `go work replace [path-to-module]`。
+4. 要添加 GOPATH 或任何目录中的所有Module，请运行 `go work use -r` 命令，该命令以递归方式将带有 `go.mod` 文件的目录添加到你的工作区。 如果一个目录没有 `go.mod` 文件，或者该目录不再存在，那该目录的 `use` 指令将从你的 `go.work` 文件中自动移除。
+
+> 注意：如果你的工程里没有`go.mod`文件，但是你想把它加入到workspace里，你需要进入你的工程目录，执行`go mod init`来添加`go.mod`，然后运行 `go work use [path-to-module]` 来把你的工程添加到workspace中。
+
+
 
 ## Workspace命令
 
-除了 `go work init` 和 `go use`，Go 1.18还为Workspace引入了如下命令：
+除了 `go work init` 和 `go work use`，Go 1.18还为Workspace引入了如下命令：
 
-- `go work sync`: pushes the dependencies in the `go.work` file back into the `go.mod` files of each workspace module.
-- `go work edit`: provides a command-line interface for editing `go.work`, for use primarily by tools or scripts.
+- `go work sync`: 把`go.work`文件里的依赖同步到workspace包含的Module的`go.mod`文件中。
+- `go work edit`: 提供了用于修改`go.work`的命令行接口，主要是给工具或脚本使用。
 
-Module-aware build commands and some `go mod` subcommands examine the `GOWORK` environment variable to determine if they are in a workspace context.
+编译命令以及`go mod`的一些子命令会检查`GOWORK`环境变量，用于判断当前go命令是否处于工作区模式下。
 
-Workspace mode is enabled if the `GOWORK` variable names a path to a file that ends in `.work`. To determine which `go.work` file is being used, run `go env GOWORK`. The output is empty if the `go` command is not in workspace mode.
+如果`GOWORK`环境变量的值是以`.work`结尾的文件路径，则启用工作区模式。
 
-When workspace mode is enabled, the `go.work` file is parsed to determine the three parameters for workspace mode: A Go version, a list of directories, and a list of replacements.
+要确定目前正在使用哪个`go.work`文件，可以运行`go env GOWORK`命令。如果go命令不在工作区模式，那`go env GOWORK`的输出结果为空。
 
-工作区模式下可以尝试使用如下命令：
+工作区模式开启后，`go.work` 文件会被解析，用来确定工作区模式下的3个参数：
+
+* Go版本
+* workspace下的Module的所在目录
+* 被替换的Module的信息
+
+工作区模式下还可以尝试如下命令：
 
 ```
 go work init
@@ -199,7 +210,7 @@ go vet
 
 对于Go的语言服务器[gopls](https://pkg.go.dev/golang.org/x/tools/gopls) 和[VSCode Go 插件](https://marketplace.visualstudio.com/items?itemName=golang.go) 的升级，我们感到非常兴奋。这可以让我们在兼容LSP(Langugage Server Protocol，语言服务器协议)的代码编辑器上使用Go workspace的体验非常棒。
 
-`gopls`的 [0.8.1](https://github.com/golang/tools/releases/tag/gopls%2Fv0.8.1) 版本为`go.work`文件引入了诊断、代码补全、格式化和提示悬浮。你可以在任何兼容LSP的代码编辑器上享受到`gopls`的新功能。
+`gopls`的 [0.8.1](https://github.com/golang/tools/releases/tag/gopls%2Fv0.8.1) 版本为`go.work`文件引入了代码诊断、代码补全、代码格式化和提示悬浮。你可以在任何兼容LSP的代码编辑器上享受到`gopls`的新功能。
 
 #### 代码编辑器相关的使用细节
 
@@ -223,10 +234,6 @@ go vet
 
 
 
-## 后记
-
-
-
 ## 开源地址
 
 文章和示例代码开源在GitHub: [Go语言初级、中级和高级教程](https://github.com/jincheng9/go-tutorial)。
@@ -235,7 +242,7 @@ go vet
 
 个人网站：[Jincheng's Blog](https://jincheng9.github.io/)。
 
-知乎：[无忌](https://www.zhihu.com/people/thucuhkwuji)。https://www.zhihu.com/people/thucuhkwuji)
+知乎：[无忌](https://www.zhihu.com/people/thucuhkwuji)
 
 
 
