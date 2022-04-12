@@ -136,9 +136,9 @@
 
 ## 实战篇
 
-### 规范
+### 代码规范
 
-* [Go语言规范](./workspace/style)
+* [Go语言代码规范](./workspace/style)
 
 ### Web框架
 
