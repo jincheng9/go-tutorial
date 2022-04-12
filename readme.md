@@ -93,6 +93,8 @@
 
 7. [Go 1.18：工作区模式最佳实践](./workspace/official-blog/go1.18-workspace-best-practice.md)
 
+7. [Practical Go：如何写出更好维护的Go程序](https://github.com/jincheng9/practical-go-cn)
+
    
 
 ## Go Quiz
@@ -139,6 +141,7 @@
 ### 代码规范
 
 * [Go语言代码规范](./workspace/style)
+* [Practical Go中文版本](https://github.com/jincheng9/practical-go-cn)
 
 ### Web框架
 
