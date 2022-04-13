@@ -287,8 +287,7 @@ sum of 1 and 2 is 3
 
 init函数没有参数，没有返回值。
 
-* 每个package里可以有多个init函数
-* 每个源程序文件里也可以有多个init函数
+* 一个package里可以有多个init函数(分布在单个源程序文件中或者多个源程序文件中)，并且按照他们呈现给编译器的顺序被调用。
 * init函数不能被显示调用，在main()函数执行之前，自动被调用
 * 同一个pacakge里的init函数调用顺序不确定
 * 不同package的init函数，根据package import的依赖关系来决定调用顺序，比如package A里import了package B，那package B的init()函数就会比package A的init函数先调用。
