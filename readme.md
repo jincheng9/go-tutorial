@@ -81,6 +81,8 @@
 
 7. [泛型：Go 1.18正式版本将从标准库中移除constraints包](./workspace/senior/p17)
 
+7. [泛型：什么场景应该使用泛型](./workspace/official-blog/when-to-use-generics.md)
+
 7. [Go语言中fmt.Println(true)的结果一定是true么？](./workspace/senior/p19)
 
 7. [Go语言中命名函数参数和命名函数返回值的注意事项](./workspace/senior/p21)
@@ -183,6 +185,8 @@
 ## 外文翻译
 
 1. [GitHub最流行的golang-cheat-sheet中文版本](https://github.com/jincheng9/golang-cheat-sheet-cn)
+
+1. [官方博文：什么场景应该使用泛型](./workspace/official-blog/when-to-use-generics.md)
 
 1. [官方博文：Go工作区模式最佳实践](./workspace/official-blog/go1.18-workspace-best-practice.md)
 
