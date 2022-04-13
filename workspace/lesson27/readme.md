@@ -302,7 +302,7 @@ init函数没有参数，没有返回值。
 
 * 禁止循环导入package。
 
-* Go Module版本号规则：https://go.dev/ref/mod#versions，版本号不符合规则就是非法版本，会导致编译失败。
+* Go Module版本号规则：[https://go.dev/ref/mod#versions](https://go.dev/ref/mod#versions)，版本号不符合规则就是非法版本，会导致编译失败。
 
   
 
