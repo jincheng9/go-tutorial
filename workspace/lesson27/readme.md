@@ -131,7 +131,7 @@ Go 1.11开始，有了Go Modules，工程项目可以建在任何地方，代码
 
   
 
-官方推荐使用Go Modules，从Go1.16版本开始，GO111MODULES环境变量默认开启为on模式。
+官方推荐使用Go Modules，从Go1.16版本开始，GO111MODULE环境变量默认开启为on模式。
 
 
 
