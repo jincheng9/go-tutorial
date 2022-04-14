@@ -46,7 +46,9 @@ func MapKeys[Key comparable, Val any](m map[Key]Val) []Key {
 
 ### 通用的数据结构
 
-Another case where type parameters can be useful is for general purpose data structures. A general purpose data structure is something like a slice or map, but one that is not built into the language, such as a linked list, or a binary tree.
+对于通用的数据结构，类型参数也会有用。通用的数据结构类似于slice和map，但是并不是语言内置的数据结构，比如链表或者二叉树。
+
+
 
 Today, programs that need such data structures typically do one of two things: write them with a specific element type, or use an interface type. Replacing a specific element type with a type parameter can produce a more general data structure that can be used in other parts of the program, or by other programs. Replacing an interface type with a type parameter can permit data to be stored more efficiently, saving memory resources; it can also permit the code to avoid type assertions, and to be fully type checked at build time.
 
@@ -156,7 +158,7 @@ Using type parameters for this kind of code is appropriate because the methods l
 
 (I should mention that Go 1.19–not 1.18–will most likely include a generic function to sort a slice using a comparison function, and that generic function will most likely not use `sort.Interface`. See [proposal #47619](https://go.dev/issue/47619). But the general point is still true even if this specific example will most likely not be useful: it’s reasonable to use type parameters when you need to implement methods that look the same for all the relevant types.)
 
-## When are type parameters not useful?
+## 类型参数何时不要用
 
 Now let’s talk about the other side of the question: when not to use type parameters.
 
@@ -192,13 +194,15 @@ If some operation has to support even types that don’t have methods (so that i
 
 An example of this is the [encoding/json](https://pkg.go.dev/encoding/json) package. We don’t want to require that every type that we encode have a `MarshalJSON` method, so we can’t use interface types. But encoding an interface type is nothing like encoding a struct type, so we shouldn’t use type parameters. Instead, the package uses reflection. The code is not simple, but it works. For details, see [the source code](https://go.dev/src/encoding/json/encode.go).
 
-## One simple guideline
+## 一个简单原则
 
-In closing, this discussion of when to use generics can be reduced to one simple guideline.
+总结一下，何时使用泛型可以简化为一个简单原则。
 
 If you find yourself writing the exact same code multiple times, where the only difference between the copies is that the code uses different types, consider whether you can use a type parameter.
 
 Another way to say this is that you should avoid type parameters until you notice that you are about the write the exact same code multiple times.
+
+
 
 ## 开源地址
 
@@ -215,5 +219,5 @@ Another way to say this is that you should avoid type parameters until you notic
 ## References
 
 * Go Blog on When to Use Generics: https://go.dev/blog/when-generics
-* Go Day 2021on Google Open Source : https://www.youtube.com/watch?v=nr8EpUO9jhw
-* Gopher Con 2021: https://www.youtube.com/watch?v=Pa_e9EeCdy8
+* Go Day 2021 on Google Open Source : https://www.youtube.com/watch?v=nr8EpUO9jhw
+* GopherCon 2021: https://www.youtube.com/watch?v=Pa_e9EeCdy8
