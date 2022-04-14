@@ -14,17 +14,19 @@ Go 1.18版本新增了一个重大功能：支持泛型编程。本文不会介�
 
 ## 写代码
 
-Let’s start with a general guideline for programming Go: write Go programs by writing code, not by defining types. When it comes to generics, if you start writing your program by defining type parameter constraints, you are probably on the wrong path. Start by writing functions. It’s easy to add type parameters later when it’s clear that they will be useful.
+Go编程有一条通用准则：write Go programs by writing code, not by defining types. 
 
-## When are type parameters useful?
+具体到泛型，如果你写代码的时候从定义类型参数约束(type parameter constraints)开始，那你可能搞错了方向。从编写函数开始，如果写的过程中发现使用类型参数更好，那就再使用类型参数。
 
-That said, let’s look at cases for which type parameters can be useful.
+## 类型参数何时有用？
 
-### When using language-defined container types
+接下来我们看看在什么情况下，使用类型参数对我们写代码更有用。
 
-One case is when writing functions that operate on the special container types that are defined by the language: slices, maps, and channels. If a function has parameters with those types, and the function code doesn’t make any particular assumptions about the element types, then it may be useful to use a type parameter.
+### 使用内置的容器类型
 
-For example, here is a function that returns a slice of all the keys in a map of any type:
+如果函数使用了语言内置的容器类型(包括slice, map和channel)作为函数参数，并且函数代码对容器的处理逻辑并没有预设容器里的元素类型，那使用类型参数(type parameter)可能就会有用。
+
+举个例子，我们要实现一个函数，该函数的入参是一个map，要返回该map的所有key组成的slice，key的类型可以是map支持的任意key类型。
 
 ```
 // MapKeys returns a slice of all the keys in m.
@@ -38,11 +40,11 @@ func MapKeys[Key comparable, Val any](m map[Key]Val) []Key {
 }
 ```
 
-This code doesn’t assume anything about the map key type, and it doesn’t use the map value type at all. It works for any map type. That makes it a good candidate for using type parameters.
+这段代码没有对map里key的类型做任何限定，并且没有用map里的value，因此这段代码适用于所有的map类型。这就是使用类型参数的一个很好的示例。
 
-The alternative to type parameters for this kind of function is typically to use reflection, but that is a more awkward programming model, is not staticaly typechecked at build time, and is often slower at run time.
+这种场景下，也可以使用反射(reflection)，但是反射是一种比较别扭的编程模型，在编译期没法做静态类型检查，并且会导致运行期的速度变慢。
 
-### General purpose data structures
+### 通用的数据结构
 
 Another case where type parameters can be useful is for general purpose data structures. A general purpose data structure is something like a slice or map, but one that is not built into the language, such as a linked list, or a binary tree.
 
