@@ -48,11 +48,14 @@ func MapKeys[Key comparable, Val any](m map[Key]Val) []Key {
 
 对于通用的数据结构，类型参数也会有用。通用的数据结构类似于slice和map，但是并不是语言内置的数据结构，比如链表或者二叉树。
 
+在没有泛型的时候，如果要实现通用的数据结构，有2种方案：
 
+* 方案1：针对每个元素类型分别实现一个数据结构
+* 方案2：使用interface类型
 
-Today, programs that need such data structures typically do one of two things: write them with a specific element type, or use an interface type. Replacing a specific element type with a type parameter can produce a more general data structure that can be used in other parts of the program, or by other programs. Replacing an interface type with a type parameter can permit data to be stored more efficiently, saving memory resources; it can also permit the code to avoid type assertions, and to be fully type checked at build time.
+泛型相对方案1的优点是代码更精简，也更方便给其它模块调用。泛型相对方案2的优点是数据存储更高效，节约内存资源，并且可以在编译期做静态类型检查，避免代码里使用类型断言。
 
-For example, here is part of what a binary tree data structure might look like using type parameters:
+下面的例子就是使用类型参数实现的通用二叉树数据结构：
 
 ```
 // Tree is a binary tree.
