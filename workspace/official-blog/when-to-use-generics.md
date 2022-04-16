@@ -100,6 +100,8 @@ func (bt *Tree[T]) Insert(val T) bool {
 }
 ```
 
+二叉树的每个节点包含一个类型为类型参数`T`的变量`val`。当二叉树实例化的时候，需要传入类型实参
+
 Each node in the tree contains a value of the type parameter `T`. When the tree is instantiated with a particular type argument, values of that type will be stored directly in the nodes. They will not be stored as interface types.
 
 This is a reasonable use of type parameters because the `Tree` data structure, including the code in the methods, is largely independent of the element type `T`.
