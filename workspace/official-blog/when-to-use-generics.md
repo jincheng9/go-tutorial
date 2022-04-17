@@ -108,7 +108,9 @@ func (bt *Tree[T]) Insert(val T) bool {
 
 ### For type parameters, prefer functions to methods
 
-The `Tree` example illustrates another general guideline: when you need something like a comparison function, prefer a function to a method.
+上面的 `Tree`数据结构示例阐述了另外一个通用准则：当你需要类似`cmp`的比较函数时，使用函数，而不是方法。
+
+example illustrates another general guideline: when you need something like a comparison function, prefer a function to a method.
 
 We could have defined the `Tree` type such that the element type is required to have a `Compare` or `Less` method. This would be done by writing a constraint that requires the method, meaning that any type argument used to instantiate the `Tree` type would need to have that method.
 
@@ -120,7 +122,7 @@ If the `Tree` element type happens to already have a `Compare` method, then we c
 
 To put it another way, it is much simpler to turn a method into a function than it is to add a method to a type. So for general purpose data types, prefer a function rather than writing a constraint that requires a method.
 
-### Implementing a common method
+### 实现公用方法Implementing a common method
 
 Another case where type parameters can be useful is when different types need to implement some common method, and the implementations for the different types all look the same.
 
@@ -165,7 +167,7 @@ Using type parameters for this kind of code is appropriate because the methods l
 
 ## 类型参数何时不要用
 
-Now let’s talk about the other side of the question: when not to use type parameters.
+现在我们谈谈类型参数不建议使用的场景。
 
 ### Don’t replace interface types with type parameters
 
@@ -185,27 +187,32 @@ Don’t make that kind of change. Omitting the type parameter makes the function
 
 It’s worth emphasizing the last point. While it’s possible to implement generics in several different ways, and implementations will change and improve over time, the implementation used in Go 1.18 will in many cases treat values whose type is a type parameter much like values whose type is an interface type. What this means is that using a type parameter will generally not be faster than using an interface type. So don’t change from interface types to type parameters just for speed, because it probably won’t run any faster.
 
-### Don’t use type parameters if method implementations differ
+### 如果方法的实现不一样，不要使用类型参数
 
-When deciding whether to use a type parameter or an interface type, consider the implementation of the methods. Earlier we said that if the implementation of a method is the same for all types, use a type parameter. Inversely, if the implementation is different for each type, then use an interface type and write different method implementations, don’t use a type parameter.
+当决定要用类型参数还是interface时，要考虑方法的逻辑实现。正如我们前面说的，如果方法的实现对于所有类型都一样，那就是用类型参数。相反，如果每个类型的方法实现是不同的，那就是用interface类型，不要用类型参数。
 
-For example, the implementation of `Read` from a file is nothing like the implementation of `Read` from a random number generator. That means that we should write two different `Read` methods, and use an interface type like `io.Reader`.
+举个例子，从文件里`Read`的实现和从随机数生成器里`Read`的实现完全不一样，在这种场景下，可以定义一个`io.Reader`的interface类型，该类型包含有一个`Read`方法。文件和随机数生成器实现各自的`Read`方法。
 
-### Use reflection where appropriate
+### 在适当的时候可以使用反射
 
-Go has [run time reflection](https://pkg.go.dev/reflect). Reflection permits a kind of generic programming, in that it permits you to write code that works with any type.
+Go有 [运行期反射](https://pkg.go.dev/reflect)。反射机制支持泛型编程，因为它允许你编写适用于任何类型的代码。
 
-If some operation has to support even types that don’t have methods (so that interface types don’t help), and if the operation is different for each type (so that type parameters aren’t appropriate), use reflection.
+如果某些操作需要支持以下场景，就可以考虑使用反射。
 
-An example of this is the [encoding/json](https://pkg.go.dev/encoding/json) package. We don’t want to require that every type that we encode have a `MarshalJSON` method, so we can’t use interface types. But encoding an interface type is nothing like encoding a struct type, so we shouldn’t use type parameters. Instead, the package uses reflection. The code is not simple, but it works. For details, see [the source code](https://go.dev/src/encoding/json/encode.go).
+* 操作没有方法的类型，interface类型不适用。
+* 每个类型的操作逻辑不一样，泛型不适用。
+
+一个例子是[encoding/json](https://pkg.go.dev/encoding/json)包的实现。我们并不希望要求我们编码的每个类型都实现`MarshalJson`方法，因此我们不能使用interface类型。而且不同类型编码的逻辑不一样，因此我们不应该用泛型。
+
+因此对于这种情况，[encoding/json](https://pkg.go.dev/encoding/json)使用了反射来实现。具体实现细节可以参考[源码](https://go.dev/src/encoding/json/encode.go)。
+
+
 
 ## 一个简单原则
 
-总结一下，何时使用泛型可以简化为一个简单原则。
+总结一下，何时使用泛型可以简化为如下的一个简单原则。
 
-If you find yourself writing the exact same code multiple times, where the only difference between the copies is that the code uses different types, consider whether you can use a type parameter.
-
-Another way to say this is that you should avoid type parameters until you notice that you are about the write the exact same code multiple times.
+如果你发现重复在写几乎完全一样的代码，唯一的区别是代码里使用的类型不一样，那就要考虑是否可以使用泛型来实现。
 
 
 
