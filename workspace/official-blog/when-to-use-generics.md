@@ -104,9 +104,7 @@ func (bt *Tree[T]) Insert(val T) bool {
 
 这种场景使用类型参数是合理的，因为`Tree`是个通用的数据结构，包括方法里的代码实现都和`T`的类型无关。
 
-
-
-The `Tree` data structure does need to know how to compare values of the element type `T`; it uses a passed-in comparison function for that. You can see this on the fourth line of the `find` method, in the call to `bt.cmp`. Other than that, the type parameter doesn’t matter at all.
+`Tree`数据结构本身不需要知道如何比较二叉树节点上类型为`T`的变量`val`的大小，它有一个成员变量`cmp`来实现`val`大小的比较，`cmp`是一个函数类型变量，在二叉树初始化的时候被指定。因此二叉树上节点值的大小比较是`Tree`外部的一个函数来实现的，你可以在`find`方法的第4行看到对`cmp`的使用。
 
 ### For type parameters, prefer functions to methods
 
@@ -117,6 +115,8 @@ We could have defined the `Tree` type such that the element type is required to 
 A consequence would be that anybody who wants to use `Tree` with a simple data type like `int` would have to define their own integer type and write their own comparison method. If we define `Tree` to take a comparison function, as in the code shown above, then it is easy to pass in the desired function. It’s just as easy to write that comparison function as it is to write a method.
 
 If the `Tree` element type happens to already have a `Compare` method, then we can simply use a method expression like `ElementType.Compare` as the comparison function.
+
+换句话说，把方法转为函数比给一个类型增加方法容易得多。因此对于通用的数据类型，优先考虑使用函数，而不是写一个必须有方法的类型限制。
 
 To put it another way, it is much simpler to turn a method into a function than it is to add a method to a type. So for general purpose data types, prefer a function rather than writing a constraint that requires a method.
 
