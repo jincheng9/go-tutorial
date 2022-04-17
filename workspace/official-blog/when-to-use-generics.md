@@ -100,11 +100,11 @@ func (bt *Tree[T]) Insert(val T) bool {
 }
 ```
 
-二叉树的每个节点包含一个类型为类型参数`T`的变量`val`。当二叉树实例化的时候，需要传入类型实参
+二叉树的每个节点包含一个类型为`T`的变量`val`。当二叉树实例化的时候，需要传入类型实参，这个时候`val`的类型已经确定下来了，不会被存为interface类型。
 
-Each node in the tree contains a value of the type parameter `T`. When the tree is instantiated with a particular type argument, values of that type will be stored directly in the nodes. They will not be stored as interface types.
+这种场景使用类型参数是合理的，因为`Tree`是个通用的数据结构，包括方法里的代码实现都和`T`的类型无关。
 
-This is a reasonable use of type parameters because the `Tree` data structure, including the code in the methods, is largely independent of the element type `T`.
+
 
 The `Tree` data structure does need to know how to compare values of the element type `T`; it uses a passed-in comparison function for that. You can see this on the fourth line of the `find` method, in the call to `bt.cmp`. Other than that, the type parameter doesn’t matter at all.
 
