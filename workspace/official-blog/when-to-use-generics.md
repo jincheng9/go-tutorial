@@ -169,13 +169,15 @@ Using type parameters for this kind of code is appropriate because the methods l
 
 现在我们谈谈类型参数不建议使用的场景。
 
-### Don’t replace interface types with type parameters
+### 不要把interface类型替换为类型参数
 
-As we all know, Go has interface types. Interface types permit a kind of generic programming.
+我们大家都知道Go语言有interface类型，interface支持某种意义上的泛型编程。
 
-For example, the widely used `io.Reader` interface provides a generic mechanism for reading data from any value that contains information (for example, a file) or that produces information (for example, a random number generator). If all you need to do with a value of some type is call a method on that value, use an interface type, not a type parameter. `io.Reader` is easy to read, efficient, and effective. There is no need to use a type parameter to read data from a value by calling the `Read` method.
+举个例子，被广泛使用的`io.Reader`接口提供了一种泛型机制用于读取数据，比如支持从文件和随机数生成器里读取数据。
 
-For example, it might be tempting to change the first function signature here, which uses just an interface type, into the second version, which uses a type parameter.
+如果你对某些类型的变量的操作只是调用该类型的方法，那就直接使用interface类型，不要使用类型参数。`io.Reader`从代码角度易于阅读且高效，没必要使用类型参数。
+
+举个例子，有人可能会把下面第1个基于interface类型的`ReadSome`版本修改为第2个基于类型参数的版本。
 
 ```
 func ReadSome(r io.Reader) ([]byte, error)
@@ -183,9 +185,9 @@ func ReadSome(r io.Reader) ([]byte, error)
 func ReadSome[T io.Reader](r T) ([]byte, error)
 ```
 
-Don’t make that kind of change. Omitting the type parameter makes the function easier to write, easier to read, and the execution time will likely be the same.
+不要做这种修改，使用第1个基于interface的版本会让函数更容易编写和阅读，并且函数执行效率也几乎一样。
 
-It’s worth emphasizing the last point. While it’s possible to implement generics in several different ways, and implementations will change and improve over time, the implementation used in Go 1.18 will in many cases treat values whose type is a type parameter much like values whose type is an interface type. What this means is that using a type parameter will generally not be faster than using an interface type. So don’t change from interface types to type parameters just for speed, because it probably won’t run any faster.
+**注意**：尽管可以使用不同的方式来实现泛型，并且泛型的实现可能会随着时间的推移而发生变化，但是Go 1.18中泛型的实现在很多情况下对于类型为interface的变量和类型为类型参数的变量处理非常相似。这意味着使用类型参数通常并不会比使用interface快，所以不要单纯为了程序运行速度而把interface类型修改为类型参数，因为它可能并不会运行更快。
 
 ### 如果方法的实现不一样，不要使用类型参数
 
@@ -195,9 +197,7 @@ It’s worth emphasizing the last point. While it’s possible to implement gene
 
 ### 在适当的时候可以使用反射
 
-Go有 [运行期反射](https://pkg.go.dev/reflect)。反射机制支持泛型编程，因为它允许你编写适用于任何类型的代码。
-
-如果某些操作需要支持以下场景，就可以考虑使用反射。
+Go有 [运行期反射](https://pkg.go.dev/reflect)。反射机制支持某种意义上的泛型编程，因为它允许你编写适用于任何类型的代码。如果某些操作需要支持以下场景，就可以考虑使用反射。
 
 * 操作没有方法的类型，interface类型不适用。
 * 每个类型的操作逻辑不一样，泛型不适用。
