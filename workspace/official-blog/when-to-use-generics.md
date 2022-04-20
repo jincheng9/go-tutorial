@@ -22,13 +22,13 @@ Go编程有一条通用准则：write Go programs by writing code, not by defini
 
 接下来我们看看在什么情况下，使用类型参数对我们写代码更有用。
 
-### 使用内置的容器类型
+### 使用Go内置的容器类型
 
 如果函数使用了语言内置的容器类型(包括slice, map和channel)作为函数参数，并且函数代码对容器的处理逻辑并没有预设容器里的元素类型，那使用类型参数(type parameter)可能就会有用。
 
 举个例子，我们要实现一个函数，该函数的入参是一个map，要返回该map的所有key组成的slice，key的类型可以是map支持的任意key类型。
 
-```
+```go
 // MapKeys returns a slice of all the keys in m.
 // The keys are not returned in any particular order.
 func MapKeys[Key comparable, Val any](m map[Key]Val) []Key {
@@ -44,7 +44,7 @@ func MapKeys[Key comparable, Val any](m map[Key]Val) []Key {
 
 这种场景下，也可以使用反射(reflection)，但是反射是一种比较别扭的编程模型，在编译期没法做静态类型检查，并且会导致运行期的速度变慢。
 
-### 通用的数据结构
+### 实现通用的数据结构
 
 对于通用的数据结构，类型参数也会有用。通用的数据结构类似于slice和map，但是并不是语言内置的数据结构，比如链表或者二叉树。
 
@@ -57,7 +57,7 @@ func MapKeys[Key comparable, Val any](m map[Key]Val) []Key {
 
 下面的例子就是使用类型参数实现的通用二叉树数据结构：
 
-```
+```go
 // Tree is a binary tree.
 type Tree[T any] struct {
     cmp  func(T, T) int
@@ -122,15 +122,15 @@ If the `Tree` element type happens to already have a `Compare` method, then we c
 
 To put it another way, it is much simpler to turn a method into a function than it is to add a method to a type. So for general purpose data types, prefer a function rather than writing a constraint that requires a method.
 
-### 实现公用方法Implementing a common method
+### 不同类型需要实现公用方法
 
-Another case where type parameters can be useful is when different types need to implement some common method, and the implementations for the different types all look the same.
+类型参数另一个有用的场景是不同的类型要实现一些公用方法，并且对于这些方法，不同类型的实现逻辑是一样的。
 
-For example, consider the standard library’s `sort.Interface`. It requires that a type implement three methods: `Len`, `Swap`, and `Less`.
+
 
 Here is an example of a generic type `SliceFn` that implements `sort.Interface` for any slice type:
 
-```
+```go
 // SliceFn implements sort.Interface for a slice of T.
 type SliceFn[T any] struct {
     s    []T
@@ -152,7 +152,7 @@ For any slice type, the `Len` and `Swap` methods are exactly the same. The `Less
 
 Here is how to use `SliceFn` to sort any slice using a comparison function:
 
-```
+```go
 // SortFn sorts s in place using a comparison function.
 func SortFn[T any](s []T, less func(T, T) bool) {
     sort.Sort(SliceFn[T]{s, cmp})
@@ -189,13 +189,13 @@ func ReadSome[T io.Reader](r T) ([]byte, error)
 
 **注意**：尽管可以使用不同的方式来实现泛型，并且泛型的实现可能会随着时间的推移而发生变化，但是Go 1.18中泛型的实现在很多情况下对于类型为interface的变量和类型为类型参数的变量处理非常相似。这意味着使用类型参数通常并不会比使用interface快，所以不要单纯为了程序运行速度而把interface类型修改为类型参数，因为它可能并不会运行更快。
 
-### 如果方法的实现不一样，不要使用类型参数
+### 如果方法的实现不同，不要使用类型参数
 
 当决定要用类型参数还是interface时，要考虑方法的逻辑实现。正如我们前面说的，如果方法的实现对于所有类型都一样，那就是用类型参数。相反，如果每个类型的方法实现是不同的，那就是用interface类型，不要用类型参数。
 
 举个例子，从文件里`Read`的实现和从随机数生成器里`Read`的实现完全不一样，在这种场景下，可以定义一个`io.Reader`的interface类型，该类型包含有一个`Read`方法。文件和随机数生成器实现各自的`Read`方法。
 
-### 在适当的时候可以使用反射
+### 在适当的时候可以使用反射(reflection)
 
 Go有 [运行期反射](https://pkg.go.dev/reflect)。反射机制支持某种意义上的泛型编程，因为它允许你编写适用于任何类型的代码。如果某些操作需要支持以下场景，就可以考虑使用反射。
 
