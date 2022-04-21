@@ -106,21 +106,25 @@ func (bt *Tree[T]) Insert(val T) bool {
 
 `Tree`数据结构本身不需要知道如何比较二叉树节点上类型为`T`的变量`val`的大小，它有一个成员变量`cmp`来实现`val`大小的比较，`cmp`是一个函数类型变量，在二叉树初始化的时候被指定。因此二叉树上节点值的大小比较是`Tree`外部的一个函数来实现的，你可以在`find`方法的第4行看到对`cmp`的使用。
 
-### For type parameters, prefer functions to methods
+### 类型参数优先使用在函数而不是方法上
 
-上面的 `Tree`数据结构示例阐述了另外一个通用准则：当你需要类似`cmp`的比较函数时，使用函数，而不是方法。
+上面的 `Tree`数据结构示例阐述了另外一个通用准则：当你需要类似`cmp`的比较函数时，优先考虑使用函数而不是方法。
 
-example illustrates another general guideline: when you need something like a comparison function, prefer a function to a method.
+对于上面`Tree`类型，除了使用函数类型的成员变量`cmp`来比较`val`的大小之外，还有另外一种方案是给`Tree`或`node`定义一个成员方法用来给类型为`T`的变量`val`的值做比较。
+
+但是成员方法由于要对`T`类型的值比较大小，就需要定义一个类型约束(type constraint)用于限定`T`的类型
 
 We could have defined the `Tree` type such that the element type is required to have a `Compare` or `Less` method. This would be done by writing a constraint that requires the method, meaning that any type argument used to instantiate the `Tree` type would need to have that method.
+
+这造成的结果是即使`T`只是一个普通的int类型，那使用者也必须定义一个自己的int类型，实现类型约束里的方法(method)，然后把这个自定义的int类型作为类型实参传参给类型参数`T`。
+
+但是如果我们参照上面`Tree`的代码实现，定义一个函数类型的成员变量`cmp`用来做`T`类型的大小比较
 
 A consequence would be that anybody who wants to use `Tree` with a simple data type like `int` would have to define their own integer type and write their own comparison method. If we define `Tree` to take a comparison function, as in the code shown above, then it is easy to pass in the desired function. It’s just as easy to write that comparison function as it is to write a method.
 
 If the `Tree` element type happens to already have a `Compare` method, then we can simply use a method expression like `ElementType.Compare` as the comparison function.
 
 换句话说，把方法转为函数比给一个类型增加方法容易得多。因此对于通用的数据类型，优先考虑使用函数，而不是写一个必须有方法的类型限制。
-
-To put it another way, it is much simpler to turn a method into a function than it is to add a method to a type. So for general purpose data types, prefer a function rather than writing a constraint that requires a method.
 
 ### 不同类型需要实现公用方法
 

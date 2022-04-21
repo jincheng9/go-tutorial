@@ -17,6 +17,15 @@ func sortMethod2() {
 	fmt.Printf("%T, %v\n", f, f)
 }
 
+type MyInt int
+
+func (a MyInt) cmp(b MyInt) bool {
+	return a < b
+}
+
 func main() {
-	sortMethod2()
+	var i MyInt = 10
+	var j MyInt = 2
+	result := i.cmp(j)
+	fmt.Println(result)
 }
