@@ -126,9 +126,13 @@ To put it another way, it is much simpler to turn a method into a function than 
 
 类型参数另一个有用的场景是不同的类型要实现一些公用方法，并且对于这些方法，不同类型的实现逻辑是一样的。
 
+下面举个例子，Go标准库里有一个[sort](https://pkg.go.dev/sort)包，可以对存储不同数据类型的slice做排序，比如`Float64s(x)`可以对`[]float64`做排序，`Ints(x)`可以对`[]int`做排序。
 
+同时sort包还可以对用户自定义的数据类型(比如结构体、自定义的int类型等)调用`sort.Sort()`做排序，只要该类型实现了`sort.Interface`这个接口类型里`Len()`、`Less()`和`Swap()`这3个方法。
 
-Here is an example of a generic type `SliceFn` that implements `sort.Interface` for any slice type:
+下面我们对sort包可以使用泛型来做一些改造，就可以对存储不同数据类型的slice统一调用`sort.Sort()`来做排序，而不用专门为`[]int`调用`Ints(x)`，为`[]float64`调用`Float64s(x)`做差异化处理了，可以简化代码逻辑。
+
+下面的代码实现了一个泛型的结构体类型`SliceFn`，这个结构体类型实现了`sort.Interface`。
 
 ```go
 // SliceFn implements sort.Interface for a slice of T.
@@ -148,9 +152,9 @@ func (s SliceFn[T] Less(i, j int) bool {
 }
 ```
 
-For any slice type, the `Len` and `Swap` methods are exactly the same. The `Less` method requires a comparison, which is the `Fn` part of the name `SliceFn`. As with the earlier `Tree` example, we will pass in a function when we create a `SliceFn`.
+对于不同的slice类型， `Len` 和 `Swap` 方法的实现是一样的。`Less` 方法需要对slice里的2个元素做比较，比较逻辑实现在`SliceFn`里的成员变量`less`里头，`less`是一个函数类型的变量，在结构体初始化的时候进行传参赋值。这点和上面`Tree`这个二叉树通用数据结构的处理类似。
 
-Here is how to use `SliceFn` to sort any slice using a comparison function:
+我们再将`sort.Sort`按照泛型风格封装为`SortFn`泛型函数，这样对于所有slice类型，我们都可以统一调用`SortFn`做排序。
 
 ```go
 // SortFn sorts s in place using a comparison function.
@@ -159,11 +163,11 @@ func SortFn[T any](s []T, less func(T, T) bool) {
 }
 ```
 
-This is similar to the standard library function `sort.Slice`, but the comparison function is written using values rather than slice indexes.
+这和标准库里的[sort.Slice](https://pkg.go.dev/sort#Slice)很类似，只不过这里的`less`比较函数的参数是具体的值，而`sort.Slice`里比较函数`less`比较函数的参数是slice的下标索引。
 
-Using type parameters for this kind of code is appropriate because the methods look exactly the same for all slice types.
+这种场景使用类型参数比较合适，因为不同类型的`SliceFn`的方法实现逻辑都是一样的，只是`slice`里存储的元素的类型不一样而已。
 
-(I should mention that Go 1.19–not 1.18–will most likely include a generic function to sort a slice using a comparison function, and that generic function will most likely not use `sort.Interface`. See [proposal #47619](https://go.dev/issue/47619). But the general point is still true even if this specific example will most likely not be useful: it’s reasonable to use type parameters when you need to implement methods that look the same for all the relevant types.)
+
 
 ## 类型参数何时不要用
 
