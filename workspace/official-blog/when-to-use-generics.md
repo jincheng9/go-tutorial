@@ -16,7 +16,7 @@ Go 1.18版本新增了一个重大功能：支持泛型编程。本文不会介�
 
 Go编程有一条通用准则：write Go programs by writing code, not by defining types. 
 
-具体到泛型，如果你写代码的时候从定义类型参数约束(type parameter constraints)开始，那你可能搞错了方向。从编写函数开始，如果写的过程中发现使用类型参数更好，那就再使用类型参数。
+具体到泛型，如果你写代码的时候从定义类型参数约束(type parameter constraints)开始，那你可能搞错了方向。从编写函数开始，如果写的过程中发现使用类型参数更好，那再使用类型参数。
 
 ## 类型参数何时有用？
 
