@@ -1,10 +1,18 @@
 # 官方最佳实践：什么场景应该使用泛型
 
+## 前言
+
+Go泛型的设计者*Ian Lance Taylor*在官方博客网站上发表了一篇文章[when to use generics](https://go.dev/blog/when-generics)，详细说明了在什么场景下应该使用泛型，什么场景下不要使用泛型。这对于我们写出符合最佳实践的Go泛型代码非常有指导意义。
+
+本人对原文在翻译的基础上做了一些表述上的优化，方便大家理解。
+
+
+
+## 原文翻译
+
 *Ian Lance Taylor*
 
 *2022.04.14*
-
-## 导言
 
 这篇博客汇总了我在2021年Google开源活动日和GopherCon会议上关于泛型的分享。
 
@@ -110,19 +118,11 @@ func (bt *Tree[T]) Insert(val T) bool {
 
 上面的 `Tree`数据结构示例阐述了另外一个通用准则：当你需要类似`cmp`的比较函数时，优先考虑使用函数而不是方法。
 
-对于上面`Tree`类型，除了使用函数类型的成员变量`cmp`来比较`val`的大小之外，还有另外一种方案是给`Tree`或`node`定义一个成员方法用来给类型为`T`的变量`val`的值做比较。
-
-但是成员方法由于要对`T`类型的值比较大小，就需要定义一个类型约束(type constraint)用于限定`T`的类型
-
-We could have defined the `Tree` type such that the element type is required to have a `Compare` or `Less` method. This would be done by writing a constraint that requires the method, meaning that any type argument used to instantiate the `Tree` type would need to have that method.
+对于上面`Tree`类型，除了使用函数类型的成员变量`cmp`来比较`val`的大小之外，还有另外一种方案是要求类型`T`必须有一个`Compare`或者`Less`方法来做大小比较。要做到这一点，就需要定义一个类型约束(type constraint)用于限定类型`T`必须实现这个方法。
 
 这造成的结果是即使`T`只是一个普通的int类型，那使用者也必须定义一个自己的int类型，实现类型约束里的方法(method)，然后把这个自定义的int类型作为类型实参传参给类型参数`T`。
 
-但是如果我们参照上面`Tree`的代码实现，定义一个函数类型的成员变量`cmp`用来做`T`类型的大小比较
-
-A consequence would be that anybody who wants to use `Tree` with a simple data type like `int` would have to define their own integer type and write their own comparison method. If we define `Tree` to take a comparison function, as in the code shown above, then it is easy to pass in the desired function. It’s just as easy to write that comparison function as it is to write a method.
-
-If the `Tree` element type happens to already have a `Compare` method, then we can simply use a method expression like `ElementType.Compare` as the comparison function.
+但是如果我们参照上面`Tree`的代码实现，定义一个函数类型的成员变量`cmp`用来做`T`类型的大小比较，代码实现就比较简洁。
 
 换句话说，把方法转为函数比给一个类型增加方法容易得多。因此对于通用的数据类型，优先考虑使用函数，而不是写一个必须有方法的类型限制。
 
@@ -132,7 +132,7 @@ If the `Tree` element type happens to already have a `Compare` method, then we c
 
 下面举个例子，Go标准库里有一个[sort](https://pkg.go.dev/sort)包，可以对存储不同数据类型的slice做排序，比如`Float64s(x)`可以对`[]float64`做排序，`Ints(x)`可以对`[]int`做排序。
 
-同时sort包还可以对用户自定义的数据类型(比如结构体、自定义的int类型等)调用`sort.Sort()`做排序，只要该类型实现了`sort.Interface`这个接口类型里`Len()`、`Less()`和`Swap()`这3个方法。
+同时sort包还可以对用户自定义的数据类型(比如结构体、自定义的int类型等)调用`sort.Sort()`做排序，只要该类型实现了`sort.Interface`这个接口类型里`Len()`、`Less()`和`Swap()`这3个方法即可。
 
 下面我们对sort包可以使用泛型来做一些改造，就可以对存储不同数据类型的slice统一调用`sort.Sort()`来做排序，而不用专门为`[]int`调用`Ints(x)`，为`[]float64`调用`Float64s(x)`做差异化处理了，可以简化代码逻辑。
 
