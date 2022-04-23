@@ -95,7 +95,7 @@
 
 7. [Go 1.18：工作区模式最佳实践](./workspace/official-blog/go1.18-workspace-best-practice.md)
 
-7. [Practical Go：如何写出更好维护的Go程序](https://github.com/jincheng9/practical-go-cn)
+7. [Practical Go：如何写出更好维护的Go代码](https://github.com/jincheng9/practical-go-cn)
 
    
 
