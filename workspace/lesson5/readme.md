@@ -45,8 +45,14 @@
 
 * Go没有三目运算符`?:`
 
+## 运算符优先级
 
+参考：https://go.dev/ref/spec#Operator_precedence
 
 ## References
 
 * https://github.com/jincheng9/golang-cheat-sheet-cn#%E6%93%8D%E4%BD%9C%E7%AC%A6
+
+* https://go.dev/ref/spec#Operator_precedence
+
+  
