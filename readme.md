@@ -67,37 +67,35 @@
 
 ## 进阶篇
 
-1. [被defer的函数一定会执行么？](./workspace/senior/p2)
+* 常用关键字
 
-2. [Go有引用变量和引用传递么？map,channel和slice作为函数参数是引用传递么？](./workspace/senior/p3)
+  * [被defer的函数一定会执行么？](./workspace/senior/p2)
 
-3. [new和make的使用区别和最佳实践是什么？](./workspace/senior/p4)
+  * [new和make的使用区别和最佳实践是什么？](./workspace/senior/p4)
 
-4. [一文读懂Go匿名结构体的使用场景](./workspace/senior/p5)
+* 语言基础
+  * [Go有引用变量和引用传递么？map,channel和slice作为函数参数是引用传递么？](./workspace/senior/p3)
+  * [一文读懂Go匿名结构体的使用场景](./workspace/senior/p5)
+  * [Go语言中fmt.Println(true)的结果一定是true么？](./workspace/senior/p19)
+  * [Go语言中命名函数参数和命名函数返回值的注意事项](./workspace/senior/p21)
 
-4. [Go语言中fmt.Println(true)的结果一定是true么？](./workspace/senior/p19)
+* 泛型
+  * [泛型：Go泛型入门官方教程](./workspace/senior/p6)
+  * [泛型：一文读懂Go泛型设计和使用场景](./workspace/senior/p7)
+  * [泛型：Go 1.18正式版本将从标准库中移除constraints包](./workspace/senior/p17)
+  * [泛型：什么场景应该使用泛型](./workspace/official-blog/when-to-use-generics.md)
 
-6. [Go语言中命名函数参数和命名函数返回值的注意事项](./workspace/senior/p21)
+* Fuzzing
+  * [Fuzzing: Go Fuzzing入门官方教程](./workspace/senior/p22)
+  * [Fuzzing: 一文读懂Go Fuzzing使用和原理](./workspace/senior/p23)
+* Workspace mode工作区模式
+  * [Go 1.18：工作区模式workspace mode简介](./workspace/senior/p25)
+  * [Go 1.18：工作区模式最佳实践](./workspace/official-blog/go1.18-workspace-best-practice.md)
 
-5. [泛型：Go泛型入门官方教程](./workspace/senior/p6)
+* 语言规范
+  * [Practical Go：如何写出更好维护的Go代码](https://github.com/jincheng9/practical-go-cn)
 
-6. [泛型：一文读懂Go泛型设计和使用场景](./workspace/senior/p7)
 
-7. [泛型：Go 1.18正式版本将从标准库中移除constraints包](./workspace/senior/p17)
-
-7. [泛型：什么场景应该使用泛型](./workspace/official-blog/when-to-use-generics.md)
-
-7. [Fuzzing: Go Fuzzing入门官方教程](./workspace/senior/p22)
-
-7. [Fuzzing: 一文读懂Go Fuzzing使用和原理](./workspace/senior/p23)
-
-7. [Go 1.18：工作区模式workspace mode简介](./workspace/senior/p25)
-
-7. [Go 1.18：工作区模式最佳实践](./workspace/official-blog/go1.18-workspace-best-practice.md)
-
-7. [Practical Go：如何写出更好维护的Go代码](https://github.com/jincheng9/practical-go-cn)
-
-   
 
 ## Go Quiz
 
