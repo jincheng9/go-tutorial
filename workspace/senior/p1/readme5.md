@@ -120,7 +120,7 @@ go version go1.18beta2 darwin/amd64
 go1.18beta2: not downloaded. Run 'go1.18beta2 download' to install to /Users/xxx/sdk/go1.18beta2
 ```
 
-执行``go1.18beta2 download`之后，也提示了源码安装位置：
+执行`go1.18beta2 download`之后，也提示了源码安装位置：
 
 ```bash
 Unpacking /Users/xxx/sdk/go1.18beta2/go1.18beta2.darwin-amd64.tar.gz ...
