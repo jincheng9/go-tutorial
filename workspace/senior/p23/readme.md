@@ -256,4 +256,5 @@ fuzzing引擎会优雅处理中断，不管中断是被发送给了coordinator�
 * Fuzzing Tesing in Go in 8 Minutes: https://www.youtube.com/watch?v=w8STTZWdG9Y
 * GitHub开源工具go-fuzz: https://github.com/dvyukov/go-fuz
 * Go fuzzing找bug示例：https://julien.ponge.org/blog/playing-with-test-fuzzing-in-go/
+* 专注于Fuzzing技术的博客网站：https://blog.fuzzbuzz.io/
 
