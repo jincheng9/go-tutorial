@@ -353,7 +353,7 @@ func loadConfig() map[string]string {
 }
 
 func requests() chan int {
-	// 将从外界中接受到的请求放入到channel里
+	// 将从外界中接收到的请求放入到channel里
 	return make(chan int)
 }
 
