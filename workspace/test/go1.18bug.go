@@ -2,7 +2,12 @@ package main
 
 import "fmt"
 
+func test1() {
+	const C1 = iota
+	const C2 = iota
+	fmt.Println("C1=", C1, " C2=", C2)
+}
+
 func main() {
-	println('1' << 32)
-	fmt.Println('1' << 32)
+	test1()
 }

@@ -18,7 +18,7 @@ sync.Map可以理解为类似一个map[interface{}]interface{}的结构，key可
 
 1. **每个key只写一次，其它对该key的操作都是读操作**
 
-2. **多个goroutinet同时读写map，但是每个goroutine只读写各自的keys**
+2. **多个goroutine同时读写map，但是每个goroutine只读写各自的keys**
 
 以上2种场景，相对于对普通的map加Mutex或者RWMutex来实现并发安全，使用sync.Map不用在业务代码里加锁，会大幅减少锁竞争，提升性能。**其它更为常见的场景还是使用普通的Map，搭配Mutex或者RWMutex来使用**。
 
