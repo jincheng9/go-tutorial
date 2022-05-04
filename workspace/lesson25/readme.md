@@ -149,9 +149,11 @@ Delete, Load, LoadAndDelete, LoadOrStore, Store的均摊时间复杂度是O(1)�
   }
   ```
 
+## 注意事项
+
 * sync.Map不支持len和cap函数
 
-* **注意**：在评估要不要使用sync.Map的时候，先考察业务场景是否符合上面描述的场景1和2，符合再考虑用sync.Map，不符合就用普通map+Mutex或者RWMutex。
+* 在评估要不要使用sync.Map的时候，先考察业务场景是否符合上面描述的场景1和2，符合再考虑用sync.Map，不符合就用普通map+Mutex或者RWMutex。
 
 ## References
 

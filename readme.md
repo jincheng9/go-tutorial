@@ -54,7 +54,7 @@
 
 * [lesson25: 并发编程之sync.Map](./workspace/lesson25)
 
-* [lesson26: 并发编程之原子操作](./workspace/lesson26)
+* [lesson26: 并发编程之原子操作sync/atomic](./workspace/lesson26)
 
 * [lesson27: 包Package和模块Module](./workspace/lesson27)
 
