@@ -237,8 +237,8 @@
 ## Go Blog
 
 * [Jincheng's Blog](https://jincheng9.github.io/)
-* [Russ Cox](https://research.swtch.com/)
-* [CS Prof Nilsson from KTH-Golang and Algo](https://yourbasic.org/golang/)
+* [Russ Cox-Go团队负责人](https://research.swtch.com/)
+* [CS Professor Nilsson from KTH](https://yourbasic.org/golang/)
 * [John Arundel](https://bitfieldconsulting.com/)
 * [Dave Cheney](https://dave.cheney.net/)
 * [Jaana Dogan-Pricipal Engineer at AWS](https://rakyll.org/about/)
@@ -255,6 +255,7 @@
 * [golang.design](https://golang.design/)
 * [Amit Saha-Atlassian Engineer](https://echorand.me/)
 * [Paschalis Tsilias-Grafana Engineer](https://tpaschalis.github.io/)
+* [liwenzhou-李文周](https://www.liwenzhou.com/)
 * [TalkGo发起人-杨文](https://maiyang.me/)
 * [smallest-rpcx作者](https://colobu.com/)
 * [ChangkunOu-欧长坤](https://changkun.de/blog/)
