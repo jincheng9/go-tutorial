@@ -123,6 +123,8 @@
 
 9. [Go Quiz: 从Go面试题看锁的注意事项](./workspace/senior/p24)
 
+9. [Go Quiz: 从Go面试题看变量的零值和初始化赋值的注意事项](./workspace/senior/p26)
+
 12. [Go questions-golang.design](https://golang.design/go-questions/)
 
     
