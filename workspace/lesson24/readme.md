@@ -9,13 +9,13 @@ Cond结构体类型定义如下：
 ```go
 type Cond struct {
     L Locker
-    // som other fields
+    // some other fields
 }
 ```
 
 Cond结构体类型以下几个方法与其紧密相关：
 
-* NewCond，创建一个条件变量，该条件变量的成员L是NewCond的参数l
+* NewCond函数，用于创建条件变量，条件变量的成员`L`是NewCond函数的参数`l`
 
   ```go
   func NewCond(l Locker) *Cond
