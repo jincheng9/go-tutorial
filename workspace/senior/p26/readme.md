@@ -184,6 +184,7 @@ Go语言里不同类型的变量的零值不一样，给大家总结了各个类
   ```
 
 
+
 ## 开源地址
 
 文章和示例代码开源在GitHub: [Go语言初级、中级和高级教程](https://github.com/jincheng9/go-tutorial)。
