@@ -9,5 +9,5 @@ type Circle struct {
 
 func main() {
 	var c Circle
-	fmt.Println(c == nil)
+	fmt.Printf("%p %v\n", &c, c)
 }
