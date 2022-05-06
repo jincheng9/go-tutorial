@@ -145,17 +145,6 @@ var (
   fmt.Println("result=", result)
   ```
 
-* 结构体:  var instance Struct，零值是nil
-
-  ```go
-  type Circle struct {
-    redius float64
-  }
-  
-  var c1 Circle
-  c1.radius = 10.00
-  ```
-
 * channel：var a chan int，通道channel，零值是nil
 
   ```go
@@ -185,7 +174,16 @@ var (
   a.speak() // miao...
   ```
 
+* 结构体:  var instance StructName，结构体里每个field的零值是对应field的类型的零值
 
+  ```go
+  type Circle struct {
+    radius float64
+  }
+  
+  var c1 Circle
+  c1.radius = 10.00
+  ```
 
 
 ## References
