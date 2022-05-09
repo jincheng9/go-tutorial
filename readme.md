@@ -1,6 +1,6 @@
 # Learning notes for golang
 
-如果发现项目里的问题或者想学习了解本项目里还没涉及到的go语言技术栈，欢迎提交[issue](https://github.com/jincheng9/go-tutorial/issues/new)。
+如果发现了本项目里的问题或者想了解本项目里还没涉及到的go语言技术栈，欢迎提交[issue](https://github.com/jincheng9/go-tutorial/issues/new)。
 
 ## 基础篇
 
