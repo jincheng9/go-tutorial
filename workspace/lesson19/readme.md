@@ -228,8 +228,12 @@ channel有3种操作，发送数据，接收数据和关闭channel。发送和�
 
   ```go
   ch := make(chan int)
+  
   x := <-ch // 从通道ch里接收值，并赋值给变量x
   <-ch // 从通道里接收值，不做其它处理
+  
+  var y int
+  y = <-ch 
   ```
 
 * 关闭通道: close(channel)，关闭nil channel会触发`panic: close of nil channel `
