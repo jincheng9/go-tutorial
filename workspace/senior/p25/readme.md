@@ -250,10 +250,10 @@ $ go1.18beta1 run main.go
 ## References
 
 * Proposal提案：https://go.googlesource.com/proposal/+/master/design/45713-workspace.md
-
 * workspace官方教程：https://go.dev/doc/tutorial/workspaces
 * workspace语法：https://go.dev/ref/mod#go-work-file-replace
 * go work命令手册：https://pkg.go.dev/cmd/go@master#hdr-Workspace_maintenance
 * go 1.18 release notes: https://tip.golang.org/doc/go1.18
 * Go如何引用本地Module：https://github.com/jincheng9/go-tutorial/tree/main/workspace/lesson27#%E5%BC%80%E5%90%AFgo111modules%E6%97%B6import%E6%9C%AC%E5%9C%B0%E7%9A%84module
 * polarisxu: https://polarisxu.studygolang.com/posts/go/dynamic/go1.18-workspace/
+* go mod tidy不能感知go.work问题：https://github.com/golang/go/issues/50750
