@@ -2,6 +2,8 @@
 
 如果发现了本项目里的问题或者想了解本项目里还没涉及到的go语言技术栈，欢迎提交[issue](https://github.com/jincheng9/go-tutorial/issues/new)。
 
+如果觉得本项目不错，欢迎给个**Star**。
+
 ## 基础篇
 
 * [lesson0: GitHub最流行的golang-cheat-sheet中文版本](https://github.com/jincheng9/golang-cheat-sheet-cn)

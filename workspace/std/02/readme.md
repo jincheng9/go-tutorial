@@ -177,6 +177,8 @@ vet的中文含义是”审查“，因此这个命令就是对Go代码做检查
 
 #### go get
 
+更新go.sum?写个example
+
 #### go list
 
 
