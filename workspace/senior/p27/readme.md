@@ -59,7 +59,7 @@ fmt.Println(f)
 
   > An untyped constant has a *default type* which is the type to which the constant is implicitly converted in contexts where a typed value is required, for instance, in a [short variable declaration](https://go.dev/ref/spec#Short_variable_declarations) such as `i := 0` where there is no explicit type. The default type of an untyped constant is `bool`, `rune`, `int`, `float64`, `complex128` or `string` respectively, depending on whether it is a boolean, rune, integer, floating-point, complex, or string constant.
 
-* 对于常量而言，**如果没有显示指定数据类型**，编译器同样会推导出一个数据类型，**但是常量在代码上下文里可以根据需要隐式转化为需要的数据类型进行计算**。
+* 对于常量而言，**如果没有显示指定数据类型**，编译器同样会推导出一个数据类型，**但是没有显示指定数据类型的常量在代码上下文里可以根据需要隐式转化为需要的数据类型进行计算**。
 
 * Go不允许不同的数据类型做运算。当变量和**没有显示指定数据类型的常量**混合在一起运算时，如果常量转化成变量的类型不会损失精度，那常量会自动转化为变量的数据类型参与运算。如果常量转化成变量的类型会损失精度，那就会编译报错。
 
