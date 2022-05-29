@@ -129,6 +129,8 @@
 
 9. [Go Quiz: 从Go面试题看变量的零值和初始化赋值的注意事项](./workspace/senior/p26)
 
+9. [Go Quiz: 从Go面试题看数值类型的自动推导](./workspace/senior/p27)
+
 12. [Go questions-golang.design](https://golang.design/go-questions/)
 
     
