@@ -186,6 +186,10 @@
 
 * [gin-swagger常见问题](./workspace/swagger)
 
+## CI/CD
+
+- [Jenkins安装部署](./workspace/devops/jenkins01.md)
+
   
 
 ## 外文翻译
