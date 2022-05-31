@@ -188,7 +188,7 @@
 
 ## CI/CD
 
-- [Jenkins安装部署](./workspace/devops/jenkins01.md)
+- [Jenkins教程01：安装部署](./workspace/devops/jenkins01.md)
 
   
 
