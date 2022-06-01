@@ -101,6 +101,14 @@ var u = 2
 fmt.Println(t / u)
 ```
 
+题目4：
+
+```go
+d := 9.0
+const f int = 2
+fmt.Println(d / f)
+```
+
 想知道答案的可以给公众号发送消息`data`获取答案。
 
 
@@ -132,5 +140,6 @@ fmt.Println(t / u)
 * https://twitter.com/val_deleplace/status/1529917910252146705
 * https://twitter.com/val_deleplace/status/1530104838587092993
 * https://twitter.com/val_deleplace/status/1529050473403142146
+* https://twitter.com/val_deleplace/status/1531963904032747522
 * https://go.dev/ref/spec#Constants
 * https://stackoverflow.com/questions/61153803/how-does-the-constant-value-auto-type-work-in-golang
