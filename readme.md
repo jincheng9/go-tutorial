@@ -95,7 +95,7 @@
 * 语言规范
   * [Practical Go：如何写出更好维护的Go代码](https://github.com/jincheng9/practical-go-cn)
 *  Go开发中10个最常见的错误
-  * [错误1：未知枚举值](./workspace/senior/p28/01-unknown-enum-value.md)
+  * [第一篇：未知枚举值](./workspace/senior/p28/01-unknown-enum-value.md)
 
 
 
