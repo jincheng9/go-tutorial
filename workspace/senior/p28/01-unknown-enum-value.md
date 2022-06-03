@@ -2,7 +2,9 @@
 
 ## 前言
 
-这是Go十大常见错误的第一篇：未知枚举值。
+这是Go十大常见错误系列的第一篇：未知枚举值。
+
+本文涉及的源代码全部开源在：[Go十大常见错误源代码](https://github.com/jincheng9/go-tutorial/tree/main/workspace/senior/p28)
 
 
 
@@ -28,7 +30,56 @@ StatusClosed = 1
 StatusUnknown = 2
 ```
 
+假设我们业务代码里的数据结构包含了枚举类型，比如下例：
 
+```go
+type Request struct {
+	ID        int    `json:"Id"`
+	Timestamp int    `json:"Timestamp"`
+	Status    Status `json:"Status"`
+}
+```
+
+我们要把接受到的JSON请求反序列化为`Request`结构体类型。
+
+```go
+{
+  "Id": 1234,
+  "Timestamp": 1563362390,
+  "Status": 0
+}
+```
+
+对于上面这个JSON请求数据，`Request`结构体里的`Status`字段会被解析为0，对应的是`StatusOpen`，符合预期。
+
+但是如果由于各种原因没有传`Status`字段，对于如下的JSON请求
+
+```go
+{
+  "Id": 1235,
+  "Timestamp": 1563362390
+}
+```
+
+在将这个JSON请求反序列化为`Request`结构体类型的时候，因为JSON串里没有`Status`字段，因此`Request`结构体里的`Status`字段的值会是零值，也就是`uint32`的零值0。这个时候`Status`字段的值还是`StatusOpen`，而不是我们预期的`StatusUnknown`。
+
+
+
+## 最佳实践
+
+因此对于枚举值的最佳实践，是把枚举的未知值设置为0。
+
+```go
+type Status uint32
+
+const (
+	StatusUnknown Status = iota
+	StatusOpen
+	StatusClosed
+)
+```
+
+这样设计后，如果JSON请求里没有传`Status`字段，那反序列化后的`Request`结构体里的`Status`字段的值就是`StatusUnknown`，符合预期。
 
 
 

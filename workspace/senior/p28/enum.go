@@ -36,12 +36,4 @@ func main() {
 		fmt.Println(err)
 	}
 	fmt.Println(req2)
-
-	var a interface{} = 1
-	result, ok := a.(int)
-	if ok {
-		fmt.Println("result:", result)
-	} else {
-		fmt.Println("interface assertion is wrong")
-	}
 }
