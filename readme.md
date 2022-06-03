@@ -196,6 +196,8 @@
 
 1. [GitHub最流行的golang-cheat-sheet中文版本](https://github.com/jincheng9/golang-cheat-sheet-cn)
 
+1. [官方博文：Go开发者调研方式改变了](./workspace/official-blog/survey-change.md)
+
 1. [官方博文：什么场景应该使用泛型](./workspace/official-blog/when-to-use-generics.md)
 
 1. [官方博文：Go工作区模式最佳实践](./workspace/official-blog/go1.18-workspace-best-practice.md)
