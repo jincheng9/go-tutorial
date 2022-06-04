@@ -40,7 +40,7 @@ type Request struct {
 }
 ```
 
-我们要把接受到的JSON请求反序列化为`Request`结构体类型。
+我们要把接收到的JSON请求反序列化为`Request`结构体类型。
 
 ```go
 {
