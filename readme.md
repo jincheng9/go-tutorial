@@ -98,6 +98,9 @@
   * [第1篇：未知枚举值](./workspace/senior/p28/01-unknown-enum-value.md)
   * [第2篇：go benchmark性能测试的坑](./workspace/senior/p28/02-go-benchmark-inline.md)
 
+* 高性能Go
+  * [high performance go workshop](https://dave.cheney.net/high-performance-go-workshop/dotgo-paris.html)
+
 
 
 

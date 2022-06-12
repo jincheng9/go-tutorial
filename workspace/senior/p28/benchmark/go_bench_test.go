@@ -13,8 +13,12 @@ func TestAdd(t *testing.T) {
 	}
 }
 
+// var result int
+
 func BenchmarkAdd(b *testing.B) {
+	// var r int
 	for i := 0; i < b.N; i++ {
 		add(1, 2)
 	}
+	// result = r
 }
