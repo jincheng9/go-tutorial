@@ -12,13 +12,71 @@
 
 `go test`支持benchmark性能测试，但是你知道这里可能有坑么？
 
-一个常见的坑是编译器优化。
+一个常见的坑是编译器优化，我们来看一个具体的例子：
+
+```go
+func add(a int, b int) int {
+	return a + b
+}
+```
+
+现在我们要对`add`函数做性能测试，可能会编写如下测试代码：
+
+```go
+func BenchmarkWrong(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		add(1000000000, 1000000001)
+	}
+}
+```
+
+这里可能有什么坑呢？对于编译器而言，`add`函数是一个叶子函数(leaf function)，即`add`函数本身没有调用其它函数，所以编译器会对`add`函数的调用做内联(inline)优化，这会导致性能测试的结果不准确。
 
 
 
 ## 最佳实践
 
 
+
+```go
+var result int
+
+func BenchmarkCorrect(b *testing.B) {
+	b.ResetTimer()
+	var r int
+	for i := 0; i < b.N; i++ {
+		r = add(1000000000, 1000000001)
+	}
+	result = r
+}
+```
+
+
+
+我们对比看看性能测试的结果
+
+```bash
+$ go test -v -bench . -count=3
+goos: darwin
+goarch: amd64
+pkg: example.com/benchmark
+cpu: Intel(R) Core(TM) i5-5250U CPU @ 1.60GHz
+BenchmarkWrong
+BenchmarkWrong-4        1000000000               0.4009 ns/op
+BenchmarkWrong-4        1000000000               0.4139 ns/op
+BenchmarkWrong-4        1000000000               0.4065 ns/op
+BenchmarkCorrect
+BenchmarkCorrect-4      1000000000               0.5590 ns/op
+BenchmarkCorrect-4      1000000000               0.5500 ns/op
+BenchmarkCorrect-4      1000000000               0.5654 ns/op
+PASS
+ok      example.com/benchmark   3.320s
+```
+
+源码地址：[benchmark性能测试源代码](https://github.com/jincheng9/go-tutorial/tree/main/workspace/senior/p28/benchmark)。
+
+## 
 
 ## 开源地址
 
