@@ -37,7 +37,7 @@ func BenchmarkWrong(b *testing.B) {
 
 ## 最佳实践
 
-
+一个解决方案是将函数调用的结果赋值给一个全局变量，如下所示：
 
 ```go
 var result int
@@ -52,9 +52,11 @@ func BenchmarkCorrect(b *testing.B) {
 }
 ```
 
+这样处理后，编译器就不知道
 
 
-我们对比看看性能测试的结果
+
+我们对比看看`BenchmarkWrong`和`BenchmarkCorrect`的性能测试结果
 
 ```bash
 $ go test -v -bench . -count=3
@@ -74,9 +76,11 @@ PASS
 ok      example.com/benchmark   3.320s
 ```
 
-源码地址：[benchmark性能测试源代码](https://github.com/jincheng9/go-tutorial/tree/main/workspace/senior/p28/benchmark)。
 
-## 
+
+测试源码地址：[benchmark性能测试源代码](https://github.com/jincheng9/go-tutorial/tree/main/workspace/senior/p28/benchmark)，大家可以下载到本地进行测试。
+
+
 
 ## 开源地址
 
