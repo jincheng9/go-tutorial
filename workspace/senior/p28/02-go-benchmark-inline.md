@@ -97,3 +97,4 @@ ok      example.com/benchmark   3.320s
 ## References
 
 * https://itnext.io/the-top-10-most-common-mistakes-ive-seen-in-go-projects-4b79d4f6cd65
+* https://dave.cheney.net/2020/04/25/inlining-optimisations-in-go
