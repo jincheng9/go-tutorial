@@ -56,7 +56,7 @@ func BenchmarkCorrect(b *testing.B) {
 
 
 
-我们对比看看`BenchmarkWrong`和`BenchmarkCorrect`的性能测试结果
+我们对比看看`BenchmarkWrong`和`BenchmarkCorrect`的性能测试结果：
 
 ```bash
 $ go test -v -bench . -count=3
