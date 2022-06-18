@@ -20,13 +20,12 @@ func BenchmarkWrong(b *testing.B) {
 	}
 }
 
-var result int
+// var result int
 
-func BenchmarkCorrect(b *testing.B) {
-	b.ResetTimer()
-	var r int
-	for i := 0; i < b.N; i++ {
-		r = add(1000000000, 1000000001)
-	}
-	result = r
-}
+// func BenchmarkCorrect(b *testing.B) {
+// 	var r int
+// 	for i := 0; i < b.N; i++ {
+// 		r = add(1000000000, 1000000001)
+// 	}
+// 	result = r
+// }
