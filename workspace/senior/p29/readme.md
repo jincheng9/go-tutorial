@@ -6,11 +6,13 @@ Go官方团队在2022.06.11发布了Go 1.19 Beta 1版本，Go 1.19的正式relea
 
 让我们先堵为快，看看Go 1.19给我们带来了哪些变化。
 
-
+这是Go 1.19版本更新内容详解的第1篇，欢迎大家关注公众号，及时获取本系列最新更新。
 
 ## Go 1.19发布清单
 
-和Go 1.18相比，改动比较小，涉及到语言(Language)、内存模型(Memory Model)、可移植性(Ports)、Go Tool工具链、运行时(Runtime)、编译器(Compiler)、汇编器(Assembler)、链接器(Linker)和核心库(Core library)。我们逐个看看具体都有哪些变化。
+和Go 1.18相比，改动相对较小，主要涉及语言(Language)、内存模型(Memory Model)、可移植性(Ports)、Go Tool工具链、运行时(Runtime)、编译器(Compiler)、汇编器(Assembler)、链接器(Linker)和核心库(Core library)等方面的优化。
+
+我们逐个看看具体都有哪些变化。
 
 ### 语言变化
 
@@ -65,27 +67,28 @@ func(t T[T]) print() {
 
 ### 内存模型
 
-[Go内存模型](https://tip.golang.org/ref/mem) 做了修改，和C, C++, Java, JavaScript, Rust和Swift保持一致。Go只提供顺序一致性(sequentially consistent)的原子操作，
+[Go内存模型](https://tip.golang.org/ref/mem) 在Go 1.19版本做了修改，和C, C++, Java, JavaScript, Rust和Swift对齐。Go只提供顺序一致原子操作(sequentially consistent atomics)，不提供其它语言里更宽松的内存模型，比如因果一致性(casual consistency)、最终一致性(eventual consistency)。
 
+伴随着内存模型的修改，Go 1.19版本在`sync/atomic`包里引入了新的类型，例如[atomic.Int64](https://pkg.go.dev/sync/atomic@master#Int64)和[atomic.Pointer[T]](https://pkg.go.dev/sync/atomic@master#Pointer)，这些新的类型可以让开发者使用原子操作时更容易。
 
-
-想了解Go原子操作和使用方法，推荐大家阅读：
+**想了解Go原子操作和使用方法，推荐大家阅读**：
 
 * [Go并发编程之原子操作sync/atomic](https://mp.weixin.qq.com/s?__biz=Mzg2MTcwNjc1Mg==&mid=2247484082&idx=1&sn=934787c9829391ba743bd611818ad0e2&chksm=ce124dddf965c4cb7d0f2d9d001ab4b7d949fbe87c4c8b7ee8d7498946824ec9aa6581cfe986&token=1782465473&lang=zh_CN#rd)
 
 ### 可移植性
 
-### Go Tool工具链
+Go 1.19版本支持Linux操作系统上的中国龙芯64位CPU架构。
 
-### 运行时
+```bash
+GOOS=linux
+GOARCH=loong64
+```
 
-### 编译器
+此外，Go现在支持在`riscv64`架构上使用寄存器来传递函数参数和函数执行结果。性能测试表明，`riscv64`架构上的Go语言性能提升了大概10%。
 
-### 汇编器
+## 总结
 
-### 链接器
-
-### 核心库
+下一篇会介绍Go 1.19在Go Tool工具链、运行时、编译器、汇编器、链接器和核心库的优化工作，有一些内容值得学习，欢迎大家关注。
 
 
 
@@ -112,3 +115,4 @@ func(t T[T]) print() {
 ## References
 
 * https://tip.golang.org/doc/go1.19
+* https://int64.me/2020/%E4%B8%80%E8%87%B4%E6%80%A7%E6%A8%A1%E5%9E%8B%E7%AC%94%E8%AE%B0.html

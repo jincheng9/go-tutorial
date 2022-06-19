@@ -102,7 +102,7 @@
   * [high performance go workshop](https://dave.cheney.net/high-performance-go-workshop/dotgo-paris.html)
 
 * Go版本演进
-  * [Go 1.19要来了，看看都有哪些变化](./workspace/senior/p29)
+  * [Go 1.19要来了，看看都有哪些变化：第1篇](./workspace/senior/p29/readme.md)
 
 
 
