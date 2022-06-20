@@ -4,7 +4,7 @@
 
 Go官方团队在2022.06.11发布了Go 1.19 Beta 1版本，Go 1.19的正式release版本预计会在今年8月份发布。
 
-让我们先堵为快，看看Go 1.19给我们带来了哪些变化。
+让我们先睹为快，看看Go 1.19给我们带来了哪些变化。
 
 这是Go 1.19版本更新内容详解的第1篇，欢迎大家关注公众号，及时获取本系列最新更新。
 
@@ -50,7 +50,7 @@ func(t T[T]) print() {
 
 > The scope of an identifier denoting a type parameter of a function or declared by a method receiver is the function body and all parameter lists of the function.
 
-这段说明对应到上面的代码，编译器会认为`print`方法里的第2个`T`(类型参数`T`)的作用域是函数体以及函数的参数列表(这里的参数列表包括方法receiver parameter list和函数名后面的参数列表)。因此第2个`T`就覆盖了的1个`T` ，所以编译器会提示`T is not a generic type`。
+这段说明对应到上面的代码，编译器会认为`print`方法里的第2个`T`(类型参数`T`)的作用域是函数体以及函数的参数列表(这里的参数列表包括方法receiver parameter list和函数名后面的参数列表)。因此第2个`T`就覆盖了第1个`T` ，所以编译器会提示`T is not a generic type`。
 
 [这个问题](https://github.com/golang/go/issues/52038)是由Go101作者提出来的，Go泛型的设计者[Robert Griesemer](https://github.com/griesemer)认领了这个问题，把类型参数的作用域按照如下说明进行调整：
 
