@@ -18,11 +18,19 @@ Go官方团队在2022.06.11发布了Go 1.19 Beta 1版本，Go 1.19的正式relea
 
 Go 1.19 adds support for links, lists, and clearer headings in doc comments. As part of this change, [`gofmt`](https://tip.golang.org/cmd/gofmt) now reformats doc comments to make their rendered meaning clearer. See “[Go Doc Comments](https://tip.golang.org/doc/comment)” for syntax details and descriptions of common mistakes now highlighted by `gofmt`. As another part of this change, the new package [go/doc/comment](https://tip.golang.org/pkg/go/doc/comment) provides parsing and reformatting of doc comments as well as support for rendering them to HTML, Markdown, and text.
 
-### New `unix` build constraint
+### 新的编译约束 `unix` 
 
-The build constraint `unix` is now recognized in `//go:build` lines. The constraint is satisfied if the target operating system, also known as `GOOS`, is a Unix or Unix-like system. For the 1.19 release it is satisfied if `GOOS` is one of `aix`, `android`, `darwin`, `dragonfly`, `freebsd`, `hurd`, `illumos`, `ios`, `linux`, `netbsd`, `openbsd`, or `solaris`. In future releases the `unix` constraint may match additional newly supported operating systems.
+Go语言支持使用编译约束(build constraint)进行条件编译。Go 1.19版本新增了编译约束 `unix` ，可以在`//go:build`后面使用`unix`。
 
-### Go command
+```go
+//go:build unix
+```
+
+`unix`表示编译的目标操作系统是Unix或者类Unix系统。对于Go 1.19版本而言，如果`GOOS`是 `aix`, `android`, `darwin`, `dragonfly`, `freebsd`, `hurd`, `illumos`, `ios`, `linux`, `netbsd`, `openbsd`, 或 `solaris`中的某一个，那就满足`unix`这个编译约束。
+
+未来`unix`约束还会匹配一些新的类Unix操作系统。 
+
+### Go命令
 
 The `-trimpath` flag, if set, is now included in the build settings stamped into Go binaries by `go` `build`, and can be examined using [`go` `version` `-m`](https://pkg.go.dev/cmd/go#hdr-Print_Go_version) or [`debug.ReadBuildInfo`](https://pkg.go.dev/runtime/debug#ReadBuildInfo).
 
@@ -37,6 +45,8 @@ The `go` command now caches information necessary to load some modules, which sh
 ### Vet
 
 The `vet` checker “errorsas” now reports when [`errors.As`](https://tip.golang.org/pkg/errors/#As) is called with a second argument of type `*error`, a common mistake.
+
+
 
 **想了解Go泛型的使用方法、设计思路和最佳实践，推荐大家阅读**：
 
