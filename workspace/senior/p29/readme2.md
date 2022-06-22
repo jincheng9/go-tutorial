@@ -12,11 +12,21 @@ Go官方团队在2022.06.11发布了Go 1.19 Beta 1版本，Go 1.19的正式relea
 
 和Go 1.18相比，改动相对较小，主要涉及语言(Language)、内存模型(Memory Model)、可移植性(Ports)、Go Tool工具链、运行时(Runtime)、编译器(Compiler)、汇编器(Assembler)、链接器(Linker)和核心库(Core library)等方面的优化。
 
-第1篇详细介绍了Go 1.19在语言、内存模型、可移植性方面的改进，本文重点介绍Go 1.19版本在Go Tool工具链方面的变化。
+第1篇详细介绍了Go 1.19在语言、内存模型、可移植性方面的改进。
 
-### Doc Comments
+本文重点介绍Go 1.19版本在Go Tool工具链方面的变化。
 
-Go 1.19 adds support for links, lists, and clearer headings in doc comments. As part of this change, [`gofmt`](https://tip.golang.org/cmd/gofmt) now reformats doc comments to make their rendered meaning clearer. See “[Go Doc Comments](https://tip.golang.org/doc/comment)” for syntax details and descriptions of common mistakes now highlighted by `gofmt`. As another part of this change, the new package [go/doc/comment](https://tip.golang.org/pkg/go/doc/comment) provides parsing and reformatting of doc comments as well as support for rendering them to HTML, Markdown, and text.
+### 文档注释
+
+[文档注释(doc comments)](https://tip.golang.org/doc/comment) 是Go语言里的对包(package), 常量(const), 函数(func), 类型(type)和变量(var)声明的一种注释规范，按照这个规范来注释的话，就可以使用`go doc`命令可以生成对应的代码说明文档。
+
+像大家熟知的https://pkg.go.dev/里的说明文档就是通过编写规范的文档注释来生成的。
+
+Go 1.19 在文档注释里新增了对于链接、列表和更清晰的标题的支持，可以参考“[Go Doc Comments](https://tip.golang.org/doc/comment)” 了解语法细节。
+
+作为这个修改的一部分，`gofmt`现在会把文档注释重新格式化，让文档样式展示更清晰。
+
+同时，新增了一个package:  [go/doc/comment](https://tip.golang.org/pkg/go/doc/comment)，可以用于解析和重新格式化文档注释，并且支持把文档注释渲染为HTML, Markdown和text格式。
 
 ### 新的编译约束 `unix` 
 
@@ -44,7 +54,7 @@ The `go` command now caches information necessary to load some modules, which sh
 
 ### Vet
 
-The `vet` checker “errorsas” now reports when [`errors.As`](https://tip.golang.org/pkg/errors/#As) is called with a second argument of type `*error`, a common mistake.
+`go vet`新增了一个`errorsas`检查规则，可以对`errors.As`函数调用进行检查，如果`errors.As`的第2个参数是`*error`类型，`go vet`会进行提示。
 
 
 
