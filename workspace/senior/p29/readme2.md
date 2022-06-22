@@ -50,7 +50,7 @@ The `-trimpath` flag, if set, is now included in the build settings stamped into
 
 `go` `env` now quotes entries that contain spaces in the `CGO_CFLAGS`, `CGO_CPPFLAGS`, `CGO_CXXFLAGS`, `CGO_FFLAGS`, `CGO_LDFLAGS`, and `GOGCCFLAGS` variables it reports.
 
-The `go` command now caches information necessary to load some modules, which should result in a speed-up of some `go` `list` invocations.
+`go`命令现在会缓存必要的信息用于加载一些模块，这会带来某些`go list`调用的加速。
 
 ### Vet
 
