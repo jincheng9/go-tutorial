@@ -56,6 +56,8 @@ The `-trimpath` flag, if set, is now included in the build settings stamped into
 
 `go vet`新增了一个`errorsas`检查规则，可以对`errors.As`函数调用进行检查，如果`errors.As`的第2个参数是`*error`类型，`go vet`会进行提示。
 
+之所以要做这个优化，是因为`errors`这个package里的`As`函数的第2个参数应该是
+
 
 
 **想了解Go泛型的使用方法、设计思路和最佳实践，推荐大家阅读**：
