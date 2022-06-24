@@ -18,9 +18,9 @@ Go官方团队在2022.06.11发布了Go 1.19 Beta 1版本，Go 1.19的正式relea
 
 ### 文档注释
 
-[文档注释(doc comments)](https://tip.golang.org/doc/comment) 是Go语言里的对包(package), 常量(const), 函数(func), 类型(type)和变量(var)声明的一种注释规范，按照这个规范来注释的话，就可以使用`go doc`命令可以生成对应的代码说明文档。
+[文档注释(doc comments)](https://tip.golang.org/doc/comment) 是Go语言里的对包(package), 常量(const), 函数(func), 类型(type)和变量(var)声明的一种注释规范。按照这个规范来注释，就可以使用`go doc`命令生成对应的代码说明文档。
 
-像大家熟知的https://pkg.go.dev/里的说明文档就是通过编写规范的文档注释来生成的。
+像大家熟知的https://pkg.go.dev/里的说明文档就是通过编写符合doc comments规范的文档注释来生成的。
 
 Go 1.19 在文档注释里新增了对于链接、列表和更清晰的标题的支持，可以参考“[Go Doc Comments](https://tip.golang.org/doc/comment)” 了解语法细节。
 
