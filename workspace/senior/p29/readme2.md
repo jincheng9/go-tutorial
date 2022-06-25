@@ -42,33 +42,44 @@ Go语言支持使用编译约束(build constraint)进行条件编译。Go 1.19�
 
 ### Go命令
 
-`go build`如果使用`-trimpath`标记，会在生成的可执行文件里打上`trimpath`标签，可以使用 [`go` `version` `-m`](https://pkg.go.dev/cmd/go#hdr-Print_Go_version) 或[`debug.ReadBuildInfo`](https://pkg.go.dev/runtime/debug#ReadBuildInfo) 检查可执行文件是否是使用`-trimpath`标记编译生成的。
+`go build`如果使用`-trimpath`标记，会在生成的可执行文件里打上`trimpath`标签，我们可以使用 [`go` `version` `-m`](https://pkg.go.dev/cmd/go#hdr-Print_Go_version) 或[`debug.ReadBuildInfo`](https://pkg.go.dev/runtime/debug#ReadBuildInfo) 检查可执行文件是否是使用`-trimpath`标记编译生成的。
 
 **备注**：编译的时候带上`trimpath`标记可以去除Go程序运行时打印的堆栈信息里包含的Go程序的编译路径和编译机用户信息，避免信息泄露。
 
 `go` `generate` 现在会在生成器环境里设置 `GOROOT` 环境变量，所以即使使用了`-trimpath`进行编译，生成器也可以精准定位到`GOROOT`的路径。
 
-`go` `test` 和 `go` `generate` now place `GOROOT/bin` at the beginning of the `PATH` used for the subprocess, so tests and generators that execute the `go` command will resolve it to same `GOROOT`.
+`go` `test` 和 `go` `generate` 运行时会把 `GOROOT/bin` 放在 `PATH` 环境变量的开头，这样设计后，`go test`和`go generate`执行的时候可以解析到同一个`GOROOT`。解决的是这个[GitHub Issue](https://github.com/golang/go/issues/23635)。
 
-`go` `env` now quotes entries that contain spaces in the `CGO_CFLAGS`, `CGO_CPPFLAGS`, `CGO_CXXFLAGS`, `CGO_FFLAGS`, `CGO_LDFLAGS`, and `GOGCCFLAGS` variables it reports.
+`go` `env`会把环境变量的值中带有空格的加上双引号包围起来，包括`CGO_CFLAGS`, `CGO_CPPFLAGS`, `CGO_CXXFLAGS`, `CGO_FFLAGS`, `CGO_LDFLAGS`, and `GOGCCFLAGS` 这些环境变量。解决的是Windows环境下的bug，详情可以参考[GitHub Issue](https://github.com/golang/go/issues/45637)。
+
+```bash
+CGO_CFLAGS="-g -O2"
+CGO_CPPFLAGS=""
+CGO_CXXFLAGS="-g -O2"
+CGO_FFLAGS="-g -O2"
+CGO_LDFLAGS="-g -O2"
+PKG_CONFIG="pkg-config"
+GOGCCFLAGS="-fPIC -arch x86_64 -m64 -pthread -fno-caret-diagnostics -Qunused-arguments -fmessage-length=0 -fdebug-prefix-map=/var/folders/pv/_x849j6n22x37xxd9cstgwkr0000gn/T/go-build4165054210=/tmp/go-build -gno-record-gcc-switches -fno-common"
+```
 
 `go`命令现在会缓存必要的信息用于加载模块(module)，这会带来`go list`调用的加速。
 
 对`-trimpath`和`go generate`不了解的，推荐阅读官方文档：
 
 * [trimpath and go generate](https://pkg.go.dev/cmd/go#hdr-Print_Go_version)
+* [go generate介绍](https://mp.weixin.qq.com/s/YBGppDhhBMorqkSzvufHlA)
 
 ### Vet
 
-`go vet`新增了一个`errorsas`检查规则，可以对`errors.As`函数调用进行检查，如果`errors.As`的第2个参数是`*error`类型，`go vet`会进行提示。
+`go vet`新增了一个`errorsas`检查规则，可以对`errors.As`函数调用进行正确性检查。
 
-之所以要做这个优化，是因为`errors`这个package里的`As`函数的第2个参数应该是
+如果`errors.As`的第2个参数是`*error`类型，`go vet`会提示错误，这也是大家使用`errors.As`常犯的一个错误。
 
 
 
 ## 推荐阅读
 
-Go 1.19版本变更内容第一期
+[Go 1.19版本变更内容第1篇](https://mp.weixin.qq.com/s/3xfCgtpEGu5Vm3XSSIze5w)，第1篇主要涉及到Go泛型的细小改动以及Go内存模型和原子操作的优化。
 
 **想了解Go泛型的使用方法、设计思路和最佳实践，推荐大家阅读**：
 
