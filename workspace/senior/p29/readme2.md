@@ -50,7 +50,7 @@ Go语言支持使用编译约束(build constraint)进行条件编译。Go 1.19�
 
 `go` `test` 和 `go` `generate` 运行时会把 `GOROOT/bin` 放在 `PATH` 环境变量的开头，这样设计后，`go test`和`go generate`执行的时候可以解析到同一个`GOROOT`。解决的是这个[GitHub Issue](https://github.com/golang/go/issues/23635)。
 
-`go` `env`会把环境变量的值中带有空格的加上双引号包围起来，包括`CGO_CFLAGS`, `CGO_CPPFLAGS`, `CGO_CXXFLAGS`, `CGO_FFLAGS`, `CGO_LDFLAGS`, and `GOGCCFLAGS` 这些环境变量。解决的是Windows环境下的bug，详情可以参考[GitHub Issue](https://github.com/golang/go/issues/45637)。
+`go` `env`会把环境变量的值中带有空格的加上双引号括起来，包括`CGO_CFLAGS`, `CGO_CPPFLAGS`, `CGO_CXXFLAGS`, `CGO_FFLAGS`, `CGO_LDFLAGS`, and `GOGCCFLAGS` 这些环境变量。解决的是Windows环境下不带空格会报错的bug，详情可以参考[GitHub Issue](https://github.com/golang/go/issues/45637)。
 
 ```bash
 CGO_CFLAGS="-g -O2"
