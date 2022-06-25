@@ -42,15 +42,21 @@ Go语言支持使用编译约束(build constraint)进行条件编译。Go 1.19�
 
 ### Go命令
 
-The `-trimpath` flag, if set, is now included in the build settings stamped into Go binaries by `go` `build`, and can be examined using [`go` `version` `-m`](https://pkg.go.dev/cmd/go#hdr-Print_Go_version) or [`debug.ReadBuildInfo`](https://pkg.go.dev/runtime/debug#ReadBuildInfo).
+`go build`如果使用`-trimpath`标记，会在生成的可执行文件里打上`trimpath`标签，可以使用 [`go` `version` `-m`](https://pkg.go.dev/cmd/go#hdr-Print_Go_version) 或[`debug.ReadBuildInfo`](https://pkg.go.dev/runtime/debug#ReadBuildInfo) 检查可执行文件是否是使用`-trimpath`标记编译生成的。
 
-`go` `generate` now sets the `GOROOT` environment variable explicitly in the generator's environment, so that generators can locate the correct `GOROOT` even if built with `-trimpath`.
+**备注**：编译的时候带上`trimpath`标记可以去除Go程序运行时打印的堆栈信息里包含的Go程序的编译路径和编译机用户信息，避免信息泄露。
 
-`go` `test` and `go` `generate` now place `GOROOT/bin` at the beginning of the `PATH` used for the subprocess, so tests and generators that execute the `go` command will resolve it to same `GOROOT`.
+`go` `generate` 现在会在生成器环境里设置 `GOROOT` 环境变量，所以即使使用了`-trimpath`进行编译，生成器也可以精准定位到`GOROOT`的路径。
+
+`go` `test` 和 `go` `generate` now place `GOROOT/bin` at the beginning of the `PATH` used for the subprocess, so tests and generators that execute the `go` command will resolve it to same `GOROOT`.
 
 `go` `env` now quotes entries that contain spaces in the `CGO_CFLAGS`, `CGO_CPPFLAGS`, `CGO_CXXFLAGS`, `CGO_FFLAGS`, `CGO_LDFLAGS`, and `GOGCCFLAGS` variables it reports.
 
-`go`命令现在会缓存必要的信息用于加载一些模块，这会带来某些`go list`调用的加速。
+`go`命令现在会缓存必要的信息用于加载模块(module)，这会带来`go list`调用的加速。
+
+对`-trimpath`和`go generate`不了解的，推荐阅读官方文档：
+
+* [trimpath and go generate](https://pkg.go.dev/cmd/go#hdr-Print_Go_version)
 
 ### Vet
 
@@ -60,14 +66,16 @@ The `-trimpath` flag, if set, is now included in the build settings stamped into
 
 
 
+## 推荐阅读
+
+Go 1.19版本变更内容第一期
+
 **想了解Go泛型的使用方法、设计思路和最佳实践，推荐大家阅读**：
 
 * [官方教程：Go泛型入门](https://mp.weixin.qq.com/s?__biz=Mzg2MTcwNjc1Mg==&mid=2247483720&idx=1&sn=57ec4877dfd364a59deacf1e74a4fb66&chksm=ce124e27f965c731432dcc89d1e0563cf84baaef482eaa068a91bee61f10cf85b433923b83b4&token=1782465473&lang=zh_CN#rd)
 * [一文读懂Go泛型设计和使用场景](https://mp.weixin.qq.com/s?__biz=Mzg2MTcwNjc1Mg==&mid=2247483731&idx=1&sn=b2258b28e2f3c16b065a5a1b22c15b0d&chksm=ce124e3cf965c72a6a22e0ed15deda8238567407bbd7157a79753fc8b605727ab2153009493c&token=1782465473&lang=zh_CN#rd)
 * [重磅：Go 1.18将移除用于泛型的constraints包](https://mp.weixin.qq.com/s?__biz=Mzg2MTcwNjc1Mg==&mid=2247483855&idx=1&sn=6ab4aeb140a1a08268dc8a0284a6f375&chksm=ce124ea0f965c7b6776061960d71e4ffb30484a82041f5b1d4786c4b49c4ffabc07a28b1cd48&token=1782465473&lang=zh_CN#rd)
 * [泛型最佳实践：Go泛型设计者教你如何用泛型](https://mp.weixin.qq.com/s?__biz=Mzg2MTcwNjc1Mg==&mid=2247484015&idx=1&sn=576b2d8b84b3a8ce5bdd6952c2b84062&chksm=ce124d00f965c416b07dcb81c4dcb9cf75859b2787d4f00ec8c80b37ca42e58cc651420a3b33&token=1782465473&lang=zh_CN#rd)
-
-
 
 **想了解Go原子操作和使用方法，推荐大家阅读**：
 
