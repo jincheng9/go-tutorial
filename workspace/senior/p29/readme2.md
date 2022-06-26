@@ -24,7 +24,7 @@ Go官方团队在2022.06.11发布了Go 1.19 Beta 1版本，Go 1.19的正式relea
 
 Go 1.19 在文档注释里新增了对于链接、列表和更清晰的标题的支持，可以参考“[Go Doc Comments](https://tip.golang.org/doc/comment)” 了解语法细节。
 
-作为这个修改的一部分，`gofmt`现在会把文档注释重新格式化，让文档样式展示更清晰。
+作为这个修改的一部分，`gofmt`现在会把文档注释重新格式化，让文档展示的样式更清晰。
 
 同时，新增了一个package:  [go/doc/comment](https://tip.golang.org/pkg/go/doc/comment)，可以用于解析和重新格式化文档注释，并且支持把文档注释渲染为HTML, Markdown和text格式。
 
