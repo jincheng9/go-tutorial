@@ -177,7 +177,7 @@ cd grpc-go/examples/helloworld
 * 第四步，在客户端调用新定义的rpc方法，获取响应结果。在`greeter_client/main.go`添加如下代码：
 
   ```go
-  r2, err2 := c.SayHelloAgain(ctx, &pb.HelloRequest{Name: name})
+  r2, err2 := c.SayHelloAgain(ctx, &pb.HelloRequest{Name: *name})
   if err2 != nil {
   	log.Fatalf("could not greet: %v", err2)
   }
