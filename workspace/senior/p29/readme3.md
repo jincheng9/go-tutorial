@@ -20,19 +20,37 @@ Go官方团队在2022.06.11发布了Go 1.19 Beta 1版本，Go 1.19的正式relea
 
 ## 运行时
 
+运行时现在支持软内存限制(soft memory limit)。这个内存限制包括了堆里的内存以及所有其它被运行时管理的内存
 
+The runtime now includes support for a soft memory limit. This memory limit includes the Go heap and all other memory managed by the runtime, and excludes external memory sources such as mappings of the binary itself, memory managed in other languages, and memory held by the operating system on behalf of the Go program. This limit may be managed via [`runtime/debug.SetMemoryLimit`](https://tip.golang.org/pkg/runtime/debug/#SetMemoryLimit) or the equivalent [`GOMEMLIMIT`](https://tip.golang.org/pkg/runtime/#hdr-Environment_Variables) environment variable. The limit works in conjunction with [`runtime/debug.SetGCPercent`](https://tip.golang.org/pkg/runtime/debug/#SetGCPercent) / [`GOGC`](https://tip.golang.org/pkg/runtime/#hdr-Environment_Variables), and will be respected even if `GOGC=off`, allowing Go programs to always make maximal use of their memory limit, improving resource efficiency in some cases. See [the GC guide](https://tip.golang.org/doc/gc-guide) for a detailed guide explaining the soft memory limit in more detail, as well as a variety of common use-cases and scenarios. Please note that small memory limits, on the order of tens of megabytes or less, are less likely to be respected due to external latency factors, such as OS scheduling. See [issue 52433](https://go.dev/issue/52433) for more details. Larger memory limits, on the order of hundreds of megabytes or more, are stable and production-ready.
+
+In order to limit the effects of GC thrashing when the program's live heap size approaches the soft memory limit, the Go runtime also attempts to limit total GC CPU utilization to 50%, excluding idle time, choosing to use more memory over preventing application progress. In practice, we expect this limit to only play a role in exceptional cases, and the new [runtime metric](https://tip.golang.org/pkg/runtime/metrics/#hdr-Supported_metrics) `/gc/limiter/last-enabled:gc-cycle` reports when this last occurred.
+
+The runtime now schedules many fewer GC worker goroutines on idle operating system threads when the application is idle enough to force a periodic GC cycle.
+
+The runtime will now allocate initial goroutine stacks based on the historic average stack usage of goroutines. This avoids some of the early stack growth and copying needed in the average case in exchange for at most 2x wasted space on below-average goroutines.
+
+On Unix operating systems, Go programs that import package [os](https://tip.golang.org/pkg/os/) now automatically increase the open file limit (`RLIMIT_NOFILE`) to the maximum allowed value; that is, they change the soft limit to match the hard limit. This corrects artificially low limits set on some systems for compatibility with very old C programs using the [*select*](https://en.wikipedia.org/wiki/Select_(Unix)) system call. Go programs are not helped by that limit, and instead even simple programs like `gofmt` often ran out of file descriptors on such systems when processing many files in parallel. One impact of this change is that Go programs that in turn execute very old C programs in child processes may run those programs with too high a limit. This can be corrected by setting the hard limit before invoking the Go program.
+
+Unrecoverable fatal errors (such as concurrent map writes, or unlock of unlocked mutexes) now print a simpler traceback excluding runtime metadata (equivalent to a fatal panic) unless `GOTRACEBACK=system` or `crash`. Runtime-internal fatal error tracebacks always include full metadata regardless of the value of `GOTRACEBACK`
+
+Support for debugger-injected function calls has been added on ARM64, enabling users to call functions from their binary in an interactive debugging session when using a debugger that is updated to make use of this functionality.
+
+The [address sanitizer support added in Go 1.18](https://tip.golang.org/doc/go1.18#go-build-asan) now handles function arguments and global variables more precisely.
 
 ## 编译器
 
+The compiler now uses a [jump table](https://en.wikipedia.org/wiki/Branch_table) to implement large integer and string switch statements. Performance improvements for the switch statement vary but can be on the order of 20% faster. (`GOARCH=amd64` and `GOARCH=arm64` only)
 
+The Go compiler now requires the `-p=importpath` flag to build a linkable object file. This is already supplied by the `go` command and by Bazel. Any other build systems that invoke the Go compiler directly will need to make sure they pass this flag as well.
 
 ## 汇编器
 
-
+Like the compiler, the assembler now requires the `-p=importpath` flag to build a linkable object file. This is already supplied by the `go` command. Any other build systems that invoke the Go assembler directly will need to make sure they pass this flag as well.
 
 ## 链接器
 
-
+On ELF platforms, the linker now emits compressed DWARF sections in the standard gABI format (`SHF_COMPRESSED`), instead of the legacy `.zdebug` format.
 
 ## 推荐阅读
 
