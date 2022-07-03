@@ -40,7 +40,9 @@ The [address sanitizer support added in Go 1.18](https://tip.golang.org/doc/go1.
 
 ## 编译器
 
-The compiler now uses a [jump table](https://en.wikipedia.org/wiki/Branch_table) to implement large integer and string switch statements. Performance improvements for the switch statement vary but can be on the order of 20% faster. (`GOARCH=amd64` and `GOARCH=arm64` only)
+针对`GOARCH=amd64` 和 `GOARCH=arm64` 架构，编译器现在使用跳表来实现大整数和字符串的switch语句。
+
+switch语句的性能提升了大概20%左右。
 
 The Go compiler now requires the `-p=importpath` flag to build a linkable object file. This is already supplied by the `go` command and by Bazel. Any other build systems that invoke the Go compiler directly will need to make sure they pass this flag as well.
 
