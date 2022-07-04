@@ -40,19 +40,23 @@ The [address sanitizer support added in Go 1.18](https://tip.golang.org/doc/go1.
 
 ## 编译器
 
-针对`GOARCH=amd64` 和 `GOARCH=arm64` 架构，编译器现在使用跳表来实现大整数和字符串的switch语句。
+针对`GOARCH=amd64` 和 `GOARCH=arm64` 架构，编译器现在使用跳表(jump table)来实现大整数和字符串的switch语句。
 
-switch语句的性能提升了大概20%左右。
+带来的优化效果是switch语句的性能提升了大概20%左右。
 
-The Go compiler now requires the `-p=importpath` flag to build a linkable object file. This is already supplied by the `go` command and by Bazel. Any other build systems that invoke the Go compiler directly will need to make sure they pass this flag as well.
+Go编译器现在需要 `-p=importpath` 标记来编译出一个可链接的目标文件。`go`命令和Bazel现在已经支持`-p=importpath`标记。
+
+任何其它直接调用Go编译器的编译系统也需要确保传递了这个标记参数。
 
 ## 汇编器
 
-Like the compiler, the assembler now requires the `-p=importpath` flag to build a linkable object file. This is already supplied by the `go` command. Any other build systems that invoke the Go assembler directly will need to make sure they pass this flag as well.
+和编译器一样，汇编器现在也需要`-p=importpath`标记来编译出一个可链接的目标文件。`go`命令已经支持该标记参数。
+
+任何其它直接调用Go汇编器的编译系统也需要确保传递了这个标记参数。
 
 ## 链接器
 
-On ELF platforms, the linker now emits compressed DWARF sections in the standard gABI format (`SHF_COMPRESSED`), instead of the legacy `.zdebug` format.
+在ELF(Executable and Linkable Format)平台上，链接器现在会以gABI格式(`SHF_COMPRESSED`压缩方式)压缩DWARF章节，而不是传统的 `.zdebug` 格式。
 
 ## 推荐阅读
 
