@@ -20,7 +20,7 @@ Go官方团队在2022.06.11发布了Go 1.19 Beta 1版本，Go 1.19的正式relea
 
 ## 运行时
 
-运行时现在支持软内存限制(soft memory limit)。这个内存限制包括了堆里的内存以及所有其它被运行时管理的内存
+运行时现在支持软内存限制(soft memory limit)。这个内存限制包括了堆里的内存以及所有其它被运行时管理的内存，但是不包括额外的内存，比如二进制程序本身映射的内存，其它语言管理的内存，操作系统占用的内存。
 
 The runtime now includes support for a soft memory limit. This memory limit includes the Go heap and all other memory managed by the runtime, and excludes external memory sources such as mappings of the binary itself, memory managed in other languages, and memory held by the operating system on behalf of the Go program. This limit may be managed via [`runtime/debug.SetMemoryLimit`](https://tip.golang.org/pkg/runtime/debug/#SetMemoryLimit) or the equivalent [`GOMEMLIMIT`](https://tip.golang.org/pkg/runtime/#hdr-Environment_Variables) environment variable. The limit works in conjunction with [`runtime/debug.SetGCPercent`](https://tip.golang.org/pkg/runtime/debug/#SetGCPercent) / [`GOGC`](https://tip.golang.org/pkg/runtime/#hdr-Environment_Variables), and will be respected even if `GOGC=off`, allowing Go programs to always make maximal use of their memory limit, improving resource efficiency in some cases. See [the GC guide](https://tip.golang.org/doc/gc-guide) for a detailed guide explaining the soft memory limit in more detail, as well as a variety of common use-cases and scenarios. Please note that small memory limits, on the order of tens of megabytes or less, are less likely to be respected due to external latency factors, such as OS scheduling. See [issue 52433](https://go.dev/issue/52433) for more details. Larger memory limits, on the order of hundreds of megabytes or more, are stable and production-ready.
 
