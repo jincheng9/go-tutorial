@@ -20,7 +20,7 @@ Go官方团队在2022.06.11发布了Go 1.19 Beta 1版本，Go 1.19的正式relea
 
 ## 运行时
 
-###  软内存限制
+###  软内存限制(soft memory limit)
 
 运行时现在支持软内存限制(soft memory limit)。这个内存限制包括了Go heap里的内存以及所有其它被Go运行时管理的内存。如果不是被Go运行时管理的内存，比如二进制程序本身映射的内存、其它语言管理的内存，是不在这个软内存限制里的。
 
@@ -30,11 +30,13 @@ Go官方团队在2022.06.11发布了Go 1.19 Beta 1版本，Go 1.19的正式relea
 
 可以参考[the GC guide](https://tip.golang.org/doc/gc-guide)查看更多软内存限制的设计实现细节，以及一些常见使用场景和最佳实践。
 
-需要注意的是，对于数十MB或者更小的内存限制，由于考虑到一些性能问题，是有可能不会生效的，可以参考[issue 52433](https://go.dev/issue/52433)查看更多细节。对于数百MB或者更大的内存限制，目前是可以稳定运行在生产环境上的。
+需要注意的是，对于数十MB或者更小的内存限制，由于考虑到一些性能问题，软内存限制是有可能不会生效的，可以参考[issue 52433](https://go.dev/issue/52433)查看更多细节。对于数百MB或者更大的内存限制，目前是可以稳定运行在生产环境上的。
 
-为了减少
+当Go程序堆内存接近软内存限制时，为了减少GC抖动的影响，Go运行时会尝试限制GC CPU利用率不超过50%(不包括CPU空闲时间)。
 
-In order to limit the effects of GC thrashing when the program's live heap size approaches the soft memory limit, the Go runtime also attempts to limit total GC CPU utilization to 50%, excluding idle time, choosing to use more memory over preventing application progress. In practice, we expect this limit to only play a role in exceptional cases, and the new [runtime metric](https://tip.golang.org/pkg/runtime/metrics/#hdr-Supported_metrics) `/gc/limiter/last-enabled:gc-cycle` reports when this last occurred.
+在实际使用中，一般只在一些特殊场景才建议使用软内存限制，当Go堆内存占用真的超过软内存限制时，新的运行时度量( [runtime metric](https://tip.golang.org/pkg/runtime/metrics/#hdr-Supported_metrics))工具`/gc/limiter/last-enabled:gc-cycle`会报告这个事件。
+
+
 
 The runtime now schedules many fewer GC worker goroutines on idle operating system threads when the application is idle enough to force a periodic GC cycle.
 
@@ -43,6 +45,8 @@ The runtime will now allocate initial goroutine stacks based on the historic ave
 
 
 On Unix operating systems, Go programs that import package [os](https://tip.golang.org/pkg/os/) now automatically increase the open file limit (`RLIMIT_NOFILE`) to the maximum allowed value; that is, they change the soft limit to match the hard limit. This corrects artificially low limits set on some systems for compatibility with very old C programs using the [*select*](https://en.wikipedia.org/wiki/Select_(Unix)) system call. Go programs are not helped by that limit, and instead even simple programs like `gofmt` often ran out of file descriptors on such systems when processing many files in parallel. One impact of this change is that Go programs that in turn execute very old C programs in child processes may run those programs with too high a limit. This can be corrected by setting the hard limit before invoking the Go program.
+
+
 
 Unrecoverable fatal errors (such as concurrent map writes, or unlock of unlocked mutexes) now print a simpler traceback excluding runtime metadata (equivalent to a fatal panic) unless `GOTRACEBACK=system` or `crash`. Runtime-internal fatal error tracebacks always include full metadata regardless of the value of `GOTRACEBACK`
 
