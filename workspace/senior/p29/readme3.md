@@ -20,15 +20,27 @@ Go官方团队在2022.06.11发布了Go 1.19 Beta 1版本，Go 1.19的正式relea
 
 ## 运行时
 
-运行时现在支持软内存限制(soft memory limit)。这个内存限制包括了堆里的内存以及所有其它被运行时管理的内存，但是不包括额外的内存，比如二进制程序本身映射的内存，其它语言管理的内存，操作系统占用的内存。
+###  软内存限制
 
-The runtime now includes support for a soft memory limit. This memory limit includes the Go heap and all other memory managed by the runtime, and excludes external memory sources such as mappings of the binary itself, memory managed in other languages, and memory held by the operating system on behalf of the Go program. This limit may be managed via [`runtime/debug.SetMemoryLimit`](https://tip.golang.org/pkg/runtime/debug/#SetMemoryLimit) or the equivalent [`GOMEMLIMIT`](https://tip.golang.org/pkg/runtime/#hdr-Environment_Variables) environment variable. The limit works in conjunction with [`runtime/debug.SetGCPercent`](https://tip.golang.org/pkg/runtime/debug/#SetGCPercent) / [`GOGC`](https://tip.golang.org/pkg/runtime/#hdr-Environment_Variables), and will be respected even if `GOGC=off`, allowing Go programs to always make maximal use of their memory limit, improving resource efficiency in some cases. See [the GC guide](https://tip.golang.org/doc/gc-guide) for a detailed guide explaining the soft memory limit in more detail, as well as a variety of common use-cases and scenarios. Please note that small memory limits, on the order of tens of megabytes or less, are less likely to be respected due to external latency factors, such as OS scheduling. See [issue 52433](https://go.dev/issue/52433) for more details. Larger memory limits, on the order of hundreds of megabytes or more, are stable and production-ready.
+运行时现在支持软内存限制(soft memory limit)。这个内存限制包括了Go heap里的内存以及所有其它被Go运行时管理的内存。如果不是被Go运行时管理的内存，比如二进制程序本身映射的内存、其它语言管理的内存，是不在这个软内存限制里的。
+
+这个限制可以通过[`runtime/debug.SetMemoryLimit`](https://tip.golang.org/pkg/runtime/debug/#SetMemoryLimit) 函数或者 [`GOMEMLIMIT`](https://tip.golang.org/pkg/runtime/#hdr-Environment_Variables) 环境变量进行设置。
+
+软内存限制和[`runtime/debug.SetGCPercent`](https://tip.golang.org/pkg/runtime/debug/#SetGCPercent) 函数以及 [`GOGC`](https://tip.golang.org/pkg/runtime/#hdr-Environment_Variables)环境变量是可以结合起来工作的，而且即使在`GOGC=off`模式下，软内存限制也会生效。设计目的是为了让Go程序可以最大化内存使用，提升某些场景下的内存资源使用效率。
+
+可以参考[the GC guide](https://tip.golang.org/doc/gc-guide)查看更多软内存限制的设计实现细节，以及一些常见使用场景和最佳实践。
+
+需要注意的是，对于数十MB或者更小的内存限制，由于考虑到一些性能问题，是有可能不会生效的，可以参考[issue 52433](https://go.dev/issue/52433)查看更多细节。对于数百MB或者更大的内存限制，目前是可以稳定运行在生产环境上的。
+
+为了减少
 
 In order to limit the effects of GC thrashing when the program's live heap size approaches the soft memory limit, the Go runtime also attempts to limit total GC CPU utilization to 50%, excluding idle time, choosing to use more memory over preventing application progress. In practice, we expect this limit to only play a role in exceptional cases, and the new [runtime metric](https://tip.golang.org/pkg/runtime/metrics/#hdr-Supported_metrics) `/gc/limiter/last-enabled:gc-cycle` reports when this last occurred.
 
 The runtime now schedules many fewer GC worker goroutines on idle operating system threads when the application is idle enough to force a periodic GC cycle.
 
 The runtime will now allocate initial goroutine stacks based on the historic average stack usage of goroutines. This avoids some of the early stack growth and copying needed in the average case in exchange for at most 2x wasted space on below-average goroutines.
+
+
 
 On Unix operating systems, Go programs that import package [os](https://tip.golang.org/pkg/os/) now automatically increase the open file limit (`RLIMIT_NOFILE`) to the maximum allowed value; that is, they change the soft limit to match the hard limit. This corrects artificially low limits set on some systems for compatibility with very old C programs using the [*select*](https://en.wikipedia.org/wiki/Select_(Unix)) system call. Go programs are not helped by that limit, and instead even simple programs like `gofmt` often ran out of file descriptors on such systems when processing many files in parallel. One impact of this change is that Go programs that in turn execute very old C programs in child processes may run those programs with too high a limit. This can be corrected by setting the hard limit before invoking the Go program.
 
