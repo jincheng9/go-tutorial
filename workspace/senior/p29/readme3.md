@@ -36,23 +36,25 @@ Go官方团队在2022.06.11发布了Go 1.19 Beta 1版本，Go 1.19的正式relea
 
 在实际使用中，一般只在一些特殊场景才建议使用软内存限制，当Go堆内存占用真的超过软内存限制时，新的运行时度量( [runtime metric](https://tip.golang.org/pkg/runtime/metrics/#hdr-Supported_metrics))工具`/gc/limiter/last-enabled:gc-cycle`会报告这个事件。
 
+如果应用程序空闲到足以执行一次GC时，Go运行时(Runtime)现在会在空闲的操作系统线程里调度更少的GC工作协程(goroutine)。
 
+Go运行时现在会根据goroutine过去栈空间的平均使用大小来分配一个初始的goroutine栈大小，提升栈空间的分配和使用效率。
 
-The runtime now schedules many fewer GC worker goroutines on idle operating system threads when the application is idle enough to force a periodic GC cycle.
+### 最大文件描述符
 
-The runtime will now allocate initial goroutine stacks based on the historic average stack usage of goroutines. This avoids some of the early stack growth and copying needed in the average case in exchange for at most 2x wasted space on below-average goroutines.
+在Unix操作系统上，import了 [os](https://tip.golang.org/pkg/os/) 包的Go程序现在会自动增加 **可打开的最大文件描述符数量** 到允许的最大值。
 
+修改这个的原因是有些系统为了兼容很老的使用select系统调用的C语言程序，会把最大文件描述符数量设置一个比较小的值，通常是1024。这个设置对Go程序没有用处，相反，还会带来一些问题。比如`gofmt`在并行处理很多文件时，很容易遇到文件描述符用尽的问题。另外这个修改需要注意的一个点是，如果Go程序和C语言混合编程，执行了很老的C代码，那在运行这个Go程序时，需要先设置最大文件描述符的hard limit，将其调小。
 
+### 堆栈信息
 
-On Unix operating systems, Go programs that import package [os](https://tip.golang.org/pkg/os/) now automatically increase the open file limit (`RLIMIT_NOFILE`) to the maximum allowed value; that is, they change the soft limit to match the hard limit. This corrects artificially low limits set on some systems for compatibility with very old C programs using the [*select*](https://en.wikipedia.org/wiki/Select_(Unix)) system call. Go programs are not helped by that limit, and instead even simple programs like `gofmt` often ran out of file descriptors on such systems when processing many files in parallel. One impact of this change is that Go programs that in turn execute very old C programs in child processes may run those programs with too high a limit. This can be corrected by setting the hard limit before invoking the Go program.
+不可恢复的致命错误(例如并发的map写入，解锁一个未加锁的mutex)现在会打印更简单的堆栈信息，不再打印Go runtime的元数据，除非设置了`GOTRACEBACK=system` or `crash`。但是对于runtime本身的致命错误，不管`GOTRACEBACK` 的值是什么，还是会打印包含元数据的所有堆栈信息。
 
+### 调试
 
+ARM64架构现在支持注入了调试器的函数调用，允许用户在交互式的调试会话里调用函数。
 
-Unrecoverable fatal errors (such as concurrent map writes, or unlock of unlocked mutexes) now print a simpler traceback excluding runtime metadata (equivalent to a fatal panic) unless `GOTRACEBACK=system` or `crash`. Runtime-internal fatal error tracebacks always include full metadata regardless of the value of `GOTRACEBACK`
-
-Support for debugger-injected function calls has been added on ARM64, enabling users to call functions from their binary in an interactive debugging session when using a debugger that is updated to make use of this functionality.
-
-The [address sanitizer support added in Go 1.18](https://tip.golang.org/doc/go1.18#go-build-asan) now handles function arguments and global variables more precisely.
+ [Go 1.18新增的address sanitizer](https://tip.golang.org/doc/go1.18#go-build-asan) 现在可以更精确地处理函数参数和全局变量。
 
 ## 编译器
 
