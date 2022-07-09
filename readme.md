@@ -105,6 +105,7 @@
   * [Go 1.19要来了，看看都有哪些变化：第1篇](./workspace/senior/p29/readme.md)
   * [Go 1.19要来了，看看都有哪些变化：第2篇](./workspace/senior/p29/readme2.md)
   * [Go 1.19要来了，看看都有哪些变化：第3篇](./workspace/senior/p29/readme3.md)
+  * [Go 1.19要来了，看看都有哪些变化：第4篇](./workspace/senior/p29/readme4.md)
 
 
 
