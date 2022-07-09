@@ -22,7 +22,26 @@ Go官方团队在2022.06.11发布了Go 1.19 Beta 1版本，Go 1.19的正式relea
 
 ### 新的原子类型(New atomic types)
 
-The [`sync/atomic`](https://tip.golang.org/pkg/sync/atomic/) package defines new atomic types [`Bool`](https://tip.golang.org/pkg/sync/atomic/#Bool), [`Int32`](https://tip.golang.org/pkg/sync/atomic/#Int32), [`Int64`](https://tip.golang.org/pkg/sync/atomic/#Int64), [`Uint32`](https://tip.golang.org/pkg/sync/atomic/#Uint32), [`Uint64`](https://tip.golang.org/pkg/sync/atomic/#Uint64), [`Uintptr`](https://tip.golang.org/pkg/sync/atomic/#Uintptr), and [`Pointer`](https://tip.golang.org/pkg/sync/atomic/#Pointer). These types hide the underlying values so that all accesses are forced to use the atomic APIs. [`Pointer`](https://tip.golang.org/pkg/sync/atomic/#Pointer) also avoids the need to convert to [`unsafe.Pointer`](https://tip.golang.org/pkg/unsafe/#Pointer) at call sites. [`Int64`](https://tip.golang.org/pkg/sync/atomic/#Int64) and [`Uint64`](https://tip.golang.org/pkg/sync/atomic/#Uint64) are automatically aligned to 64-bit boundaries in structs and allocated data, even on 32-bit systems.
+[`sync/atomic`](https://tip.golang.org/pkg/sync/atomic/)包里现在定义了新的类型： [`Bool`](https://tip.golang.org/pkg/sync/atomic/#Bool), [`Int32`](https://tip.golang.org/pkg/sync/atomic/#Int32), [`Int64`](https://tip.golang.org/pkg/sync/atomic/#Int64), [`Uint32`](https://tip.golang.org/pkg/sync/atomic/#Uint32), [`Uint64`](https://tip.golang.org/pkg/sync/atomic/#Uint64), [`Uintptr`](https://tip.golang.org/pkg/sync/atomic/#Uintptr), and [`Pointer`](https://tip.golang.org/pkg/sync/atomic/#Pointer)。
+
+这些新的类型定义了相应的原子方法，要修改或者读取这些类型的变量的值就必须使用该类型的原子方法，避免误操作。
+
+```go
+type Bool struct {
+	// contains filtered or unexported fields
+}
+
+func (x *Bool) CompareAndSwap(old, new bool) (swapped bool)
+func (x *Bool) Load() bool
+func (x *Bool) Store(val bool)
+func (x *Bool) Swap(new bool) (old bool)
+```
+
+比如上面的`sync/atomic`包里的`Bool`类型就有4个原子方法，要读取或者修改`atomic.Bool`类型的变量的值就要使用这4个方法。
+
+`sync/atomic`包有了`Pointer`类型后，开发者不需要先把变量转成`unsafe.Pointer`类型再去调用`sync/atomic`包里的函数，直接使用`Pointer`类型的原子方法即可。
+
+`Int64` 和`Uint64`类型在结构体(structs)和分配的内存里会自动按照64位自动对齐，即使在32位系统上也是按照64位对齐。
 
 ### 路径查找(PATH lookups)
 
