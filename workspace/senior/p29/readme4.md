@@ -24,7 +24,7 @@ Go官方团队在2022.06.11发布了Go 1.19 Beta 1版本，Go 1.19的正式relea
 
 [`sync/atomic`](https://tip.golang.org/pkg/sync/atomic/)包里现在定义了新的类型： [`Bool`](https://tip.golang.org/pkg/sync/atomic/#Bool), [`Int32`](https://tip.golang.org/pkg/sync/atomic/#Int32), [`Int64`](https://tip.golang.org/pkg/sync/atomic/#Int64), [`Uint32`](https://tip.golang.org/pkg/sync/atomic/#Uint32), [`Uint64`](https://tip.golang.org/pkg/sync/atomic/#Uint64), [`Uintptr`](https://tip.golang.org/pkg/sync/atomic/#Uintptr), and [`Pointer`](https://tip.golang.org/pkg/sync/atomic/#Pointer)。
 
-这些新的类型定义了相应的原子方法，要修改或者读取这些类型的变量的值就必须使用该类型的原子方法，避免误操作。
+这些新的类型定义了相应的原子方法，要修改或者读取这些类型的变量的值就必须使用该类型的原子方法，这样可以避免误操作。
 
 ```go
 type Bool struct {
@@ -51,19 +51,19 @@ On Windows, `Command` and `LookPath` now respect the [`NoDefaultCurrentDirectory
 
 ### 核心库的微小改动
 
-As always, there are various minor changes and updates to the library, made with the Go 1 [promise of compatibility](https://tip.golang.org/doc/go1compat) in mind. There are also various performance improvements, not enumerated here.
+Go标准库在Go 1.19版本有很多细微的改动和优化，主要涵盖以下内容：
 
 - [archive/zip](https://tip.golang.org/pkg/archive/zip/)
 
-  [`Reader`](https://tip.golang.org/pkg/archive/zip/#Reader) now ignores non-ZIP data at the start of a ZIP file, matching most other implementations. This is necessary to read some Java JAR files, among other uses.
+  [`Reader`](https://tip.golang.org/pkg/archive/zip/#Reader) 现在会忽略掉ZIP文件开头的非ZIP数据部分，这在读一些Java的JAR文件时会很有必要。
 
 - [crypto/rand](https://tip.golang.org/pkg/crypto/rand/)
 
-  [`Read`](https://tip.golang.org/pkg/crypto/rand/#Read) no longer buffers random data obtained from the operating system between calls.On Plan 9, `Read` has been reimplemented, replacing the ANSI X9.31 algorithm with fast key erasure.
+  [`Read`](https://tip.golang.org/pkg/crypto/rand/#Read) 不再缓存从操作系统里获取的随机数。对于Plan 9操作系统，`Read`被重新实现了，用fast key erasure替换掉了ANSI X9.31算法。
 
 - [crypto/tls](https://tip.golang.org/pkg/crypto/tls/)
 
-  The `tls10default` `GODEBUG` option has been removed. It is still possible to enable TLS 1.0 client-side by setting [`Config.MinVersion`](https://tip.golang.org/pkg/crypto/tls#Config.MinVersion).The TLS server and client now reject duplicate extensions in TLS handshakes, as required by RFC 5246, Section 7.4.1.4 and RFC 8446, Section 4.2.
+   `tls10default` `GODEBUG` 选项在Go 1.19版本已经被移除。 不过，我们还是可以通过设置 [`Config.MinVersion`](https://tip.golang.org/pkg/crypto/tls#Config.MinVersion) 来支持client侧使用TLS 1.0协议。根据RFC 5246中7.4.1.4章节和RFC 8446中4.2章节的要求，TLS server和client现在会拒绝TLS握手里重复的扩展(duplicate extensions)。
 
 - [crypto/x509](https://tip.golang.org/pkg/crypto/x509/)
 
