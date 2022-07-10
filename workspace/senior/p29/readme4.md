@@ -71,11 +71,11 @@ Go标准库在Go 1.19版本有很多细微的改动和优化，主要涵盖以�
 
 - [crypto/x509/pkix](https://tip.golang.org/pkg/crypto/x509/pkix)
 
-  The types [`CertificateList`](https://tip.golang.org/pkg/crypto/x509/pkix#CertificateList) and [`TBSCertificateList`](https://tip.golang.org/pkg/crypto/x509/pkix#TBSCertificateList) have been deprecated. The new [`crypto/x509` CRL functionality](https://tip.golang.org/doc/go1.19#crypto/x509) should be used instead.
+   [`CertificateList`](https://tip.golang.org/pkg/crypto/x509/pkix#CertificateList) 和 [`TBSCertificateList`](https://tip.golang.org/pkg/crypto/x509/pkix#TBSCertificateList) 现在被废弃了，应该使用新的 [`crypto/x509` CRL functionality](https://tip.golang.org/doc/go1.19#crypto/x509)。 
 
 - [debug](https://tip.golang.org/pkg/debug/)
 
-  The new `EM_LONGARCH` and `R_LARCH_*` constants support the loong64 port.
+  新的 `EM_LONGARCH` and `R_LARCH_*` 常量现在支持龙芯loong64架构。
 
 - [debug/pe](https://tip.golang.org/pkg/debug/pe/)
 
