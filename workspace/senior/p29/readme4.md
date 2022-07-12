@@ -45,11 +45,11 @@ func (x *Bool) Swap(new bool) (old bool)
 
 ### 路径查找(PATH lookups)
 
-[`Command`](https://tip.golang.org/pkg/os/exec/#Command) 和 [`LookPath`](https://tip.golang.org/pkg/os/exec/#LookPath) 不再允许在当前目录查找
+[`Command`](https://tip.golang.org/pkg/os/exec/#Command) 和 [`LookPath`](https://tip.golang.org/pkg/os/exec/#LookPath) 不再允许在当前目录查找可执行程序，这个修改解决了一个[常见的安全问题](https://tip.golang.org/blog/path-security)，但是也带来了破坏性更新。
 
-no longer allow results from a PATH search to be found relative to the current directory. This removes a [common source of security problems](https://tip.golang.org/blog/path-security) but may also break existing programs that depend on using, say, `exec.Command("prog")` to run a binary named `prog` (or, on Windows, `prog.exe`) in the current directory. See the [`os/exec`](https://tip.golang.org/pkg/os/exec/) package documentation for information about how best to update such programs.
+比如以前有段代码是`exec.Command("prog")`，表示要执行当前目录下名为`prog`的可执行文件(在Windows系统上对应的是`prog.exe`)，那使用Go 1.19后就不会生效了。可以参考 [`os/exec`](https://tip.golang.org/pkg/os/exec/) 包的说明来修改代码以适配`Command`和`LookPath`的改动。
 
-On Windows, `Command` and `LookPath` now respect the [`NoDefaultCurrentDirectoryInExePath`](https://docs.microsoft.com/en-us/windows/win32/api/processenv/nf-processenv-needcurrentdirectoryforexepatha) environment variable, making it possible to disable the default implicit search of “`.`” in PATH lookups on Windows systems.
+在Windows系统上，`Command`和`LookPath`现在会感知 [`NoDefaultCurrentDirectoryInExePath`](https://docs.microsoft.com/en-us/windows/win32/api/processenv/nf-processenv-needcurrentdirectoryforexepatha) 环境变量。我们可以在Windows系统上设置该环境变量来禁止从当前目录`.` 查找可执行程序。
 
 ### 核心库的微小改动
 
