@@ -169,11 +169,15 @@ Go标准库在Go 1.19版本有很多细微的改动和优化，主要涵盖以�
 
 - [runtime](https://tip.golang.org/pkg/runtime/)
 
-  The [`GOROOT`](https://tip.golang.org/pkg/runtime/#GOROOT) function now returns the empty string (instead of `"go"`) when the binary was built with the `-trimpath` flag set and the `GOROOT` variable is not set in the process environment.
+   [`GOROOT`](https://tip.golang.org/pkg/runtime/#GOROOT) 函数会返回空串，当Go可执行程序使用了`-trimpath`标记进行编译并且没有在进程运行环境里没有设置`GOROOT`环境变量。
 
 - [runtime/metrics](https://tip.golang.org/pkg/runtime/metrics/)
 
-  The new `/sched/gomaxprocs:threads` [metric](https://tip.golang.org/pkg/runtime/metrics/#hdr-Supported_metrics) reports the current [`runtime.GOMAXPROCS`](https://tip.golang.org/pkg/runtime/#GOMAXPROCS) value.The new `/cgo/go-to-c-calls:calls` [metric](https://tip.golang.org/pkg/runtime/metrics/#hdr-Supported_metrics) reports the total number of calls made from Go to C. This metric is identical to the [`runtime.NumCgoCall`](https://tip.golang.org/pkg/runtime/#NumCgoCall) function.The new `/gc/limiter/last-enabled:gc-cycle` [metric](https://tip.golang.org/pkg/runtime/metrics/#hdr-Supported_metrics) reports the last GC cycle when the GC CPU limiter was enabled. See the [runtime notes](https://tip.golang.org/doc/go1.19#runtime) for details about the GC CPU limiter.
+  新的 `/sched/gomaxprocs:threads` [度量指标](https://tip.golang.org/pkg/runtime/metrics/#hdr-Supported_metrics) 会报告 [`runtime.GOMAXPROCS`](https://tip.golang.org/pkg/runtime/#GOMAXPROCS) 的当前值。
+
+  新的 `/cgo/go-to-c-calls:calls` [度量指标](https://tip.golang.org/pkg/runtime/metrics/#hdr-Supported_metrics) 会报告Go调用C的总次数。这个指标等同于 [`runtime.NumCgoCall`](https://tip.golang.org/pkg/runtime/#NumCgoCall) 函数的执行结果。
+
+  新的 `/gc/limiter/last-enabled:gc-cycle` [度量指标](https://tip.golang.org/pkg/runtime/metrics/#hdr-Supported_metrics) 在GC CPU limiter开启时，会报告最新的GC循环(cycle)。可以参考runtime notes](https://tip.golang.org/doc/go1.19#runtime) 了解更多关于GC CPU limiter的细节。
 
 - [runtime/pprof](https://tip.golang.org/pkg/runtime/pprof/)
 
