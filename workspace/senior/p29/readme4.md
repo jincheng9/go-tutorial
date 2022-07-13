@@ -187,7 +187,11 @@ Go标准库在Go 1.19版本有很多细微的改动和优化，主要涵盖以�
 
 - [runtime/race](https://tip.golang.org/pkg/runtime/race/)
 
-  The race detector has been upgraded to use thread sanitizer version v3 on all supported platforms except `windows/amd64` and `openbsd/amd64`, which remain on v2. Compared to v2, it is now typically 1.5x to 2x faster, uses half as much memory, and it supports an unlimited number of goroutines. On Linux, the race detector now requires at least glibc version 2.17.The race detector is now supported on `GOARCH=s390x`.Race detector support for `openbsd/amd64` has been removed from thread sanitizer upstream, so it is unlikely to ever be updated from v2.
+  The race detector has been upgraded to use thread sanitizer version v3 on all supported platforms except `windows/amd64` and `openbsd/amd64`, which remain on v2. Compared to v2, it is now typically 1.5x to 2x faster, uses half as much memory, and it supports an unlimited number of goroutines. On Linux, the race detector now requires at least glibc version 2.17.
+
+  The race detector is now supported on `GOARCH=s390x`.
+
+  Race detector support for `openbsd/amd64` has been removed from thread sanitizer upstream, so it is unlikely to ever be updated from v2.
 
 - [runtime/trace](https://tip.golang.org/pkg/runtime/trace/)
 
