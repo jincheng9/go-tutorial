@@ -69,7 +69,17 @@ Go标准库在Go 1.19版本有很多细微的改动和优化，主要涵盖以�
 
 - [crypto/x509](https://tip.golang.org/pkg/crypto/x509/)
 
-  [`CreateCertificate`](https://tip.golang.org/pkg/crypto/x509/#CreateCertificate) no longer supports creating certificates with `SignatureAlgorithm` set to `MD5WithRSA`.`CreateCertificate` no longer accepts negative serial numbers.[`ParseCertificate`](https://tip.golang.org/pkg/crypto/x509/#ParseCertificate) and [`ParseCertificateRequest`](https://tip.golang.org/pkg/crypto/x509/#ParseCertificateRequest) now reject certificates and CSRs which contain duplicate extensions.The new [`CertPool.Clone`](https://tip.golang.org/pkg/crypto/x509/#CertPool.Clone) and [`CertPool.Equal`](https://tip.golang.org/pkg/crypto/x509/#CertPool.Equal) methods allow cloning a `CertPool` and checking the equality of two `CertPool`s respectively.The new function [`ParseRevocationList`](https://tip.golang.org/pkg/crypto/x509/#ParseRevocationList) provides a faster, safer to use CRL parser which returns a [`RevocationList`](https://tip.golang.org/pkg/crypto/x509/#RevocationList). To support this addition, `RevocationList` adds new fields `RawIssuer`, `Signature`, `AuthorityKeyId`, and `Extensions`. The new method [`RevocationList.CheckSignatureFrom`](https://tip.golang.org/pkg/crypto/x509/#RevocationList.CheckSignatureFrom) checks that the signature on a CRL is a valid signature from a [`Certificate`](https://tip.golang.org/pkg/crypto/x509/#Certificate). With the new CRL functionality, the existing functions [`ParseCRL`](https://tip.golang.org/pkg/crypto/x509/#ParseCRL) and [`ParseDERCRL`](https://tip.golang.org/pkg/crypto/x509/#ParseDERCRL) are deprecated. Additionally the method [`Certificate.CheckCRLSignature`](https://tip.golang.org/pkg/crypto/x509#Certificate.CheckCRLSignature) is deprecated.When building paths, [`Certificate.Verify`](https://tip.golang.org/pkg/crypto/x509/#Certificate.Verify) now considers certificates to be equal when the subjects, public keys, and SANs are all equal. Before, it required byte-for-byte equality.
+  [`CreateCertificate`](https://tip.golang.org/pkg/crypto/x509/#CreateCertificate) 不再支持使用`MD5WITHRSA`的签名算法来创建证书。
+
+  `CreateCertificate` 不再接受SerialNumber为负数。
+
+  [`ParseCertificate`](https://tip.golang.org/pkg/crypto/x509/#ParseCertificate) 和 [`ParseCertificateRequest`](https://tip.golang.org/pkg/crypto/x509/#ParseCertificateRequest) now reject certificates and CSRs which contain duplicate extensions.
+
+  新方法 [`CertPool.Clone`](https://tip.golang.org/pkg/crypto/x509/#CertPool.Clone) 和 [`CertPool.Equal`](https://tip.golang.org/pkg/crypto/x509/#CertPool.Equal) 可以克隆一个`CertPool`，并且检查2个`CertPool`是否相同。
+
+  The new function [`ParseRevocationList`](https://tip.golang.org/pkg/crypto/x509/#ParseRevocationList) provides a faster, safer to use CRL parser which returns a [`RevocationList`](https://tip.golang.org/pkg/crypto/x509/#RevocationList). To support this addition, `RevocationList` adds new fields `RawIssuer`, `Signature`, `AuthorityKeyId`, and `Extensions`. The new method [`RevocationList.CheckSignatureFrom`](https://tip.golang.org/pkg/crypto/x509/#RevocationList.CheckSignatureFrom) checks that the signature on a CRL is a valid signature from a [`Certificate`](https://tip.golang.org/pkg/crypto/x509/#Certificate). With the new CRL functionality, the existing functions [`ParseCRL`](https://tip.golang.org/pkg/crypto/x509/#ParseCRL) and [`ParseDERCRL`](https://tip.golang.org/pkg/crypto/x509/#ParseDERCRL) are deprecated. Additionally the method [`Certificate.CheckCRLSignature`](https://tip.golang.org/pkg/crypto/x509#Certificate.CheckCRLSignature) is deprecated.
+
+  When building paths, [`Certificate.Verify`](https://tip.golang.org/pkg/crypto/x509/#Certificate.Verify) now considers certificates to be equal when the subjects, public keys, and SANs are all equal. Before, it required byte-for-byte equality.
 
 - [crypto/x509/pkix](https://tip.golang.org/pkg/crypto/x509/pkix)
 
@@ -81,7 +91,7 @@ Go标准库在Go 1.19版本有很多细微的改动和优化，主要涵盖以�
 
 - [debug/pe](https://tip.golang.org/pkg/debug/pe/)
 
-  The new [`File.COFFSymbolReadSectionDefAux`](https://tip.golang.org/pkg/debug/pe/#File.COFFSymbolReadSectionDefAux) method, which returns a [`COFFSymbolAuxFormat5`](https://tip.golang.org/pkg/debug/pe/#COFFSymbolAuxFormat5), provides access to COMDAT information in PE file sections. These are supported by new `IMAGE_COMDAT_*` and `IMAGE_SCN_*` constants.
+  引入了新方法 [`File.COFFSymbolReadSectionDefAux`](https://tip.golang.org/pkg/debug/pe/#File.COFFSymbolReadSectionDefAux) ，该方法返回 [`COFFSymbolAuxFormat5`](https://tip.golang.org/pkg/debug/pe/#COFFSymbolAuxFormat5)类型，可以让开发者访问PE文件里的COMDAT信息。
 
 - [encoding/binary](https://tip.golang.org/pkg/encoding/binary/)
 
