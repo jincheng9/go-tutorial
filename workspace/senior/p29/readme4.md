@@ -181,7 +181,9 @@ Go标准库在Go 1.19版本有很多细微的改动和优化，主要涵盖以�
 
 - [runtime/pprof](https://tip.golang.org/pkg/runtime/pprof/)
 
-  Stop-the-world pause times have been significantly reduced when collecting goroutine profiles, reducing the overall latency impact to the application.`MaxRSS` is now reported in heap profiles for all Unix operating systems (it was previously only reported for `GOOS=android`, `darwin`, `ios`, and `linux`).
+  Stop-the-world pause times have been significantly reduced when collecting goroutine profiles, reducing the overall latency impact to the application.
+
+  `MaxRSS` is now reported in heap profiles for all Unix operating systems (it was previously only reported for `GOOS=android`, `darwin`, `ios`, and `linux`).
 
 - [runtime/race](https://tip.golang.org/pkg/runtime/race/)
 
@@ -201,7 +203,9 @@ Go标准库在Go 1.19版本有很多细微的改动和优化，主要涵盖以�
 
 - [syscall](https://tip.golang.org/pkg/syscall/)
 
-  On PowerPC (`GOARCH=ppc64`, `ppc64le`), [`Syscall`](https://tip.golang.org/pkg/syscall/#Syscall), [`Syscall6`](https://tip.golang.org/pkg/syscall/#Syscall6), [`RawSyscall`](https://tip.golang.org/pkg/syscall/#RawSyscall), and [`RawSyscall6`](https://tip.golang.org/pkg/syscall/#RawSyscall6) now always return 0 for return value `r2` instead of an undefined value.On AIX and Solaris, `Getrusage` is now defined.
+  对于PowerPC (`GOARCH=ppc64`, `ppc64le`)架构，[`Syscall`](https://tip.golang.org/pkg/syscall/#Syscall)， [`Syscall6`](https://tip.golang.org/pkg/syscall/#Syscall6)，[`RawSyscall`](https://tip.golang.org/pkg/syscall/#RawSyscall)，和 [`RawSyscall6`](https://tip.golang.org/pkg/syscall/#RawSyscall6) 函数的第2个返回值`r2` 现在永远返回0，而不是之前的未定义值(undefined value)。
+
+  对于AIX和Solaris系统，可以使用 `Getrusage` 函数了。
 
 - [time](https://tip.golang.org/pkg/time/)
 
