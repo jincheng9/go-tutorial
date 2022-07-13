@@ -73,13 +73,11 @@ Go标准库在Go 1.19版本有很多细微的改动和优化，主要涵盖以�
 
   `CreateCertificate` 不再接受SerialNumber为负数。
 
-  [`ParseCertificate`](https://tip.golang.org/pkg/crypto/x509/#ParseCertificate) 和 [`ParseCertificateRequest`](https://tip.golang.org/pkg/crypto/x509/#ParseCertificateRequest) now reject certificates and CSRs which contain duplicate extensions.
+  [`ParseCertificate`](https://tip.golang.org/pkg/crypto/x509/#ParseCertificate) 和 [`ParseCertificateRequest`](https://tip.golang.org/pkg/crypto/x509/#ParseCertificateRequest) 现在会拒绝包含有重复扩展的证书和CSR(Certifcate Signing Request)。
 
   新方法 [`CertPool.Clone`](https://tip.golang.org/pkg/crypto/x509/#CertPool.Clone) 和 [`CertPool.Equal`](https://tip.golang.org/pkg/crypto/x509/#CertPool.Equal) 可以克隆一个`CertPool`，并且检查2个`CertPool`是否相同。
 
-  The new function [`ParseRevocationList`](https://tip.golang.org/pkg/crypto/x509/#ParseRevocationList) provides a faster, safer to use CRL parser which returns a [`RevocationList`](https://tip.golang.org/pkg/crypto/x509/#RevocationList). To support this addition, `RevocationList` adds new fields `RawIssuer`, `Signature`, `AuthorityKeyId`, and `Extensions`. The new method [`RevocationList.CheckSignatureFrom`](https://tip.golang.org/pkg/crypto/x509/#RevocationList.CheckSignatureFrom) checks that the signature on a CRL is a valid signature from a [`Certificate`](https://tip.golang.org/pkg/crypto/x509/#Certificate). With the new CRL functionality, the existing functions [`ParseCRL`](https://tip.golang.org/pkg/crypto/x509/#ParseCRL) and [`ParseDERCRL`](https://tip.golang.org/pkg/crypto/x509/#ParseDERCRL) are deprecated. Additionally the method [`Certificate.CheckCRLSignature`](https://tip.golang.org/pkg/crypto/x509#Certificate.CheckCRLSignature) is deprecated.
-
-  When building paths, [`Certificate.Verify`](https://tip.golang.org/pkg/crypto/x509/#Certificate.Verify) now considers certificates to be equal when the subjects, public keys, and SANs are all equal. Before, it required byte-for-byte equality.
+  新函数 [`ParseRevocationList`](https://tip.golang.org/pkg/crypto/x509/#ParseRevocationList) 提供了一个更快、更安全的方式去使用CRL解析器(parser)。
 
 - [crypto/x509/pkix](https://tip.golang.org/pkg/crypto/x509/pkix)
 
@@ -95,11 +93,13 @@ Go标准库在Go 1.19版本有很多细微的改动和优化，主要涵盖以�
 
 - [encoding/binary](https://tip.golang.org/pkg/encoding/binary/)
 
-  The new interface [`AppendByteOrder`](https://tip.golang.org/pkg/encoding/binary/#AppendByteOrder) provides efficient methods for appending a `uint16`, `uint32`, or `uint64` to a byte slice. [`BigEndian`](https://tip.golang.org/pkg/encoding/binary/#BigEndian) and [`LittleEndian`](https://tip.golang.org/pkg/encoding/binary/#LittleEndian) now implement this interface.Similarly, the new functions [`AppendUvarint`](https://tip.golang.org/pkg/encoding/binary/#AppendUvarint) and [`AppendVarint`](https://tip.golang.org/pkg/encoding/binary/#AppendVarint) are efficient appending versions of [`PutUvarint`](https://tip.golang.org/pkg/encoding/binary/#PutUvarint) and [`PutVarint`](https://tip.golang.org/pkg/encoding/binary/#PutVarint).
+  新接口 [`AppendByteOrder`](https://tip.golang.org/pkg/encoding/binary/#AppendByteOrder) 提供了高效的方法用于把 `uint16`，`uint32`，或 `uint64` 添加到一个byte切片里。
+
+   [`BigEndian`](https://tip.golang.org/pkg/encoding/binary/#BigEndian) 和 [`LittleEndian`](https://tip.golang.org/pkg/encoding/binary/#LittleEndian) 都实现了该接口。
 
 - [encoding/csv](https://tip.golang.org/pkg/encoding/csv/)
 
-  The new method [`Reader.InputOffset`](https://tip.golang.org/pkg/encoding/csv/#Reader.InputOffset) reports the reader's current input position as a byte offset, analogous to `encoding/json`'s [`Decoder.InputOffset`](https://tip.golang.org/pkg/encoding/json/#Decoder.InputOffset).
+  新方法 [`Reader.InputOffset`](https://tip.golang.org/pkg/encoding/csv/#Reader.InputOffset) 会返回当前读到的位置，以偏移的字节数来表示，类似于 `encoding/json`包里的 [`Decoder.InputOffset`](https://tip.golang.org/pkg/encoding/json/#Decoder.InputOffset)。
 
 - [encoding/xml](https://tip.golang.org/pkg/encoding/xml/)
 
