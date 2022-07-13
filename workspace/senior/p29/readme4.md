@@ -195,11 +195,13 @@ Go标准库在Go 1.19版本有很多细微的改动和优化，主要涵盖以�
 
 - [sort](https://tip.golang.org/pkg/sort/)
 
-  The sorting algorithm has been rewritten to use [pattern-defeating quicksort](https://arxiv.org/pdf/2106.05123.pdf), which is faster for several common scenarios.The new function [Find](https://tip.golang.org/pkg/sort/#Find) is like [Search](https://tip.golang.org/pkg/sort/#Search) but often easier to use: it returns an additional boolean reporting whether an equal value was found.
+  Go自带的排序算法使用了[pattern-defeating quicksort](https://arxiv.org/pdf/2106.05123.pdf)进行重写，速度更快。
+
+  新的函数 [Find](https://tip.golang.org/pkg/sort/#Find) 类似 函数[Search](https://tip.golang.org/pkg/sort/#Search) ，但是更好用。`Find`函数会额外返回一个bool值，用于表示是否找到了相同的数。
 
 - [strconv](https://tip.golang.org/pkg/strconv/)
 
-  [`Quote`](https://tip.golang.org/pkg/strconv/#Quote) and related functions now quote the rune U+007F as `\x7f`, not `\u007f`, for consistency with other ASCII values.
+  [`Quote`](https://tip.golang.org/pkg/strconv/#Quote) 函数和相关函数为了和其它ASCII码值标尺一致，会引用字符U+007F为`\x7f`，而不是`\u007f`。
 
 - [syscall](https://tip.golang.org/pkg/syscall/)
 
