@@ -115,7 +115,9 @@ Go标准库在Go 1.19版本有很多细微的改动和优化，主要涵盖以�
 
 - [go/parser](https://tip.golang.org/pkg/go/parser/)
 
-  The parser now recognizes `~x` as a unary expression with operator [token.TILDE](https://tip.golang.org/pkg/go/token#TILDE), allowing better error recovery when a type constraint such as `~int` is used in an incorrect context.
+  `go/parser`会把 `~x`解析为一元表达式(unary expression)，其中操作符是`~`，`~`操作符的官方说明参考 [token.TILDE](https://tip.golang.org/pkg/go/token#TILDE)。
+
+  当类型约束(type constraint)用在错误的上下文时，比如`~int`，可以允许更好的错误恢复。
 
 - [go/types](https://tip.golang.org/pkg/go/types/)
 
