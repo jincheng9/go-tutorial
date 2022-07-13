@@ -103,15 +103,15 @@ Go标准库在Go 1.19版本有很多细微的改动和优化，主要涵盖以�
 
 - [encoding/xml](https://tip.golang.org/pkg/encoding/xml/)
 
-  The new method [`Decoder.InputPos`](https://tip.golang.org/pkg/encoding/xml/#Decoder.InputPos) reports the reader's current input position as a line and column, analogous to `encoding/csv`'s [`Decoder.FieldPos`](https://tip.golang.org/pkg/encoding/csv/#Decoder.FieldPos).
+  新方法 [`Decoder.InputPos`](https://tip.golang.org/pkg/encoding/xml/#Decoder.InputPos) 会返回当前读到的位置，以行和列来表示，类似于 `encoding/csv`包里的 [`Decoder.FieldPos`](https://tip.golang.org/pkg/encoding/csv/#Decoder.FieldPos)方法。
 
 - [flag](https://tip.golang.org/pkg/flag/)
 
-  The new function [`TextVar`](https://tip.golang.org/pkg/flag/#TextVar) defines a flag with a value implementing [`encoding.TextUnmarshaler`](https://tip.golang.org/pkg/encoding/#TextUnmarshaler), allowing command-line flag variables to have types such as [`big.Int`](https://tip.golang.org/pkg/math/big/#Int), [`netip.Addr`](https://tip.golang.org/pkg/net/netip/#Addr), and [`time.Time`](https://tip.golang.org/pkg/time/#Time).
+  新函数 [`TextVar`](https://tip.golang.org/pkg/flag/#TextVar) 定义了一个 [`encoding.TextUnmarshaler`](https://tip.golang.org/pkg/encoding/#TextUnmarshaler)参数，允许命令行里传入的flag变量使用 [`big.Int`](https://tip.golang.org/pkg/math/big/#Int), [`netip.Addr`](https://tip.golang.org/pkg/net/netip/#Addr)和[`time.Time`](https://tip.golang.org/pkg/time/#Time)类型。
 
 - [fmt](https://tip.golang.org/pkg/fmt/)
 
-  The new functions [`Append`](https://tip.golang.org/pkg/fmt/#Append), [`Appendf`](https://tip.golang.org/pkg/fmt/#Appendf), and [`Appendln`](https://tip.golang.org/pkg/fmt/#Appendln) append formatted data to byte slices.
+  新函数 [`Append`](https://tip.golang.org/pkg/fmt/#Append), [`Appendf`](https://tip.golang.org/pkg/fmt/#Appendf) 和 [`Appendln`](https://tip.golang.org/pkg/fmt/#Appendln) 可以添加格式化的数据到byte切片中。
 
 - [go/parser](https://tip.golang.org/pkg/go/parser/)
 
