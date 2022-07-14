@@ -161,11 +161,13 @@ Go标准库在Go 1.19版本有很多细微的改动和优化，主要涵盖以�
 
 - [reflect](https://tip.golang.org/pkg/reflect/)
 
-  The method [`Value.Bytes`](https://tip.golang.org/pkg/reflect/#Value.Bytes) now accepts addressable arrays in addition to slices.The methods [`Value.Len`](https://tip.golang.org/pkg/reflect/#Value.Len) and [`Value.Cap`](https://tip.golang.org/pkg/reflect/#Value.Cap) now successfully operate on a pointer to an array and return the length of that array, to match what the [builtin `len` and `cap` functions do](https://tip.golang.org/ref/spec#Length_and_capacity).
+   [`Value.Bytes`](https://tip.golang.org/pkg/reflect/#Value.Bytes) 方法现在除了接收slice切片，现在还接收可取址的数组(addressable array)。 [`Value.Len`](https://tip.golang.org/pkg/reflect/#Value.Len) 和 [`Value.Cap`](https://tip.golang.org/pkg/reflect/#Value.Cap) 方法现在可以操作指向数组的指针，返回数组的长度。
 
 - [regexp/syntax](https://tip.golang.org/pkg/regexp/syntax/)
 
-  Go 1.18 release candidate 1, Go 1.17.8, and Go 1.16.15 included a security fix to the regular expression parser, making it reject very deeply nested expressions. Because Go patch releases do not introduce new API, the parser returned [`syntax.ErrInternalError`](https://tip.golang.org/pkg/regexp/syntax/#ErrInternalError) in this case. Go 1.19 adds a more specific error, [`syntax.ErrNestingDepth`](https://tip.golang.org/pkg/regexp/syntax/#ErrNestingDepth), which the parser now returns instead.
+  Go 1.18 release candidate 1， Go 1.17.8和 Go 1.16.15 这3个版本包含了对正则表达式解析可能带来的安全问题的修复，会拒绝嵌套很深的正则表达式。由于Go的补丁版本不能引入新的API，对于这种情况，解析器会返回 [`syntax.ErrInternalError`](https://tip.golang.org/pkg/regexp/syntax/#ErrInternalError) 。
+
+  Go 1.19对于上述情况，新增了一个更具体的错误 [`syntax.ErrNestingDepth`](https://tip.golang.org/pkg/regexp/syntax/#ErrNestingDepth)，不再返回 [`syntax.ErrInternalError`](https://tip.golang.org/pkg/regexp/syntax/#ErrInternalError) 。
 
 - [runtime](https://tip.golang.org/pkg/runtime/)
 
@@ -181,9 +183,9 @@ Go标准库在Go 1.19版本有很多细微的改动和优化，主要涵盖以�
 
 - [runtime/pprof](https://tip.golang.org/pkg/runtime/pprof/)
 
-  Stop-the-world pause times have been significantly reduced when collecting goroutine profiles, reducing the overall latency impact to the application.
+  `pprof`在收集goroutine profile时做了优化，可以大大减少对应用程序的性能影响。
 
-  `MaxRSS` is now reported in heap profiles for all Unix operating systems (it was previously only reported for `GOOS=android`, `darwin`, `ios`, and `linux`).
+  所有Unix操作系统上做`pprof` 的heap profile结果都包含了`MaxRSS`，之前只有 `GOOS=android`, `darwin`, `ios` 和 `linux`系统上才会包含有`MaxRSS`结果。
 
 - [runtime/race](https://tip.golang.org/pkg/runtime/race/)
 
@@ -219,7 +221,9 @@ Go标准库在Go 1.19版本有很多细微的改动和优化，主要涵盖以�
 
 - [time](https://tip.golang.org/pkg/time/)
 
-  The new method [`Duration.Abs`](https://tip.golang.org/pkg/time/#Duration.Abs) provides a convenient and safe way to take the absolute value of a duration, converting −2⁶³ to 2⁶³−1. (This boundary case can happen as the result of subtracting a recent time from the zero time.)The new method [`Time.ZoneBounds`](https://tip.golang.org/pkg/time/#Time.ZoneBounds) returns the start and end times of the time zone in effect at a given time. It can be used in a loop to enumerate all the known time zone transitions at a given location.
+  新方法 [`Duration.Abs`](https://tip.golang.org/pkg/time/#Duration.Abs) 可以得到duration的绝对值，更方便和安全，其中对于边界情况，−2⁶³ 会被转换为 2⁶³−1。
+
+  新方法 [`Time.ZoneBounds`](https://tip.golang.org/pkg/time/#Time.ZoneBounds) 可以返回指定时间所在时区的开始和结束时间。
 
 ## 推荐阅读
 
