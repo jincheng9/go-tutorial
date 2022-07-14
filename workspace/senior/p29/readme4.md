@@ -187,15 +187,19 @@ Go标准库在Go 1.19版本有很多细微的改动和优化，主要涵盖以�
 
 - [runtime/race](https://tip.golang.org/pkg/runtime/race/)
 
-  The race detector has been upgraded to use thread sanitizer version v3 on all supported platforms except `windows/amd64` and `openbsd/amd64`, which remain on v2. Compared to v2, it is now typically 1.5x to 2x faster, uses half as much memory, and it supports an unlimited number of goroutines. On Linux, the race detector now requires at least glibc version 2.17.
+  race detector在Go 1.19版本做了升级，使用v3版本的 thread sanitizer，支持除了 `windows/amd64` 和 `openbsd/amd64` 的所有平台， `windows/amd64`和 `openbsd/amd64`平台仍然使用v2版本的thread sanitizer。
 
-  The race detector is now supported on `GOARCH=s390x`.
+  和v2版本相比，v3版本速度提升了1.5-2倍，并且内存开销减半，还不限制goroutine的数量。
 
-  Race detector support for `openbsd/amd64` has been removed from thread sanitizer upstream, so it is unlikely to ever be updated from v2.
+  在Linux操作系统上，race detector现在要求glibc的版本最低是2.17。
+
+  race detector现在至此`GOARCH=s390x`架构。
+
+  新版的thread sanitizer不再支持`openbsd/amd64`平台，因此`openbsd/amd64`平台还是会沿用旧的v2版本的thread sanitizer。
 
 - [runtime/trace](https://tip.golang.org/pkg/runtime/trace/)
 
-  When tracing and the [CPU profiler](https://tip.golang.org/pkg/runtime/pprof#StartCPUProfile) are enabled simultaneously, the execution trace includes CPU profile samples as instantaneous events.
+  当tracing和 [CPU profiler](https://tip.golang.org/pkg/runtime/pprof#StartCPUProfile) 同时开启时，tracing也会记录CPU Profile采样的结果。
 
 - [sort](https://tip.golang.org/pkg/sort/)
 
