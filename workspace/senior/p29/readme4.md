@@ -137,7 +137,9 @@ Go标准库在Go 1.19版本有很多细微的改动和优化，主要涵盖以�
 
 - [io](https://tip.golang.org/pkg/io/)
 
-  [`NopCloser`](https://tip.golang.org/pkg/io/#NopCloser)'s result now implements [`WriterTo`](https://tip.golang.org/pkg/io/#WriterTo) whenever its input does.[`MultiReader`](https://tip.golang.org/pkg/io/#MultiReader)'s result now implements [`WriterTo`](https://tip.golang.org/pkg/io/#WriterTo) unconditionally. If any underlying reader does not implement `WriterTo`, it is simulated appropriately.
+  [`NopCloser`](https://tip.golang.org/pkg/io/#NopCloser)'s result now implements [`WriterTo`](https://tip.golang.org/pkg/io/#WriterTo) whenever its input does.
+
+  [`MultiReader`](https://tip.golang.org/pkg/io/#MultiReader)'s result now implements [`WriterTo`](https://tip.golang.org/pkg/io/#WriterTo) unconditionally. If any underlying reader does not implement `WriterTo`, it is simulated appropriately.
 
 - [mime](https://tip.golang.org/pkg/mime/)
 
@@ -153,11 +155,17 @@ Go标准库在Go 1.19版本有很多细微的改动和优化，主要涵盖以�
 
 - [net/url](https://tip.golang.org/pkg/net/url/)
 
-  The new [`JoinPath`](https://tip.golang.org/pkg/net/url/#JoinPath) function and [`URL.JoinPath`](https://tip.golang.org/pkg/net/url/#URL.JoinPath) method create a new `URL` by joining a list of path elements.The `URL` type now distinguishes between URLs with no authority and URLs with an empty authority. For example, `http:///path` has an empty authority (host), while `http:/path` has none.The new [`URL`](https://tip.golang.org/pkg/net/url/#URL) field `OmitHost` is set to `true` when a `URL` has an empty authority.
+  新增的 [`JoinPath`](https://tip.golang.org/pkg/net/url/#JoinPath) 函数 和 [`URL.JoinPath`](https://tip.golang.org/pkg/net/url/#URL.JoinPath) 方法可以把一组path元素组合在一起，创建一个新的 `URL`。
+
+   `URL`类型现在会区分没有host的URL和host为空的URL。举个例子， `http:///path` 是有host的，host为空，然后 `http:/path` 就没有host。
+
+  当URL的host为空时，[`URL`](https://tip.golang.org/pkg/net/url/#URL) 类型里的字段 `OmitHost` 的值会被设置为`true`。
 
 - [os/exec](https://tip.golang.org/pkg/os/exec/)
 
-  A [`Cmd`](https://tip.golang.org/pkg/os/exec/#Cmd) with a non-empty `Dir` field and nil `Env` now implicitly sets the `PWD` environment variable for the subprocess to match `Dir`.The new method [`Cmd.Environ`](https://tip.golang.org/pkg/os/exec/#Cmd.Environ) reports the environment that would be used to run the command, including the implicitly set `PWD` variable.
+  如果 [`Cmd`](https://tip.golang.org/pkg/os/exec/#Cmd) 类型的 `Dir` 字段非空， `Env`字段为nil，会隐式地为子进程设置`PWD`环境变量，值为`Dir`字段的值。
+
+  新方法 [`Cmd.Environ`](https://tip.golang.org/pkg/os/exec/#Cmd.Environ) 可以获取到运行cmd的环境，包括隐式设置的`PWD`环境变量。
 
 - [reflect](https://tip.golang.org/pkg/reflect/)
 
