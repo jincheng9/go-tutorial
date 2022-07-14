@@ -151,7 +151,11 @@ Go标准库在Go 1.19版本有很多细微的改动和优化，主要涵盖以�
 
 - [net/http](https://tip.golang.org/pkg/net/http/)
 
-  [`ResponseWriter.WriteHeader`](https://tip.golang.org/pkg/net/http/#ResponseWriter) now supports sending user-defined 1xx informational headers.The `io.ReadCloser` returned by [`MaxBytesReader`](https://tip.golang.org/pkg/net/http/#MaxBytesReader) will now return the defined error type [`MaxBytesError`](https://tip.golang.org/pkg/net/http/#MaxBytesError) when its read limit is exceeded.The HTTP client will handle a 3xx response without a `Location` header by returning it to the caller, rather than treating it as an error.
+  [`ResponseWriter.WriteHeader`](https://tip.golang.org/pkg/net/http/#ResponseWriter) now supports sending user-defined 1xx informational headers.
+
+  The `io.ReadCloser` returned by [`MaxBytesReader`](https://tip.golang.org/pkg/net/http/#MaxBytesReader) will now return the defined error type [`MaxBytesError`](https://tip.golang.org/pkg/net/http/#MaxBytesError) when its read limit is exceeded.
+
+  The HTTP client will handle a 3xx response without a `Location` header by returning it to the caller, rather than treating it as an error.
 
 - [net/url](https://tip.golang.org/pkg/net/url/)
 
