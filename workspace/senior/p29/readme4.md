@@ -149,16 +149,6 @@ Go标准库在Go 1.19版本有很多细微的改动和优化，主要涵盖以�
 
   如果在Windows系统上，想让以`.js`为扩展名的文件被mime包识别为 `text/plain` ，必须显示调用 [`AddExtensionType`](https://tip.golang.org/pkg/mime/#AddExtensionType)。
 
-- [net](https://tip.golang.org/pkg/net/)
-
-  The pure Go resolver will now use EDNS(0) to include a suggested maximum reply packet length, permitting reply packets to contain up to 1232 bytes (the previous maximum was 512). In the unlikely event that this causes problems with a local DNS resolver, setting the environment variable `GODEBUG=netdns=cgo` to use the cgo-based resolver should work. Please report any such problems on [the issue tracker](https://tip.golang.org/issue/new).
-
-  When a net package function or method returns an "I/O timeout" error, the error will now satisfy `errors.Is(err, context.DeadlineExceeded)`. When a net package function returns an "operation was canceled" error, the error will now satisfy `errors.Is(err, context.Canceled)`. These changes are intended to make it easier for code to test for cases in which a context cancellation or timeout causes a net package function or method to return an error, while preserving backward compatibility for error messages.
-
-  [`Resolver.PreferGo`](https://tip.golang.org/pkg/net/#Resolver.PreferGo) is now implemented on Windows and Plan 9. It previously only worked on Unix platforms. Combined with [`Dialer.Resolver`](https://tip.golang.org/pkg/net/#Dialer.Resolver) and [`Resolver.Dial`](https://tip.golang.org/pkg/net/#Resolver.Dial), it's now possible to write portable programs and be in control of all DNS name lookups when dialing.
-
-  The `net` package now has initial support for the `netgo` build tag on Windows. When used, the package uses the Go DNS client (as used by `Resolver.PreferGo`) instead of asking Windows for DNS results. The upstream DNS server it discovers from Windows may not yet be correct with complex system network configurations, however.
-
 - [net/http](https://tip.golang.org/pkg/net/http/)
 
   [`ResponseWriter.WriteHeader`](https://tip.golang.org/pkg/net/http/#ResponseWriter) 现在支持发送用户自定义的1xx信息头(informational header)。
