@@ -121,19 +121,21 @@ Go标准库在Go 1.19版本有很多细微的改动和优化，主要涵盖以�
 
 - [go/types](https://tip.golang.org/pkg/go/types/)
 
-  The new methods [`Func.Origin`](https://tip.golang.org/pkg/go/types/#Func.Origin) and [`Var.Origin`](https://tip.golang.org/pkg/go/types/#Var.Origin) return the corresponding [`Object`](https://tip.golang.org/pkg/go/types/#Object) of the generic type for synthetic [`Func`](https://tip.golang.org/pkg/go/types/#Func) and [`Var`](https://tip.golang.org/pkg/go/types/#Var) objects created during type instantiation.It is no longer possible to produce an infinite number of distinct-but-identical [`Named`](https://tip.golang.org/pkg/go/types/#Named) type instantiations via recursive calls to [`Named.Underlying`](https://tip.golang.org/pkg/go/types/#Named.Underlying) or [`Named.Method`](https://tip.golang.org/pkg/go/types/#Named.Method).
+  新方法 [`Func.Origin`](https://tip.golang.org/pkg/go/types/#Func.Origin) 和 [`Var.Origin`](https://tip.golang.org/pkg/go/types/#Var.Origin) 会返回 [`Func`](https://tip.golang.org/pkg/go/types/#Func) 和 [`Var`](https://tip.golang.org/pkg/go/types/#Var) 实例化后的对象。
 
 - [hash/maphash](https://tip.golang.org/pkg/hash/maphash/)
 
-  The new functions [`Bytes`](https://tip.golang.org/pkg/hash/maphash/#Bytes) and [`String`](https://tip.golang.org/pkg/hash/maphash/#String) provide an efficient way hash a single byte slice or string. They are equivalent to using the more general [`Hash`](https://tip.golang.org/pkg/hash/maphash/#Hash) with a single write, but they avoid setup overhead for small inputs.
+  新函数 [`Bytes`](https://tip.golang.org/pkg/hash/maphash/#Bytes) 和 [`String`](https://tip.golang.org/pkg/hash/maphash/#String) 提供了高效的方式用于对一个byte slice或者字符串做hash。
 
 - [html/template](https://tip.golang.org/pkg/html/template/)
 
-  The type [`FuncMap`](https://tip.golang.org/pkg/html/template/#FuncMap) is now an alias for `text/template`'s [`FuncMap`](https://tip.golang.org/pkg/text/template/#FuncMap) instead of its own named type. This allows writing code that operates on a `FuncMap` from either setting.
+   [`FuncMap`](https://tip.golang.org/pkg/html/template/#FuncMap) 类型现在是`text/template`包里 [`FuncMap`](https://tip.golang.org/pkg/text/template/#FuncMap) 类型的别名，本身不再是一个独立的类型。
 
 - [image/draw](https://tip.golang.org/pkg/image/draw/)
 
-  [`Draw`](https://tip.golang.org/pkg/image/draw/#Draw) with the [`Src`](https://tip.golang.org/pkg/image/draw/#Src) operator preserves non-premultiplied-alpha colors when destination and source images are both [`image.NRGBA`](https://tip.golang.org/pkg/image/#NRGBA) or both [`image.NRGBA64`](https://tip.golang.org/pkg/image/#NRGBA64). This reverts a behavior change accidentally introduced by a Go 1.18 library optimization; the code now matches the behavior in Go 1.17 and earlier.
+  [`Draw`](https://tip.golang.org/pkg/image/draw/#Draw) with the [`Src`](https://tip.golang.org/pkg/image/draw/#Src) operator preserves non-premultiplied-alpha colors when destination and source images are both [`image.NRGBA`](https://tip.golang.org/pkg/image/#NRGBA) or both [`image.NRGBA64`](https://tip.golang.org/pkg/image/#NRGBA64). 
+
+  This reverts a behavior change accidentally introduced by a Go 1.18 library optimization; the code now matches the behavior in Go 1.17 and earlier.
 
 - [io](https://tip.golang.org/pkg/io/)
 
@@ -151,11 +153,11 @@ Go标准库在Go 1.19版本有很多细微的改动和优化，主要涵盖以�
 
 - [net/http](https://tip.golang.org/pkg/net/http/)
 
-  [`ResponseWriter.WriteHeader`](https://tip.golang.org/pkg/net/http/#ResponseWriter) now supports sending user-defined 1xx informational headers.
+  [`ResponseWriter.WriteHeader`](https://tip.golang.org/pkg/net/http/#ResponseWriter) 现在支持发送用户自定义的1xx信息头(informational header)。
 
-  The `io.ReadCloser` returned by [`MaxBytesReader`](https://tip.golang.org/pkg/net/http/#MaxBytesReader) will now return the defined error type [`MaxBytesError`](https://tip.golang.org/pkg/net/http/#MaxBytesError) when its read limit is exceeded.
+   [`MaxBytesReader`](https://tip.golang.org/pkg/net/http/#MaxBytesReader) 的返回值 `io.ReadCloser`在超过读上限(read limit)后，会返回一个错误类型 [`MaxBytesError`](https://tip.golang.org/pkg/net/http/#MaxBytesError) 。
 
-  The HTTP client will handle a 3xx response without a `Location` header by returning it to the caller, rather than treating it as an error.
+  HTTP client会把状态码为3xx但是没有`Location` header的Http Response返回给调用者，而不是直接当做错误处理。
 
 - [net/url](https://tip.golang.org/pkg/net/url/)
 
