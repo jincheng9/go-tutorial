@@ -12,7 +12,7 @@ Go官方团队在2022.06.11发布了Go 1.19 Beta 1版本，Go 1.19的正式relea
 
 第2篇主要涉及Go文档注释(doc comments)、编译约束(build constraint)以及Go命令的修改，原文链接：[Go 1.19版本变更内容第2篇](https://mp.weixin.qq.com/s?__biz=Mzg2MTcwNjc1Mg==&mid=2247484188&idx=1&sn=c14bafb1f89b3b3f988452c5a5f32884&chksm=ce124c73f965c5651a688c42561b02e38253b60943c77a0a6ad7b45621b4296d9e1acd47de7a#rd)。
 
-第2篇主要涉及Go运行时、编译器、汇编器和链接器方面的改动和优化，原文链接：[Go 1.19版本变更内容第3篇]()。
+第3篇主要涉及Go运行时、编译器、汇编器和链接器方面的改动和优化，原文链接：[Go 1.19版本变更内容第3篇](https://mp.weixin.qq.com/s?__biz=Mzg2MTcwNjc1Mg==&mid=2247484203&idx=1&sn=fcf95ce045a54c2f6a9414d1e9fa732d&chksm=ce124c44f965c5525fc820f99978cf0996d5f3653e4e580302986f14c9ae740d499ba9fb18c4&token=1117798005&lang=zh_CN#rd)。
 
 ## Go 1.19发布清单
 
