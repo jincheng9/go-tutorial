@@ -223,7 +223,7 @@ Go标准库在Go 1.19版本有很多细微的改动和优化，主要涵盖以�
 
 - [strconv](https://tip.golang.org/pkg/strconv/)
 
-  [`Quote`](https://tip.golang.org/pkg/strconv/#Quote) 函数和相关函数为了和其它ASCII码值标尺一致，会引用字符U+007F为`\x7f`，而不是`\u007f`。
+  [`Quote`](https://tip.golang.org/pkg/strconv/#Quote) 函数和相关函数为了和其它ASCII码值保持一致，会引用字符U+007F为`\x7f`，而不是`\u007f`。
 
 - [syscall](https://tip.golang.org/pkg/syscall/)
 
