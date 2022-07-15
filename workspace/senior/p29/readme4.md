@@ -133,23 +133,31 @@ Go标准库在Go 1.19版本有很多细微的改动和优化，主要涵盖以�
 
 - [image/draw](https://tip.golang.org/pkg/image/draw/)
 
-  [`Draw`](https://tip.golang.org/pkg/image/draw/#Draw) with the [`Src`](https://tip.golang.org/pkg/image/draw/#Src) operator preserves non-premultiplied-alpha colors when destination and source images are both [`image.NRGBA`](https://tip.golang.org/pkg/image/#NRGBA) or both [`image.NRGBA64`](https://tip.golang.org/pkg/image/#NRGBA64). 
+  当目标图像和源头像都是[`image.NRGBA`](https://tip.golang.org/pkg/image/#NRGBA) 或者都是 [`image.NRGBA64`](https://tip.golang.org/pkg/image/#NRGBA64) 类型时，operator为 [`Src`](https://tip.golang.org/pkg/image/draw/#Src) 的[`Draw`](https://tip.golang.org/pkg/image/draw/#Draw) 会保留non-premultiplied-alpha颜色。
 
-  This reverts a behavior change accidentally introduced by a Go 1.18 library optimization; the code now matches the behavior in Go 1.17 and earlier.
+  其实Go 1.17及更早版本的行为就是如此，但是Go 1.18版本做库优化的时候改变了这个行为，Go 1.19版本将这个行为还原了。
 
 - [io](https://tip.golang.org/pkg/io/)
 
-  [`NopCloser`](https://tip.golang.org/pkg/io/#NopCloser)'s result now implements [`WriterTo`](https://tip.golang.org/pkg/io/#WriterTo) whenever its input does.
+  [`NopCloser`](https://tip.golang.org/pkg/io/#NopCloser)的结果现在实现了 [`WriterTo`](https://tip.golang.org/pkg/io/#WriterTo) 接口。
 
-  [`MultiReader`](https://tip.golang.org/pkg/io/#MultiReader)'s result now implements [`WriterTo`](https://tip.golang.org/pkg/io/#WriterTo) unconditionally. If any underlying reader does not implement `WriterTo`, it is simulated appropriately.
+  [`MultiReader`](https://tip.golang.org/pkg/io/#MultiReader)的结果现在无条件地实现了 [`WriterTo`](https://tip.golang.org/pkg/io/#WriterTo)。如果任何底层的reader没有实现`WriteTo`，也会模拟`WriteTo`的行为。
 
 - [mime](https://tip.golang.org/pkg/mime/)
 
-  On Windows only, the mime package now ignores a registry entry recording that the extension `.js` should have MIME type `text/plain`. This is a common unintentional misconfiguration on Windows systems. The effect is that `.js` will have the default MIME type `text/javascript; charset=utf-8`. Applications that expect `text/plain` on Windows must now explicitly call [`AddExtensionType`](https://tip.golang.org/pkg/mime/#AddExtensionType).
+  `.js`扩展名的文件本来应该被mime包识别为 `text/plain`类型，但是在Windows系统上有bug，会导致以`.js`为扩展名的文件被mime包识别为`text/javascript; charset=utf-8`类型。
+
+  如果在Windows系统上，想让以`.js`为扩展名的文件被mime包识别为 `text/plain` ，必须显示调用 [`AddExtensionType`](https://tip.golang.org/pkg/mime/#AddExtensionType)。
 
 - [net](https://tip.golang.org/pkg/net/)
 
-  The pure Go resolver will now use EDNS(0) to include a suggested maximum reply packet length, permitting reply packets to contain up to 1232 bytes (the previous maximum was 512). In the unlikely event that this causes problems with a local DNS resolver, setting the environment variable `GODEBUG=netdns=cgo` to use the cgo-based resolver should work. Please report any such problems on [the issue tracker](https://tip.golang.org/issue/new).When a net package function or method returns an "I/O timeout" error, the error will now satisfy `errors.Is(err, context.DeadlineExceeded)`. When a net package function returns an "operation was canceled" error, the error will now satisfy `errors.Is(err, context.Canceled)`. These changes are intended to make it easier for code to test for cases in which a context cancellation or timeout causes a net package function or method to return an error, while preserving backward compatibility for error messages.[`Resolver.PreferGo`](https://tip.golang.org/pkg/net/#Resolver.PreferGo) is now implemented on Windows and Plan 9. It previously only worked on Unix platforms. Combined with [`Dialer.Resolver`](https://tip.golang.org/pkg/net/#Dialer.Resolver) and [`Resolver.Dial`](https://tip.golang.org/pkg/net/#Resolver.Dial), it's now possible to write portable programs and be in control of all DNS name lookups when dialing.The `net` package now has initial support for the `netgo` build tag on Windows. When used, the package uses the Go DNS client (as used by `Resolver.PreferGo`) instead of asking Windows for DNS results. The upstream DNS server it discovers from Windows may not yet be correct with complex system network configurations, however.
+  The pure Go resolver will now use EDNS(0) to include a suggested maximum reply packet length, permitting reply packets to contain up to 1232 bytes (the previous maximum was 512). In the unlikely event that this causes problems with a local DNS resolver, setting the environment variable `GODEBUG=netdns=cgo` to use the cgo-based resolver should work. Please report any such problems on [the issue tracker](https://tip.golang.org/issue/new).
+
+  When a net package function or method returns an "I/O timeout" error, the error will now satisfy `errors.Is(err, context.DeadlineExceeded)`. When a net package function returns an "operation was canceled" error, the error will now satisfy `errors.Is(err, context.Canceled)`. These changes are intended to make it easier for code to test for cases in which a context cancellation or timeout causes a net package function or method to return an error, while preserving backward compatibility for error messages.
+
+  [`Resolver.PreferGo`](https://tip.golang.org/pkg/net/#Resolver.PreferGo) is now implemented on Windows and Plan 9. It previously only worked on Unix platforms. Combined with [`Dialer.Resolver`](https://tip.golang.org/pkg/net/#Dialer.Resolver) and [`Resolver.Dial`](https://tip.golang.org/pkg/net/#Resolver.Dial), it's now possible to write portable programs and be in control of all DNS name lookups when dialing.
+
+  The `net` package now has initial support for the `netgo` build tag on Windows. When used, the package uses the Go DNS client (as used by `Resolver.PreferGo`) instead of asking Windows for DNS results. The upstream DNS server it discovers from Windows may not yet be correct with complex system network configurations, however.
 
 - [net/http](https://tip.golang.org/pkg/net/http/)
 
