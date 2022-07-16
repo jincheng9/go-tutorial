@@ -161,7 +161,7 @@ Go标准库在Go 1.19版本有很多细微的改动和优化，主要涵盖以�
 
   新增的 [`JoinPath`](https://tip.golang.org/pkg/net/url/#JoinPath) 函数 和 [`URL.JoinPath`](https://tip.golang.org/pkg/net/url/#URL.JoinPath) 方法可以把一组path元素组合在一起，创建一个新的 `URL`。
 
-   `URL`类型现在会区分没有host的URL和host为空的URL。举个例子， `http:///path` 是有host的，host为空，然后 `http:/path` 就没有host。
+   `URL`类型现在会区分没有host的URL和host为空的URL。举个例子， `http:///path` 是有host的，只是host为空，但是 `http:/path` 就没有host。
 
   当URL的host为空时，[`URL`](https://tip.golang.org/pkg/net/url/#URL) 类型里的字段 `OmitHost` 的值会被设置为`true`。
 
@@ -183,7 +183,7 @@ Go标准库在Go 1.19版本有很多细微的改动和优化，主要涵盖以�
 
 - [runtime](https://tip.golang.org/pkg/runtime/)
 
-   [`GOROOT`](https://tip.golang.org/pkg/runtime/#GOROOT) 函数会返回空串，当Go可执行程序使用了`-trimpath`标记进行编译并且没有在进程运行环境里没有设置`GOROOT`环境变量。
+  当Go可执行程序使用了`-trimpath`标记进行编译并且在进程运行环境里没有设置`GOROOT`环境变量， [`GOROOT`](https://tip.golang.org/pkg/runtime/#GOROOT) 函数会返回空串。
 
 - [runtime/metrics](https://tip.golang.org/pkg/runtime/metrics/)
 
@@ -207,7 +207,7 @@ Go标准库在Go 1.19版本有很多细微的改动和优化，主要涵盖以�
 
   在Linux操作系统上，race detector现在要求glibc的版本最低是2.17。
 
-  race detector现在至此`GOARCH=s390x`架构。
+  race detector现在支持`GOARCH=s390x`架构。
 
   新版的thread sanitizer不再支持`openbsd/amd64`平台，因此`openbsd/amd64`平台还是会沿用旧的v2版本的thread sanitizer。
 
