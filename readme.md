@@ -74,8 +74,8 @@
 * 常用关键字
 
   * [被defer的函数一定会执行么？](./workspace/senior/p2)
-
   * [new和make的使用区别和最佳实践是什么？](./workspace/senior/p4)
+  * [receive-only channel和send-only channel有用么？](./workspace/senior/p30)
 * 语言基础
   * [Go有引用变量和引用传递么？map,channel和slice作为函数参数是引用传递么？](./workspace/senior/p3)
   * [一文读懂Go匿名结构体的使用场景](./workspace/senior/p5)
