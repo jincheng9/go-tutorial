@@ -2,9 +2,43 @@
 
 ## 背景
 
+Go内置的数据结构channel我们都很熟悉
 
+### 题目1
+
+```go
+ch := make(<-chan int)
+close(ch)
+fmt.Println("ok")
+```
+
+* A: 正常打印ok
+* B: 运行时报错：fatal error - deadlock
+* C: 运行时报错：painic
+* D: 编译失败
+
+### 题目2
+
+```go
+c := make(chan<- int)
+close(c)
+fmt.Println("ok")
+```
+
+* A: 正常打印ok
+* B: 运行时报错：fatal error - deadlock
+* C: 运行时报错：painic
+* D: 编译失败
 
 ## 解析
+
+题目1的答案是D，题目1创建了一个receive-only channel，只能从channel里接收值，不能往channel里发送值。
+
+对于receive-only channel不能close。
+
+题目2的答案是A，题目2创建了一个send-only channel，只能往channel里发送值，不能从channel里接收值。
+
+对于send-only channel可以正常close。
 
 
 
