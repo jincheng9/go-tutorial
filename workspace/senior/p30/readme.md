@@ -4,7 +4,7 @@
 
 Go内置的数据结构channel相信大家都很熟悉，channel在Go语言里扮演了非常重要的角色。
 
-* channel可以帮助实现goroutine之间的通信和同步
+* channel可以帮助实现goroutine之间的通信和同步。
 * Go语言通过goroutine和channel实现了CSP(Communicating Sequencial Process)模型。
 
 Go语言的发明人之一Robe Pike说过下面这句话：
@@ -15,12 +15,12 @@ Go语言的发明人之一Robe Pike说过下面这句话：
 
 channel分为2种类型：
 
-* bi-directional channel(双向channel)：既可以往channel里发送数据，也可以从channel接收数据uni
+* bi-directional channel(双向channel)：既可以往channel里发送数据，也可以从channel接收数据
 * uni-directional channel(单向channel)
   * send-only channel：只能往channel发送数据，不能从channel接收数据，否则会编译报错
   * receive-only channel：只能从channel接收数据，不能往channel发送数据，否则会编译报错
 
-单向channel的一个典型使用场景是作为函数或方法参数，用来控制只能往channel发送数据或者只能从channel接收数据，避免一些情况的误操作。
+单向channel的一个典型使用场景是作为函数或方法参数，用来控制只能往channel发送数据或者只能从channel接收数据，避免误操作。
 
 ```go
 package main
