@@ -95,7 +95,7 @@ fmt.Println("ok")
 
 * 题目1的答案是D，题目1创建了一个receive-only channel，只能从channel里接收值，不能往channel里发送值。
 
-​	对于receive-only channel不能close，如果做close操作，会有如下报错：
+  对于receive-only channel不能close，如果做close操作，会有如下报错：
 
 ```go
 ./main.go:9:7: invalid operation: close(ch) (cannot close receive-only channel)
@@ -103,7 +103,7 @@ fmt.Println("ok")
 
 * 题目2的答案是A，题目2创建了一个send-only channel，只能往channel里发送值，不能从channel里接收值。
 
-​	对于send-only channel可以正常close。
+  对于send-only channel可以正常close。
 
 为什么receive-only channel不能close，但是send-only channel可以close呢？
 
