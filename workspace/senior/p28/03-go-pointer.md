@@ -10,9 +10,11 @@
 
 ## 场景
 
-Passing a variable by value will create a copy of this variable. Whereas passing it by pointer will just copy the memory address.
+如果我们有变量要传参，可以传该变量的值或者传指向该变量的指针。
 
-Hence, passing a pointer will always be **faster**, isn’t it?
+Go初学者容易有一种误解， 认为传变量的值会对整个变量做拷贝，而传指针只需要拷贝内存地址，所以传指针速度更快。
+
+但事实真的是这样么？
 
 If you believe this, please take a look at [this example](https://gist.github.com/teivah/a32a8e9039314a48f03538f3f9535537). This is a benchmark on a 0.3 KB data structure that we pass and receive by pointer and then by value. 0.3 KB is not huge but that should not be far from the type of data structures we see every day (for most of us).
 
