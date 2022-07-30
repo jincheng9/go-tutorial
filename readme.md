@@ -66,6 +66,12 @@
 
 * [lesson29: select语义](./workspace/lesson29)
 
+* [lesson30: go单元测试](./workspace/lesson30)
+
+* [lesson31: go性能测试](./workspace/lesson31)
+
+* [lesson32: go模糊测试](./workspace/senior/p22)
+
   
 
 
