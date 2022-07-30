@@ -1,8 +1,8 @@
-# Go指针的性能问题
+# Go指针的性能问题和内存逃逸
 
 ## 前言
 
-这是Go十大常见错误系列的第3篇：Go指针的性能问题。素材来源于Go布道者，现Docker公司资深工程师[Teiva Harsanyi](https://teivah.medium.com/)。
+这是Go十大常见错误系列的第3篇：Go指针的性能问题和内存逃逸。素材来源于Go布道者，现Docker公司资深工程师[Teiva Harsanyi](https://teivah.medium.com/)。
 
 本文涉及的源代码全部开源在：[Go十大常见错误源代码](https://github.com/jincheng9/go-tutorial/tree/main/workspace/senior/p28)，欢迎大家关注公众号，及时获取本系列最新更新。
 
@@ -10,17 +10,107 @@
 
 ## 场景
 
-如果我们有变量要传参，可以传该变量的值或者传指向该变量的指针。
+我们知道，函数参数和返回值可以使用变量或者指向变量的指针。
 
-Go初学者容易有一种误解， 认为传变量的值会对整个变量做拷贝，而传指针只需要拷贝内存地址，所以传指针速度更快。
+Go初学者容易有一种误解：
+
+* 认为函数参数和返回值如果使用变量的值会对整个变量做拷贝，速度慢
+* 认为函数参数和返回值如果使用指针类型，只需要拷贝内存地址，速度更快
 
 但事实真的是这样么？
 
-If you believe this, please take a look at [this example](https://gist.github.com/teivah/a32a8e9039314a48f03538f3f9535537). This is a benchmark on a 0.3 KB data structure that we pass and receive by pointer and then by value. 0.3 KB is not huge but that should not be far from the type of data structures we see every day (for most of us).
+我们可以看下这段代码 [this example](https://github.com/jincheng9/go-tutorial/blob/main/workspace/senior/p28/pointer/pointer_test.go)，做性能测试的结果如下：
 
-When I execute these benchmarks on my local environment, passing by value is more than **4 times faster** than passing by pointer. This might a bit counterintuitive, right?
+```bash
+$ go test -bench .
+goos: darwin
+goarch: amd64
+pkg: pointer
+cpu: Intel(R) Core(TM) i5-5250U CPU @ 1.60GHz
+BenchmarkByPointer-4     6473781               178.2 ns/op
+BenchmarkByValue-4      21760696                47.11 ns/op
+PASS
+ok      pointer 2.894s
+```
 
-The explanation of this result is related to how the memory is managed in Go. I couldn’t explain it as brilliantly as [William Kennedy](https://www.ardanlabs.com/blog/2017/05/language-mechanics-on-stacks-and-pointers.html) but let’s try to summarize it.
+可以看出，参数和返回值都用指针的函数比参数和返回值都用变量值的函数慢很多，前者的耗时是后者的4倍。
+
+初学者看到这个，可能会觉得有点反直觉，为什么会这样呢？
+
+这和Go对stack(栈)和heap(堆)的内存管理有关系，变量分配在stack上还是heap上，对性能是会有影响的。
+
+* stack上分配内存效率比heap更高，而且stack上分配的内存不用做GC，超出了作用域，就自动回收内存。
+
+* 放在heap上的内存，需要由GC来做内存回收，而且容易产生内存碎片。
+
+* 编译器决定变量分配在stack还是heap上，需要做逃逸分析(escape analysis)，逃逸分析在编译阶段就完成了。
+
+通过逃逸分析，编译器会尽可能把能分配在栈上的对象分配在栈上，避免频繁GC垃圾回收带来的系统开销，对程序性能有影响。
+
+
+
+### 案例1
+
+我们看下面的代码：其中结构体`foo`的可以参考 [this example](https://github.com/jincheng9/go-tutorial/blob/main/workspace/senior/p28/pointer/pointer_test.go)。
+
+```go
+func getFooValue() foo {
+	var result foo
+	// Do something
+	return result
+}
+```
+
+变量`result`定义的时候会在这个goroutine的stack上分配`result`的内存空间。
+
+当函数返回时，`getFooValue`的调用方如果有接收返回值，那`result`的值会被拷贝给对应的接收变量。
+
+stack上变量`result`的内存空间会标记为不可用，不能再被访问，除非这块空间再次被分配给其它变量。
+
+
+
+### 案例2
+
+我们看下面的代码：
+
+```go
+func getFooPointer() *foo {
+	var result foo
+	// Do something
+	return &result
+}
+```
+
+
+
+### 案例3
+
+我们看下面的代码：
+
+```go
+func main()  {
+	p := &foo{}
+	f(p)
+}
+```
+
+
+
+## 总结
+
+那我们怎么知道到底变量是分配在stack上还是head上呢？通常有以下原则，
+
+
+
+此外，我们还可以借助内存逃逸分析工具来帮助我们。
+
+因为内存逃逸分析是编译器在编译期就完成的，可以使用以编译下命令来做内存逃逸分析：
+
+* `go build -gcflags="-m"`
+* `go build -gcflags="-m -l"`，`-l`会禁用内联优化。
+* `go build -gcflags="-m -m"`，多一个`-m`会展示更详细的分析结果。
+
+
 
 A variable can be allocated on the **heap** or the **stack**. As a rough draft:
 
@@ -60,6 +150,10 @@ Then, if we suffer from performance issues, one possible optimization could be t
 
 But again, for most of our day-to-day use cases, values are the best fit.
 
+## 推荐阅读
+
+
+
 ## 开源地址
 
 文章和示例代码开源在GitHub: [Go语言初级、中级和高级教程](https://github.com/jincheng9/go-tutorial)。
@@ -76,4 +170,5 @@ But again, for most of our day-to-day use cases, values are the best fit.
 
 * https://itnext.io/the-top-10-most-common-mistakes-ive-seen-in-go-projects-4b79d4f6cd65
 * https://www.ardanlabs.com/blog/2017/05/language-mechanics-on-stacks-and-pointers.html
+* https://www.ardanlabs.com/blog/2017/05/language-mechanics-on-escape-analysis.html
 * https://www.youtube.com/watch?v=ZMZpH4yT7M0

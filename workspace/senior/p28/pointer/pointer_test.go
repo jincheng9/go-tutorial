@@ -1,4 +1,4 @@
-package main
+package pointer
 
 import (
 	"encoding/json"
