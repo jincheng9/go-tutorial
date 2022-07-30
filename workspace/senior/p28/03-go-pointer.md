@@ -65,7 +65,9 @@ func getFooValue() foo {
 
 当函数返回时，`getFooValue`的调用方如果有接收返回值，那`result`的值会被拷贝给对应的接收变量。
 
-stack上变量`result`的内存空间会标记为不可用，不能再被访问，除非这块空间再次被分配给其它变量。
+stack上变量`result`的内存空间会被释放(标记为不可用，不能再被访问，除非这块空间再次被分配给其它变量)。
+
+**注意**：本案例的结构体`foo`占用的内存空间比较小，约0.3KB，goroutine的stack空间足够存储，如果`foo`占用的空间过大，在stack里存储不了，就会分配内存到heap上。
 
 
 
@@ -80,6 +82,10 @@ func getFooPointer() *foo {
 	return &result
 }
 ```
+
+函数`getFooPointer`因为返回的是一个指针，如果变量`result`分配在stack上，那函数返回后，`result`的内存空间会被释放，就会导致接受函数返回值的变量无法访问原本`result`的内存空间，成为一个悬浮指针(dangling pointer)。
+
+所以这种情况会发生内存逃逸，`result`会分配在heap上，而不是stack上。
 
 
 
