@@ -17,9 +17,7 @@ Go初学者容易有一种误解：
 * 认为函数参数和返回值如果使用变量的值会对整个变量做拷贝，速度慢
 * 认为函数参数和返回值如果使用指针类型，只需要拷贝内存地址，速度更快
 
-但事实真的是这样么？
-
-我们可以看下这段代码 [this example](https://github.com/jincheng9/go-tutorial/blob/main/workspace/senior/p28/pointer/pointer_test.go)，做性能测试的结果如下：
+但事实真的是这样么？我们可以看下这段代码 [this example](https://github.com/jincheng9/go-tutorial/blob/main/workspace/senior/p28/pointer/pointer_test.go)，做性能测试的结果如下：
 
 ```bash
 $ go test -bench .
@@ -43,9 +41,13 @@ ok      pointer 2.894s
 
 * 放在heap上的内存，需要由GC来做内存回收，而且容易产生内存碎片。
 
-* 编译器决定变量分配在stack还是heap上，需要做逃逸分析(escape analysis)，逃逸分析在编译阶段就完成了。
+* 编译器在编译期决定变量分配在stack还是heap上，需要做逃逸分析(escape analysis)，逃逸分析在编译阶段就完成了。
 
-通过逃逸分析，编译器会尽可能把能分配在栈上的对象分配在栈上，避免频繁GC垃圾回收带来的系统开销，对程序性能有影响。
+什么是逃逸分析呢？
+
+Go编译器解析源代码，决定哪些变量分配在stack内存空间，哪些变量分配在heap内存空间的过程就叫做逃逸分析，属于Go代码编译的一个分析阶段。
+
+通过逃逸分析，编译器会尽可能把能分配在栈上的对象分配在栈上，避免堆内存频繁GC垃圾回收带来的系统开销，影响程序性能。
 
 
 
@@ -100,63 +102,51 @@ func main()  {
 }
 ```
 
+指针变量`p`是函数`f`的实参，因为我们是在main所在的goroutine里调用函数`f`，并没有跨goroutine，所以指针变量`p`分配在stack上就可以，不需要分配在heap上。
+
 
 
 ## 总结
 
-那我们怎么知道到底变量是分配在stack上还是head上呢？通常有以下原则，
+那我们怎么知道到底变量是分配在stack上还是head上呢？
 
+Go官方给的说法是：
 
+* 从程序正确性的角度而言，你不需要关心变量是分配在stack上还是heap上。变量分配在哪块内存空间不改变Go语言的语义。
+* 从程序性能的角度而言，你可以关心变量到底是分配在stack上还是heap上，因为正如上文所言，变量存储的位置是对性能有影响的。
+
+> ### How do I know whether a variable is allocated on the heap or the stack?
+>
+> From a correctness standpoint, you don't need to know. Each variable in Go exists as long as there are references to it. The storage location chosen by the implementation is irrelevant to the semantics of the language.
+>
+> The storage location does have an effect on writing efficient programs. When possible, the Go compilers will allocate variables that are local to a function in that function's stack frame. However, if the compiler cannot prove that the variable is not referenced after the function returns, then the compiler must allocate the variable on the garbage-collected heap to avoid dangling pointer errors. Also, if a local variable is very large, it might make more sense to store it on the heap rather than the stack.
+>
+> In the current compilers, if a variable has its address taken, that variable is a candidate for allocation on the heap. However, a basic *escape analysis* recognizes some cases when such variables will not live past the return from the function and can reside on the stack.
+
+一般而言，遇到以下情况会发生逃逸行为，Go编译器会将变量存储在heap上
+
+* 函数内局部变量在函数外部被引用
+* 接口(interface)类型的变量
+* size未知或者动态变化的变量，如slice，map，channel，[]byte等
+* size过大的局部变量，因为stack内存空间比较小。
 
 此外，我们还可以借助内存逃逸分析工具来帮助我们。
 
 因为内存逃逸分析是编译器在编译期就完成的，可以使用以编译下命令来做内存逃逸分析：
 
-* `go build -gcflags="-m"`
-* `go build -gcflags="-m -l"`，`-l`会禁用内联优化。
+* `go build -gcflags="-m"`，可以展示逃逸分析、内联优化等各种优化结果。
+* `go build -gcflags="-m -l"`，`-l`会禁用内联优化，这样可以过滤掉内联优化的结果展示，让我们可以关注逃逸分析的结果。
 * `go build -gcflags="-m -m"`，多一个`-m`会展示更详细的分析结果。
 
 
 
-A variable can be allocated on the **heap** or the **stack**. As a rough draft:
-
-- The stack contains the **ongoing** variables for a given **goroutine**. Once a function returned, the variables are popped from the stack.
-- The heap contains the **shared** variables (global variables, etc.).
-
-Let’s check at a simple example where we return a value:
-
-<iframe src="https://itnext.io/media/e449d978f99c08184cd5a202cdf2a1d4" allowfullscreen="" frameborder="0" height="153" width="692" title="value.go" class="fp aq as ag cf" scrolling="auto" style="box-sizing: inherit; height: 153px; top: 0px; left: 0px; width: 692px; position: absolute;"></iframe>
-
-Here, a `result` variable is created by the current goroutine. This variable is pushed into the current stack. Once the function returns, the client will receive a copy of this variable. The variable itself is popped from the stack. It still exists in memory until it is erased by another variable but it **cannot be accessed anymore**.
-
-Now, the same example but with a pointer:
-
-<iframe src="https://itnext.io/media/c509bec83765998aee524baeaa8b6741" allowfullscreen="" frameborder="0" height="153" width="692" title="pointer.go" class="fp aq as ag cf" scrolling="auto" style="box-sizing: inherit; height: 153px; top: 0px; left: 0px; width: 692px; position: absolute;"></iframe>
-
-The `result` variable is still created by the current goroutine but the client will receive a pointer (a copy of the variable address). If the `result` variable was popped from the stack, the client of this function **could not access** it anymore.
-
-In this scenario, the Go compiler will **escape** the `result` variable to a place where the variables can be shared: **the heap**.
-
-Passing pointers, though, is another scenario. For example:
-
-<iframe src="https://itnext.io/media/6e7878703f82261e74637f928cb92234" allowfullscreen="" frameborder="0" height="131" width="692" title="pointer.go" class="fp aq as ag cf" scrolling="auto" style="box-sizing: inherit; height: 131px; top: 0px; left: 0px; width: 692px; position: absolute;"></iframe>
-
-Because we are calling `f` within the same goroutine, the `p` variable does not need to be escaped. It is simply pushed to the stack and the sub-function can access it.
-
-For example, this is a direct consequence of receiving a slice in the `Read` method of `io.Reader` instead of returning one. Returning a slice (which is a pointer) would have escaped it to the heap.
-
-Why is the stack so **fast** then? There are two main reasons:
-
-- There is no need to have a **garbage collector** for the stack. As we said, a variable is simply pushed once it is created then popped from the stack once the function returns. There is no need to get a complex process reclaiming unused variables, etc.
-- A stack belongs to one goroutine so storing a variable does not need to be **synchronized** compared to storing it on the heap. This also results in a performance gain.
-
-As a conclusion, when we create a function, our default behavior should be to use **values instead of pointers**. A pointer should only be used if we want to **share** a variable.
-
-Then, if we suffer from performance issues, one possible optimization could be to check whether pointers would help or not in some specific situations. It is possible to know when the compiler will escape a variable to the heap by using the following command: `go build -gcflags "-m -m"`.
-
-But again, for most of our day-to-day use cases, values are the best fit.
-
 ## 推荐阅读
+
+* [Go十大常见错误第1篇：未知枚举值](https://mp.weixin.qq.com/s?__biz=Mzg2MTcwNjc1Mg==&mid=2247484146&idx=1&sn=10fb12b643a2e37c090e5aa3bc583152&chksm=ce124d9df965c48bb954aeddabdff3db12738ded3875542250c5d0ef6cfd4417fc56580288b1&token=1912894792&lang=zh_CN#rd)
+* [Go十大常见错误第2篇：benchmark性能测试的坑](https://mp.weixin.qq.com/s?__biz=Mzg2MTcwNjc1Mg==&mid=2247484163&idx=1&sn=b28d61c1f3ec9d914e698dce105ba5d1&chksm=ce124c6cf965c57a90bc85a5295ed9375103de20607b509f845583ff6686385df0ed96653d00&token=1912894792&lang=zh_CN#rd)
+* [Go栈和指针的语法机制](https://www.ardanlabs.com/blog/2017/05/language-mechanics-on-stacks-and-pointers.html)
+* [逃逸分析原理 by ArdanLabs](https://www.ardanlabs.com/blog/2017/05/language-mechanics-on-escape-analysis.html)
+* [逃逸分析原理 by Gopher Con](https://www.youtube.com/watch?v=ZMZpH4yT7M0)
 
 
 
