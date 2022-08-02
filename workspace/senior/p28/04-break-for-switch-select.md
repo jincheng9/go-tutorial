@@ -10,7 +10,53 @@
 
 ## 场景
 
+What happens in the following example if `f` returns true?
 
+```go
+for {
+  switch f() {
+  case true:
+    break
+  case false:
+    // Do something
+  }
+}
+```
+
+
+
+We are going to call the `break` statement. Yet, this will break the `switch` statement, **not the for-loop**.
+
+Same problem with:
+
+```go
+for {
+  select {
+  case <-ch:
+  // Do something
+  case <-ctx.Done():
+    break
+  }
+}
+```
+
+
+
+The `break` is related to the `select` statement, not the for-loop.
+
+One possible solution to break a for/switch or a for/select is to use a **labeled break** like this:
+
+```go
+loop:
+	for {
+		select {
+		case <-ch:
+		// Do something
+		case <-ctx.Done():
+			break loop
+		}
+	}
+```
 
 
 
@@ -21,10 +67,10 @@
 ## 推荐阅读
 
 * [Go十大常见错误第1篇：未知枚举值](https://mp.weixin.qq.com/s?__biz=Mzg2MTcwNjc1Mg==&mid=2247484146&idx=1&sn=10fb12b643a2e37c090e5aa3bc583152&chksm=ce124d9df965c48bb954aeddabdff3db12738ded3875542250c5d0ef6cfd4417fc56580288b1&token=1912894792&lang=zh_CN#rd)
+
 * [Go十大常见错误第2篇：benchmark性能测试的坑](https://mp.weixin.qq.com/s?__biz=Mzg2MTcwNjc1Mg==&mid=2247484163&idx=1&sn=b28d61c1f3ec9d914e698dce105ba5d1&chksm=ce124c6cf965c57a90bc85a5295ed9375103de20607b509f845583ff6686385df0ed96653d00&token=1912894792&lang=zh_CN#rd)
-* [Go栈和指针的语法机制](https://www.ardanlabs.com/blog/2017/05/language-mechanics-on-stacks-and-pointers.html)
-* [逃逸分析原理 by ArdanLabs](https://www.ardanlabs.com/blog/2017/05/language-mechanics-on-escape-analysis.html)
-* [逃逸分析原理 by Gopher Con](https://www.youtube.com/watch?v=ZMZpH4yT7M0)
+
+  
 
 
 
@@ -51,6 +97,5 @@
 ## References
 
 * https://itnext.io/the-top-10-most-common-mistakes-ive-seen-in-go-projects-4b79d4f6cd65
-* https://www.ardanlabs.com/blog/2017/05/language-mechanics-on-stacks-and-pointers.html
-* https://www.ardanlabs.com/blog/2017/05/language-mechanics-on-escape-analysis.html
-* https://www.youtube.com/watch?v=ZMZpH4yT7M0
+* https://github.com/jincheng9/go-tutorial/tree/main/workspace/lesson6
+* https://github.com/jincheng9/go-tutorial/tree/main/workspace/lesson7
