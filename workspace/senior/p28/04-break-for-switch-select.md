@@ -1,4 +1,4 @@
-# Go十大常见错误第4篇：for/switch和for/select做break操作退出的注意事项
+# Go十大常见错误第4篇：for/switch和for/select做break操作的注意事项
 
 ## 前言
 
@@ -10,7 +10,9 @@
 
 ## 场景
 
-What happens in the following example if `f` returns true?
+### 案例1
+
+大家看看下面这段代码：
 
 ```go
 for {
@@ -23,11 +25,13 @@ for {
 }
 ```
 
+如果函数调用`f()`返回的结果是`true`，进入到`case true`分支，会发生什么？会退出for循环么？
 
+答案是：只退出了switch语句，并不会退出for循环，所以break后又继续执行for循环里的代码。
 
-We are going to call the `break` statement. Yet, this will break the `switch` statement, **not the for-loop**.
+### 案例2
 
-Same problem with:
+再看下面这段代码
 
 ```go
 for {
@@ -40,11 +44,11 @@ for {
 }
 ```
 
+同样地，如果执行了break语句，退出的只是select语句块，并不会退出for循环。
 
+那在上面2种场景里，如何退出for循环呢？
 
-The `break` is related to the `select` statement, not the for-loop.
-
-One possible solution to break a for/switch or a for/select is to use a **labeled break** like this:
+可以结合label和break进行实现。
 
 ```go
 loop:
@@ -58,9 +62,7 @@ loop:
 	}
 ```
 
-
-
-## 总结
+对于上面的代码，loop是一个label，`break loop`如果执行了就会退出for循环。
 
 
 
@@ -69,6 +71,14 @@ loop:
 * [Go十大常见错误第1篇：未知枚举值](https://mp.weixin.qq.com/s?__biz=Mzg2MTcwNjc1Mg==&mid=2247484146&idx=1&sn=10fb12b643a2e37c090e5aa3bc583152&chksm=ce124d9df965c48bb954aeddabdff3db12738ded3875542250c5d0ef6cfd4417fc56580288b1&token=1912894792&lang=zh_CN#rd)
 
 * [Go十大常见错误第2篇：benchmark性能测试的坑](https://mp.weixin.qq.com/s?__biz=Mzg2MTcwNjc1Mg==&mid=2247484163&idx=1&sn=b28d61c1f3ec9d914e698dce105ba5d1&chksm=ce124c6cf965c57a90bc85a5295ed9375103de20607b509f845583ff6686385df0ed96653d00&token=1912894792&lang=zh_CN#rd)
+
+* [Go十大常见错误第3篇：go指针的性能问题和内存逃逸](https://mp.weixin.qq.com/s?__biz=Mzg2MTcwNjc1Mg==&mid=2247484247&idx=1&sn=faf716627afb00df646cecff023fb63c&chksm=ce124c38f965c52efd009a4c98691d56b5765dc7dce98aa49b226ad9274bd062d8d01e702e91&token=1899277735&lang=zh_CN#rd)
+
+* [Go switch使用说明](https://github.com/jincheng9/go-tutorial/tree/main/workspace/lesson6)
+
+* [Go for/break使用说明](https://github.com/jincheng9/go-tutorial/tree/main/workspace/lesson7)
+
+* [Go select语义](https://github.com/jincheng9/go-tutorial/tree/main/workspace/lesson29)
 
   
 
