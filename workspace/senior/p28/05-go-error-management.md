@@ -10,7 +10,43 @@
 
 ## 场景
 
+Go is still a bit young in its way to deal with errors. It’s not a coincidence if this is one of the most expected features of Go 2.
 
+The current standard library (before Go 1.13) only offers functions to construct errors so you probably want to take a look at [*pkg/errors*](https://github.com/pkg/errors) (if this is not already done).
+
+This library is a good way to respect the following rule of thumb which is not always respected:
+
+*An error should be handled only* ***once\****. Logging an error* ***is\*** *handling an error. So an error should* ***either\*** *be logged or propagated.*
+
+With the current standard library, it is difficult to respect this as we may want to add some context to an error and have some form of hierarchy.
+
+Let’s see an example of what we would expect with a REST call leading to a DB issue:
+
+```
+unable to serve HTTP POST request for customer 1234
+ |_ unable to insert customer contract abcd
+     |_ unable to commit transaction
+```
+
+If we use *pkg/errors*, we could do it this way:
+
+<iframe src="https://itnext.io/media/f9de41040d88d7e4cf2dffd98d22f8d8" allowfullscreen="" frameborder="0" height="505" width="692" title="errors.go" class="fp aq as ag cf" scrolling="auto" style="box-sizing: inherit; height: 504.984px; top: 0px; left: 0px; width: 692px; position: absolute;"></iframe>
+
+The initial error (if not returned by an external library) could be created with `errors.New`. The middle layer, `insert`, wraps this error by adding more context to it. Then, the parent handles the error by logging it. Each level either return or handle the error.
+
+We may also want to check at the error cause itself to implement a retry for example. Let’s say we have a `db` package from an external library dealing with the database accesses. This library may return a transient (temporary) error called `db.DBError`. To determine whether we need to retry, we have to check at the error cause:
+
+<iframe src="https://itnext.io/media/f62acbb037a06d9580e40d0e11889c32" allowfullscreen="" frameborder="0" height="527" width="692" title="errors.go" class="fp aq as ag cf" scrolling="auto" style="box-sizing: inherit; height: 527px; top: 0px; left: 0px; width: 692px; position: absolute;"></iframe>
+
+This is done using `errors.Cause` which also comes from *pkg/errors*:
+
+One common mistake I’ve seen was to use *pkg/errors* partially. Checking an error was for example done this way:
+
+<iframe src="https://itnext.io/media/db4ccb35df705f8b09e38fc15d4d5534" allowfullscreen="" frameborder="0" height="197" width="692" title="errors.go" class="fp aq as ag cf" scrolling="auto" style="box-sizing: inherit; height: 197px; top: 0px; left: 0px; width: 692px; position: absolute;"></iframe>
+
+In this example, if the `db.DBError` is wrapped, it will never trigger the retry.
+
+[Don't just check errors, handle them gracefullyThis post is an extract from my presentation at the recent GoCon spring conference in Tokyo, Japan. I've spent a lot of…dave.cheney.net](https://dave.cheney.net/2016/04/27/dont-just-check-errors-handle-them-gracefully)
 
 
 
