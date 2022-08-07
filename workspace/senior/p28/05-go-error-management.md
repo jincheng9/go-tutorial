@@ -10,7 +10,7 @@
 
 ## 场景
 
-Go is still a bit young in its way to deal with errors. It’s not a coincidence if this is one of the most expected features of Go 2.
+Go语言在错误处理(error handling)机制上经常被诟病。
 
 The current standard library (before Go 1.13) only offers functions to construct errors so you probably want to take a look at [*pkg/errors*](https://github.com/pkg/errors) (if this is not already done).
 
