@@ -16,7 +16,7 @@ The current standard library (before Go 1.13) only offers functions to construct
 
 This library is a good way to respect the following rule of thumb which is not always respected:
 
-*An error should be handled only* ***once\****. Logging an error* ***is\*** *handling an error. So an error should* ***either\*** *be logged or propagated.*
+>  An error should be handled only **once**. Logging an error is handling an error. So an error should  either be logged or propagated.
 
 With the current standard library, it is difficult to respect this as we may want to add some context to an error and have some form of hierarchy.
 
