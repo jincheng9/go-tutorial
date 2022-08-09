@@ -12,9 +12,11 @@
 
 Go语言在错误处理(error handling)机制上经常被诟病。
 
-The current standard library (before Go 1.13) only offers functions to construct errors so you probably want to take a look at [*pkg/errors*](https://github.com/pkg/errors) (if this is not already done).
+在Go 1.13版本之前，Go标准库里只有一个用于构建error的`errors.New`函数，没有其它函数。
 
-This library is a good way to respect the following rule of thumb which is not always respected:
+所以很多人可能用过开源的[*pkg/errors*](https://github.com/pkg/errors)包来处理Go语言里的error。
+
+这个包的代码风格很好，遵循了下面的error处理法则。
 
 >  An error should be handled only **once**. Logging an error is handling an error. So an error should  either be logged or propagated.
 
@@ -30,7 +32,31 @@ unable to serve HTTP POST request for customer 1234
 
 If we use *pkg/errors*, we could do it this way:
 
-<iframe src="https://itnext.io/media/f9de41040d88d7e4cf2dffd98d22f8d8" allowfullscreen="" frameborder="0" height="505" width="692" title="errors.go" class="fp aq as ag cf" scrolling="auto" style="box-sizing: inherit; height: 504.984px; top: 0px; left: 0px; width: 692px; position: absolute;"></iframe>
+```go
+func postHandler(customer Customer) Status {
+	err := insert(customer.Contract)
+	if err != nil {
+		log.WithError(err).Errorf("unable to serve HTTP POST request for customer %s", customer.ID)
+		return Status{ok: false}
+	}
+	return Status{ok: true}
+}
+
+func insert(contract Contract) error {
+	err := dbQuery(contract)
+	if err != nil {
+		return errors.Wrapf(err, "unable to insert customer contract %s", contract.ID)
+	}
+	return nil
+}
+
+func dbQuery(contract Contract) error {
+	// Do something then fail
+	return errors.New("unable to commit transaction")
+}
+```
+
+
 
 The initial error (if not returned by an external library) could be created with `errors.New`. The middle layer, `insert`, wraps this error by adding more context to it. Then, the parent handles the error by logging it. Each level either return or handle the error.
 
