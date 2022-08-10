@@ -14,7 +14,7 @@ Go语言在错误处理(error handling)机制上经常被诟病。
 
 在Go 1.13版本之前，Go标准库里只有一个用于构建error的`errors.New`函数，没有其它函数。
 
-所以很多人可能用过开源的[*pkg/errors*](https://github.com/pkg/errors)包来处理Go语言里的error。
+所以很多人可能用过开源的[*pkg/errors*](https://github.com/pkg/errors)包来处理Go语言里的error。使用[*pkg/errors*](https://github.com/pkg/errors)包的开发者也会犯一些错误，下文会详细讲到。
 
 这个包的代码风格很好，遵循了下面的error处理法则。
 
