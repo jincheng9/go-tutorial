@@ -30,7 +30,7 @@ Go语言在错误处理(error handling)机制上经常被诟病。
 
 很多开发者在日常开发中，如果某个函数里遇到了error，可能会先打印error，同时把error也返回给上层调用方，这就没有遵循上面的最佳实践。
 
-我们接下来看一个具体的示例，代码逻辑是后台收到了一个RESTful的接口请求，触发了数据库报错：
+我们接下来看一个具体的示例，代码逻辑是后台收到了一个RESTful的接口请求，触发了数据库报错。我们想打印如下的堆栈信息：
 
 ```
 unable to serve HTTP POST request for customer 1234
@@ -67,7 +67,7 @@ func dbQuery(contract Contract) error {
 函数调用链是`postHandler` -> `insert` -> `dbQuery`。
 
 * `dbQuery`使用`errors.New`函数创建error并返回给上层调用方。
-* `insert`对`dbQuery`返回的error做了一层封装，添加了一些上下文信息。
+* `insert`对`dbQuery`返回的error做了一层封装，添加了一些上下文信息，把error返回给上层调用方。
 * `postHandler`打印`insert`返回的error。
 
 函数调用链的每一层，要么返回error，要么打印error，遵循了上面提到的error处理法则。
@@ -76,7 +76,7 @@ func dbQuery(contract Contract) error {
 
 在业务逻辑里，我们经常会需要判断error类型，根据error的类型，决定下一步的操作：
 
-* 比如可能重试直到成功。
+* 比如可能做重试操作，直到成功。
 * 比如可能直接打印错误日志，然后退出函数。
 
 举个例子，假设我们使用了一个名为`db`的包，用来做数据库的读写操作。
@@ -126,7 +126,7 @@ case *db.DBError:
 }
 ```
 
-错误在哪里呢？
+**可能的错误在哪里呢？**
 
 上面代码示例里对error类型的判断使用了`err.(type)`，没有使用`errors.Cause(err).(type)`。
 
