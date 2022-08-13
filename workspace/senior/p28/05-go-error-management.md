@@ -14,15 +14,23 @@ Go语言在错误处理(error handling)机制上经常被诟病。
 
 在Go 1.13版本之前，Go标准库里只有一个用于构建error的`errors.New`函数，没有其它函数。
 
-所以很多人可能用过开源的[*pkg/errors*](https://github.com/pkg/errors)包来处理Go语言里的error。使用[*pkg/errors*](https://github.com/pkg/errors)包的开发者也会犯一些错误，下文会详细讲到。
+### pkg/errors包
 
-这个包的代码风格很好，遵循了下面的error处理法则。
+由于Go标准库里errors包的功能比较少，所以很多人可能用过开源的[*pkg/errors*](https://github.com/pkg/errors)包来处理Go语言里的error。
+
+比较早使用Go语言做开发，并且使用[*pkg/errors*](https://github.com/pkg/errors)包的开发者也会犯一些错误，下文会详细讲到。
+
+`pkg/errors`包的代码风格很好，遵循了下面的error处理法则。
 
 >  An error should be handled only **once**. Logging an error is handling an error. So an error should  either be logged or propagated.
 
-With the current standard library, it is difficult to respect this as we may want to add some context to an error and have some form of hierarchy.
+翻译成中文就是：
 
-Let’s see an example of what we would expect with a REST call leading to a DB issue:
+> error只应该被处理一次，打印error也是对error的一种处理。所以对于error，要么打印出来，要么就把error返回传递给上一层。
+
+很多开发者在日常开发中，如果某个函数里遇到了error，可能会先打印error，同时把error也返回给上层调用方，这就没有遵循上面的最佳实践。
+
+我们接下来看一个具体的示例，代码逻辑是后台收到了一个RESTful的接口请求，触发了数据库报错：
 
 ```
 unable to serve HTTP POST request for customer 1234
@@ -30,7 +38,7 @@ unable to serve HTTP POST request for customer 1234
      |_ unable to commit transaction
 ```
 
-If we use *pkg/errors*, we could do it this way:
+假设我们使用`pkg/errors`包，我们可以使用如下代码来实现：
 
 ```go
 func postHandler(customer Customer) Status {
@@ -56,23 +64,73 @@ func dbQuery(contract Contract) error {
 }
 ```
 
+函数调用链是`postHandler` -> `insert` -> `dbQuery`。
 
+* `dbQuery`使用`errors.New`函数创建error并返回给上层调用方。
+* `insert`对`dbQuery`返回的error做了一层封装，添加了一些上下文信息。
+* `postHandler`打印`insert`返回的error。
 
-The initial error (if not returned by an external library) could be created with `errors.New`. The middle layer, `insert`, wraps this error by adding more context to it. Then, the parent handles the error by logging it. Each level either return or handle the error.
+函数调用链的每一层，要么返回error，要么打印error，遵循了上面提到的error处理法则。
 
-We may also want to check at the error cause itself to implement a retry for example. Let’s say we have a `db` package from an external library dealing with the database accesses. This library may return a transient (temporary) error called `db.DBError`. To determine whether we need to retry, we have to check at the error cause:
+### error判断
 
-<iframe src="https://itnext.io/media/f62acbb037a06d9580e40d0e11889c32" allowfullscreen="" frameborder="0" height="527" width="692" title="errors.go" class="fp aq as ag cf" scrolling="auto" style="box-sizing: inherit; height: 527px; top: 0px; left: 0px; width: 692px; position: absolute;"></iframe>
+在业务逻辑里，我们经常会需要判断error类型，根据error的类型，决定下一步的操作：
 
-This is done using `errors.Cause` which also comes from *pkg/errors*:
+* 比如可能重试直到成功。
+* 比如可能直接打印错误日志，然后退出函数。
 
-One common mistake I’ve seen was to use *pkg/errors* partially. Checking an error was for example done this way:
+举个例子，假设我们使用了一个名为`db`的包，用来做数据库的读写操作。
 
-<iframe src="https://itnext.io/media/db4ccb35df705f8b09e38fc15d4d5534" allowfullscreen="" frameborder="0" height="197" width="692" title="errors.go" class="fp aq as ag cf" scrolling="auto" style="box-sizing: inherit; height: 197px; top: 0px; left: 0px; width: 692px; position: absolute;"></iframe>
+在数据库负载比较高的情况下，调用`db`包里的方法可能会返回一个临时的`db.DBError`的错误，对于这种情况我们需要做重试。
 
-In this example, if the `db.DBError` is wrapped, it will never trigger the retry.
+那就可以使用如下的代码，先判断error的类型，然后根据具体的error类型做对应的处理。
 
-[Don't just check errors, handle them gracefullyThis post is an extract from my presentation at the recent GoCon spring conference in Tokyo, Japan. I've spent a lot of…dave.cheney.net](https://dave.cheney.net/2016/04/27/dont-just-check-errors-handle-them-gracefully)
+```go
+func postHandler(customer Customer) Status {
+	err := insert(customer.Contract)
+	if err != nil {
+		switch errors.Cause(err).(type) {
+		default:
+			log.WithError(err).Errorf("unable to serve HTTP POST request for customer %s", customer.ID)
+			return Status{ok: false}
+		case *db.DBError:
+			return retry(customer)
+		}
+
+	}
+	return Status{ok: true}
+}
+
+func insert(contract Contract) error {
+	err := db.dbQuery(contract)
+	if err != nil {
+		return errors.Wrapf(err, "unable to insert customer contract %s", contract.ID)
+	}
+	return nil
+}
+```
+
+上面判断error的类型使用了`pkg/errors`包里的`errors.Cause`函数。
+
+### 常见错误
+
+对于上面的error判断，一个常见的错误是如下的代码：
+
+```go
+switch err.(type) {
+default:
+  log.WithError(err).Errorf("unable to serve HTTP POST request for customer %s", customer.ID)
+  return Status{ok: false}
+case *db.DBError:
+  return retry(customer)
+}
+```
+
+错误在哪里呢？
+
+上面代码示例里对error类型的判断使用了`err.(type)`，没有使用`errors.Cause(err).(type)`。
+
+如果在业务函数调用链中有一个环节对`*db.DBError`做了封装，那`err.(type)`就无法匹配到`*db.DBError`，就永远不会触发重试。
 
 
 
@@ -85,6 +143,8 @@ In this example, if the `db.DBError` is wrapped, it will never trigger the retry
 * [Go十大常见错误第3篇：go指针的性能问题和内存逃逸](https://mp.weixin.qq.com/s?__biz=Mzg2MTcwNjc1Mg==&mid=2247484247&idx=1&sn=faf716627afb00df646cecff023fb63c&chksm=ce124c38f965c52efd009a4c98691d56b5765dc7dce98aa49b226ad9274bd062d8d01e702e91&token=1899277735&lang=zh_CN#rd)
 
 * [Go十大常见错误第4篇：break操作的注意事项](https://mp.weixin.qq.com/s?__biz=Mzg2MTcwNjc1Mg==&mid=2247484262&idx=1&sn=c1bea8af60444a4ef73c4d4d7a09d16d&chksm=ce124c09f965c51f3663ac9089a792d36c3685850e12695dd26d15a1a50f393b2d7c92b9983a&token=461369035&lang=zh_CN#rd)
+
+* [Go面试题系列，看看你会几题？](https://mp.weixin.qq.com/mp/appmsgalbum?__biz=Mzg2MTcwNjc1Mg==&action=getalbum&album_id=2199553588283179010#wechat_redirect)
 
   
 
