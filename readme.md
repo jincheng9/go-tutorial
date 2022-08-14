@@ -106,6 +106,7 @@
   * [第3篇：go指针的性能问题和内存逃逸](./workspace/senior/p28/03-go-pointer.md)
   * [第4篇：for/switch和for/select做break操作退出的注意事项](./workspace/senior/p28/04-break-for-switch-select.md)
   * [第5篇：go语言Error管理](./workspace/senior/p28/05-go-error-management.md)
+  * [第6篇：切片slice初始化常犯的错误](./workspace/senior/p28/06-go-slice-init.md)
 
 * 高性能Go
   * [high performance go workshop](https://dave.cheney.net/high-performance-go-workshop/dotgo-paris.html)
