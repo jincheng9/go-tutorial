@@ -10,50 +10,93 @@
 
 ## 场景
 
-Sometimes, we know what will be the final length of a slice. For example, let’s say we want to convert a slice of `Foo` to a slice of `Bar` which means the two slices will have the same length.
+假设我们知道要创建的slice的长度，你会怎么创建和初始化这个slice？
 
-I often see slices initialized this way:
+比如我们定义了一个结构体叫`Bar`，现在要创建一个slice，里面的元素就是`Bar`类型，而且该slice的长度是已知的。
+
+### 方法1
+
+有的人可能这么来做，先定义slice
 
 ```go
 var bars []Bar
 bars := make([]Bar, 0)
 ```
 
+每次要往`bars`这个slice插入元素的时候，通过append来操作
+
+```go
+bars = append(bars, barElement)
+```
+
+`slice`实际上是一个结构体类型，包含3个字段，分别是
+
+- array: 是指针，指向一个数组，切片的数据实际都存储在这个数组里。
+- len: 切片的长度。
+- cap: 切片的容量，表示切片当前最多可以存储多少个元素，如果超过了现有容量会自动扩容。
+
+slice底层的数据结构定义如下：
+
+```go
+type slice struct {
+	array unsafe.Pointer
+	len   int
+	cap   int
+}
+
+type Pointer *ArbitraryType
+```
+
+如果按照上面的示例先创建一个长度为0的slice，那在append插入元素的过程中，`bars`这个slice会做自动扩容。
+
+如果`bars`的长度比较大，可能会发生多次扩容。每次扩容都要创建一个新的内存空间，然后把旧内存空间的数据拷贝过来，效率比较低。
+
+### 方法2
+
+在定义slice的时候指定长度，代码示例如下：
+
+```go
+func convert(foos []Foo) []Bar {
+	bars := make([]Bar, len(foos))
+	for i, foo := range foos {
+		bars[i] = fooToBar(foo)
+	}
+	return bars
+}
+```
+
+这行代码`	bars := make([]Bar, len(foos))`直接指定了slice的长度，无需扩容。
 
 
-A slice is not a magic structure. Under the hood, it implements a **growth** strategy if there is no more space available. In this case, a new array is automatically created (with a [bigger capacity](https://www.darkcoding.net/software/go-how-slices-grow/)) and all the items are copied over.
 
-Now, let’s imagine we need to repeat this growth operation multiple times as our `[]Foo` contains thousand of elements? The amortized time complexity (the average) of an insert will remain O(1) but in practice, it will have a **performance impact**.
+###  方法3
 
-Therefore, if we know the final length, we can either:
+在定义slice的时候提前指定容量，长度设置为0，代码示例如下：
 
-- Initialize it with a predefined length:
+```go
+func convert(foos []Foo) []Bar {
+	bars := make([]Bar, 0, len(foos))
+	for _, foo := range foos {
+		bars = append(bars, fooToBar(foo))
+	}
+	return bars
+}
+```
 
-  ```go
-  func convert(foos []Foo) []Bar {
-  	bars := make([]Bar, len(foos))
-  	for i, foo := range foos {
-  		bars[i] = fooToBar(foo)
-  	}
-  	return bars
-  }
-  ```
+这种方法也可以，也无需扩容。
 
-  
+那方法2和方法3哪种好一点呢？其实各有优缺点：
 
-- Or initialize it with a 0-length and predefined capacity:
+* 从效率上来说，方法2比方法3要高一点，因为方法3里调用了append函数，再对bars赋值，效率比直接通过`		bars[i] = fooToBar(foo)`要低一点。
+* 从代码的可维护性来说，方法2不能通过append函数来插入元素，因为方法2里的slice定义的时候指定了长度，如果调用append，会扩容，往现有元素后面追加元素。方法3不能通过`bars[i] = `的方式来赋值，因为方法3里的slice定义的时候长度为0，如果使用`bars[1]=`，会触发`panic: runtime error: index out of range [1] with length 0`。
 
-  ```go
-  func convert(foos []Foo) []Bar {
-  	bars := make([]Bar, 0, len(foos))
-  	for _, foo := range foos {
-  		bars = append(bars, fooToBar(foo))
-  	}
-  	return bars
-  }
-  ```
 
-What is the best option? The first one is slightly faster. Yet, you may want to prefer the second one because it can make things more consistent: regardless of whether we know the initial size, adding an element at the end of a slice is done using `append`.
+
+最后强烈推荐大家看看这道关于Go slice的面试题：[Go Quiz: 从Go面试题看slice的底层原理和注意事项](https://mp.weixin.qq.com/s?__biz=Mzg2MTcwNjc1Mg==&mid=2247483741&idx=1&sn=486066a3a582faf457f91b8397178f64&chksm=ce124e32f965c72411e2f083c22531aa70bb7fa0946c505dc886fb054b2a644abde3ad7ea6a0&token=1846351524&lang=zh_CN#rd)。
+
+看完后你会彻底了解Go slice的原理和注意事项。
+
+
 
 ## 推荐阅读
 
