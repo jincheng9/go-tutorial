@@ -10,7 +10,36 @@
 
 ## 场景
 
+`context.Context` is quite often misunderstood by the developers. According to the official documentation:
 
+> A Context carries a deadline, a cancelation signal, and other values across API boundaries.
+
+This description is generic enough to make some people puzzled about why and how it should be used.
+
+Let’s try to detail it. A context can carry:
+
+- A **deadline**. It means either a duration (e.g. 250 ms) or a date-time (e.g. `2019-01-08 01:00:00`) by which we consider that if it is reached, we must cancel an ongoing activity (an I/O request, awaiting a channel input, etc.).
+- A **cancelation signal** (basically a `<-chan struct{}`). Here, the behavior is similar. Once we receive a signal, we must stop an ongoing activity. For example, let’s imagine that we receive two requests. One to insert some data and another one to cancel the first request (because it’s not relevant anymore or whatever). This could be achieved by using a cancelable context in the first call that would be then canceled once we get the second request.
+- A list of key/value (both based on an `interface{}` type).
+
+Two things to add. First, a context is **composable**. So, we can have a context that carries a deadline and a list of key/value for example. Moreover, multiple goroutines can **share** the same context so a cancelation signal can potentially stop **multiple activities**.
+
+Coming back to our topic, here is a concrete mistake I’ve seen.
+
+A Go application was based on [*urfave/cli*](https://github.com/urfave/cli) (if you don’t know it, that’s a nice library to create command-line applications in Go). Once started, the developer *inherits* from a sort of application context. It means when the application is stopped, the library will use this context to send a cancellation signal.
+
+What I experienced is that this very context was directly passed while calling a gRPC endpoint for example. This is **not** what we want to do.
+
+Instead, we want to indicate to the gRPC library: *Please cancel the request either when the application is being stopped or after 100 ms for example.*
+
+To achieve this, we can simply create a composed context. If `parent` is the name of the application context (created by *urfave/cli*), then we can simply do this:
+
+```go
+ctx, cancel := context.WithTimeout(parent, 100 * time.Millisecond)
+response, err := grpcClient.Send(ctx, request)
+```
+
+Contexts are not that complex to understand and it is one of the best feature of the language in my opinion.
 
 
 
