@@ -26,6 +26,8 @@ Let’s try to detail it. A context can carry:
 
 Two things to add. First, a context is **composable**. So, we can have a context that carries a deadline and a list of key/value for example. Moreover, multiple goroutines can **share** the same context so a cancelation signal can potentially stop **multiple activities**.
 
+
+
 Coming back to our topic, here is a concrete mistake I’ve seen.
 
 A Go application was based on [*urfave/cli*](https://github.com/urfave/cli) (if you don’t know it, that’s a nice library to create command-line applications in Go). Once started, the developer *inherits* from a sort of application context. It means when the application is stopped, the library will use this context to send a cancellation signal.
@@ -55,7 +57,9 @@ Contexts are not that complex to understand and it is one of the best feature of
 
 * [Go十大常见错误第4篇：break操作的注意事项](https://mp.weixin.qq.com/s?__biz=Mzg2MTcwNjc1Mg==&mid=2247484262&idx=1&sn=c1bea8af60444a4ef73c4d4d7a09d16d&chksm=ce124c09f965c51f3663ac9089a792d36c3685850e12695dd26d15a1a50f393b2d7c92b9983a&token=461369035&lang=zh_CN#rd)
 
-* [Go十大常见错误第5篇：slice初始化常犯的错误](https://mp.weixin.qq.com/s?__biz=Mzg2MTcwNjc1Mg==&mid=2247484274&idx=1&sn=711abea3c6fd5d15341ee1b34da8a160&chksm=ce124c1df965c50b3af84965f7ed30b574cd0b247ea6f77b944ec858bd43ee37f4c1554a5bce&token=1846351524&lang=zh_CN#rd)
+* [Go十大常见错误第5篇：Go语言Error管理](https://mp.weixin.qq.com/s?__biz=Mzg2MTcwNjc1Mg==&mid=2247484274&idx=1&sn=711abea3c6fd5d15341ee1b34da8a160&chksm=ce124c1df965c50b3af84965f7ed30b574cd0b247ea6f77b944ec858bd43ee37f4c1554a5bce&token=1846351524&lang=zh_CN#rd)
+
+* [Go十大常见错误第6篇：slice初始化常犯的错误]
 
 * [Go面试题系列，看看你会几题？](https://mp.weixin.qq.com/mp/appmsgalbum?__biz=Mzg2MTcwNjc1Mg==&action=getalbum&album_id=2199553588283179010#wechat_redirect)
 
@@ -84,3 +88,4 @@ Contexts are not that complex to understand and it is one of the best feature of
 ## References
 
 * https://itnext.io/the-top-10-most-common-mistakes-ive-seen-in-go-projects-4b79d4f6cd65
+* https://pkg.go.dev/context
