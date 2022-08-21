@@ -8,7 +8,7 @@
 
 
 
-## 场景
+## Context是什么
 
 Go语言里的[context.Context](https://pkg.go.dev/context)非常有用，但是也经常被开发者误解。
 
@@ -27,6 +27,8 @@ Let’s try to detail it. A context can carry:
 Two things to add. First, a context is **composable**. So, we can have a context that carries a deadline and a list of key/value for example. Moreover, multiple goroutines can **share** the same context so a cancelation signal can potentially stop **multiple activities**.
 
 
+
+## 常见错误
 
 Coming back to our topic, here is a concrete mistake I’ve seen.
 
@@ -89,3 +91,5 @@ Contexts are not that complex to understand and it is one of the best feature of
 
 * https://itnext.io/the-top-10-most-common-mistakes-ive-seen-in-go-projects-4b79d4f6cd65
 * https://pkg.go.dev/context
+* https://go.dev/blog/context
+* https://www.digitalocean.com/community/tutorials/how-to-use-contexts-in-go
