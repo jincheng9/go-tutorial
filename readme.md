@@ -107,7 +107,8 @@
   * [第4篇：for/switch和for/select做break操作退出的注意事项](./workspace/senior/p28/04-break-for-switch-select.md)
   * [第5篇：go语言Error管理](./workspace/senior/p28/05-go-error-management.md)
   * [第6篇：slice初始化常犯的错误](./workspace/senior/p28/06-go-slice-init.md)
-  * [第7篇：Context管理](./workspace/senior/p28/07-go-context-management.md)
+  * [第7篇：并发编程里的Context管理](./workspace/senior/p28/07-go-context-management.md)
+  * [第8篇：不使用-race选项做并发竞争检测](./workspace/senior/p28/07-go-race-detector.md)
 
 * 高性能Go
   * [high performance go workshop](https://dave.cheney.net/high-performance-go-workshop/dotgo-paris.html)

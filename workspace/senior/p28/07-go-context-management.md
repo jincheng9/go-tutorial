@@ -14,9 +14,9 @@ Go语言里的[context.Context](https://pkg.go.dev/context)非常有用，但是
 
 官方对Context的表述是：
 
-> A Context carries a deadline, a cancelation signal, and other values across API boundaries.
+> Package context defines the Context type, which carries deadlines, cancellation signals, and other request-scoped values across API boundaries and between processes.
 
-光看这段描述，还是很容易让人迷糊的，我们接下来具体看看Context到底可以帮助我们做什么事情。
+光看这段描述，还是很容易让人迷糊的，我们接下来具体看看Context到底是什么以及可以帮助我们做什么事情。
 
 Let’s try to detail it. A context can carry:
 
