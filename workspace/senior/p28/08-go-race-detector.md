@@ -8,17 +8,82 @@
 
 
 
-## 场景
+## 背景
 
-A mistake I do see very often is testing a Go application without the `-race` option.
+并发编程里很容易遇到并发访问冲突的问题。
 
-As described in this [report](https://blog.acolyer.org/2019/05/17/understanding-real-world-concurrency-bugs-in-go/), although Go was *“designed to make concurrent programming easier and less error-prone*”, we still suffer a lot from concurrency problems.
+Go语言里多个goroutine同时操作某个共享变量的时候，如果一个goroutine对该变量做写操作，其它goroutine做读操作，假设没有做好并发访问控制，就容易出现并发访问冲突，导致程序crash。
 
-Obviously, the Go race detector will not help for every single concurrency problems. Nevertheless, it is **valuable** tooling and we should always enable it while testing our applications.
+大家可以看如下的代码示例：
+
+```go
+package main
+
+import (
+	"fmt"
+)
+
+func main() {
+	c := make(chan bool)
+	m := make(map[string]string)
+	go func() {
+		m["1"] = "a" // First conflicting access.
+		c <- true
+	}()
+	m["2"] = "b" // Second conflicting access.
+	<-c
+	for k, v := range m {
+		fmt.Println(k, v)
+	}
+}
+```
+
+上面的代码会出现并发访问冲突，2个goroutine同时对共享变量`m`做写操作。
+
+通过`-race`选项，我们就可以利用编译器帮我们快速发现问题。
+
+```bash
+$ go run -race main.go 
+==================
+WARNING: DATA RACE
+Write at 0x00c000074180 by goroutine 7:
+  runtime.mapassign_faststr()
+      /usr/local/opt/go/libexec/src/runtime/map_faststr.go:202 +0x0
+  main.main.func1()
+      /Users/xxx/github/go-tutorial/workspace/senior/p28/data-race/main.go:11 +0x5d
+
+Previous write at 0x00c000074180 by main goroutine:
+  runtime.mapassign_faststr()
+      /usr/local/opt/go/libexec/src/runtime/map_faststr.go:202 +0x0
+  main.main()
+      /Users/xxx/github/go-tutorial/workspace/senior/p28/data-race/main.go:14 +0xcb
+
+Goroutine 7 (running) created at:
+  main.main()
+      /Users/xxx/github/go-tutorial/workspace/senior/p28/data-race/main.go:10 +0x9c
+==================
+1 a
+2 b
+Found 1 data race(s)
+exit status 66
+```
 
 
 
-https://medium.com/@val_deleplace/does-the-race-detector-catch-all-data-races-1afed51d57fb
+## 常见问题
+
+一个常见的错误是开发者测试Go程序的时候，不使用`-race`选项。
+
+尽管Go语言设计的目的之一是为了让并发编程更简单、更不容易出错，但Go语言开发者还是会遇到并发问题。
+
+因此，大家在测试Go程序的时候，应该开启`-race`选项，及时发现代码里的并发访问冲突问题。
+
+```bash
+$ go test -race mypkg    // to test the package
+$ go run -race mysrc.go  // to run the source file
+$ go build -race mycmd   // to build the command
+$ go install -race mypkg // to install the package
+```
 
 
 
@@ -37,6 +102,8 @@ https://medium.com/@val_deleplace/does-the-race-detector-catch-all-data-races-1a
 * [Go十大常见错误第6篇：slice初始化常犯的错误](https://mp.weixin.qq.com/s?__biz=Mzg2MTcwNjc1Mg==&mid=2247484289&idx=1&sn=2b8171458cde4425b28fdf8f51df8d7c&chksm=ce124ceef965c5f8a14f5951457ce2ac0ecc4612cf2013957f1d818b6e74da7c803b9df1d394&token=1477304797&lang=zh_CN#rd)
 
 * [Go面试题系列，看看你会几题？](https://mp.weixin.qq.com/mp/appmsgalbum?__biz=Mzg2MTcwNjc1Mg==&action=getalbum&album_id=2199553588283179010#wechat_redirect)
+
+* [Go编译器的race detector可以发现所有的并发冲突么？](https://medium.com/@val_deleplace/does-the-race-detector-catch-all-data-races-1afed51d57fb)
 
   
 
