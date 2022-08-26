@@ -1,8 +1,8 @@
-# Go十大常见错误第7篇：Context管理
+# Go十大常见错误第8篇：Context管理
 
 ## 前言
 
-这是Go十大常见错误系列的第7篇：Context管理。素材来源于Go布道者，现Docker公司资深工程师[Teiva Harsanyi](https://teivah.medium.com/)。
+这是Go十大常见错误系列的第8篇：Context管理。素材来源于Go布道者，现Docker公司资深工程师[Teiva Harsanyi](https://teivah.medium.com/)。
 
 本文涉及的源代码全部开源在：[Go十大常见错误源代码](https://github.com/jincheng9/go-tutorial/tree/main/workspace/senior/p28)，欢迎大家关注公众号，及时获取本系列最新更新。
 
