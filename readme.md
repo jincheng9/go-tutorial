@@ -109,6 +109,8 @@
   * [第6篇：slice初始化常犯的错误](./workspace/senior/p28/06-go-slice-init.md)
   * [第7篇：不使用-race选项做并发竞争检测](./workspace/senior/p28/07-go-race-detector.md)
   * [第8篇：并发编程里的Context管理](./workspace/senior/p28/08-go-context-management.md)
+  * [第9篇：使用文件名称作为函数输入](./workspace/senior/p28/09-go-use-filename-as-input.md)
+  * [第10篇：Goroutine和循环变量](./workspace/senior/p28/10-go-goroutine-loop-var.md)
 
 * 高性能Go
   * [high performance go workshop](https://dave.cheney.net/high-performance-go-workshop/dotgo-paris.html)
