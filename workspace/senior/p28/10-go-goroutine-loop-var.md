@@ -10,9 +10,9 @@
 
 ## 常见错误
 
-The last common mistake I’ve seen was made using goroutines with loop variables.
+对于Go初学者，很容易犯的一个错误就是goroutine和循环变量结合在一起使用时，错误地使用了循环变量。
 
-What is the output of the following example?
+比如下面这个例子：
 
 ```go
 ints := []int{1, 2, 3}
@@ -23,13 +23,17 @@ for _, i := range ints {
 }
 ```
 
+这段程序的输出结果应该是什么？
 
+Go初学者可能认为输出结果应该是`1 2 3`，但实际情况并不是。
 
-`1 2 3` in whatever order? Nope.
+这个例子里，3个goroutine共享同一个变量`i`，最后输出的结果大概率是输出`3 3 3`。
 
-In this example, each goroutine **shares** the same variable instance so it will produce `3 3 3` (most likely).
+要解决这个问题，主要有2个解决方案。
 
-There are two solutions to deal with this problem. The first one is to pass the value of the `i` variable to the closure (the inner function):
+### 解决方案1
+
+把循环变量`i`作为goroutine函数的一个参数，编译器在执行`go func(i int)`时，就会解析到`i`的值，确保每个goroutine可以拿到自己想要的值。
 
 ```go
 ints := []int{1, 2, 3}
@@ -42,7 +46,9 @@ for _, i := range ints {
 
 
 
-And the second one is to create another variable within the for-loop scope:
+#### 解决方案2
+
+创建一个新的变量，用于goroutine。
 
 ```go
 ints := []int{1, 2, 3}
@@ -55,8 +61,6 @@ for _, i := range ints {
 ```
 
 
-
-It might look a bit odd to call `i := i` but it’s perfectly valid. Being in a loop means being in another scope. So `i := i` creates another variable instance called `i`. Of course, we may want to call it with a different name for readability purpose.
 
 
 
