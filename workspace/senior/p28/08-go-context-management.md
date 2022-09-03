@@ -10,7 +10,7 @@
 
 ## Context是什么
 
-Go语言里的[context.Context](https://pkg.go.dev/context)非常有用，但是也经常被开发者误解。
+Go语言里的[context.Context](https://pkg.go.dev/context)包非常有用，但是也经常被开发者误解。
 
 官方对Context的表述是：
 
@@ -18,13 +18,37 @@ Go语言里的[context.Context](https://pkg.go.dev/context)非常有用，但是
 
 光看这段描述，还是很容易让人迷糊的，我们接下来具体看看Context到底是什么以及可以帮助我们做什么事情。
 
-Let’s try to detail it. A context can carry:
+总结起来，Context有3个能力，
 
-- A **deadline**. It means either a duration (e.g. 250 ms) or a date-time (e.g. `2019-01-08 01:00:00`) by which we consider that if it is reached, we must cancel an ongoing activity (an I/O request, awaiting a channel input, etc.).
-- A **cancelation signal** (basically a `<-chan struct{}`). Here, the behavior is similar. Once we receive a signal, we must stop an ongoing activity. For example, let’s imagine that we receive two requests. One to insert some data and another one to cancel the first request (because it’s not relevant anymore or whatever). This could be achieved by using a cancelable context in the first call that would be then canceled once we get the second request.
-- A list of key/value (both based on an `interface{}` type).
+- 超时控制。 通过`context.WithTimeout`函数和`context.WithDeadline`函数可以创建一个有超时时间的Context。
 
-Two things to add. First, a context is **composable**. So, we can have a context that carries a deadline and a list of key/value for example. Moreover, multiple goroutines can **share** the same context so a cancelation signal can potentially stop **multiple activities**.
+  ```go
+  func WithTimeout(parent Context, timeout time.Duration) (Context, CancelFunc)
+  func WithDeadline(parent Context, d time.Time) (Context, CancelFunc)
+  ```
+
+  
+
+- 取消信号。通过`context.WithCancel`函数可以创建一个可以发出主动cancel信号的Context。
+
+  ```go
+  func WithCancel(parent Context) (ctx Context, cancel CancelFunc)
+  ```
+
+  
+
+- 附加值。通过Context的`WithValue`函数可以给Context添加附加值。其中key和value都是空接口类型(`interface{}`)。
+
+  ```go
+  func WithValue(parent Context, key, val any) Context
+  ```
+
+  通过Context的
+
+有2点要补充：
+
+* 第一，Context是可以组合的。比如，我们可以通过`context.WithTimeout`创建一个有超时时间的Context，同时调用Context里的`WithValue`给这个`Context`添加一些附加值。
+* 第二，多个goroutine可以共享同一个Context，因此一个取消信号可以停止多个goroutine。
 
 
 
@@ -94,5 +118,5 @@ Contexts are not that complex to understand and it is one of the best feature of
 * https://itnext.io/the-top-10-most-common-mistakes-ive-seen-in-go-projects-4b79d4f6cd65
 * https://pkg.go.dev/context
 * https://go.dev/blog/context
-* https://www.digitalocean.com/community/tutorials/how-to-use-contexts-in-go
 * https://mp.weixin.qq.com/s/PoXSEDHRyKCyjibFGS0wHw
+* https://www.digitalocean.com/community/tutorials/how-to-use-contexts-in-go
