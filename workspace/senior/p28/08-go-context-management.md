@@ -1,8 +1,8 @@
-# Go十大常见错误第8篇：Context管理
+# Go十大常见错误第8篇：并发编程中Context使用常见错误
 
 ## 前言
 
-这是Go十大常见错误系列的第8篇：Context管理。素材来源于Go布道者，现Docker公司资深工程师[Teiva Harsanyi](https://teivah.medium.com/)。
+这是Go十大常见错误系列的第8篇：并发编程中Context使用常见错误。素材来源于Go布道者，现Docker公司资深工程师[Teiva Harsanyi](https://teivah.medium.com/)。
 
 本文涉及的源代码全部开源在：[Go十大常见错误源代码](https://github.com/jincheng9/go-tutorial/tree/main/workspace/senior/p28)，欢迎大家关注公众号，及时获取本系列最新更新。
 
@@ -43,20 +43,20 @@ type Context interface {
 
 Context可以通过超时设置、携带取消信号、附加参数信息来方便goroutine里做相应的逻辑控制。
 
-- 超时控制。 通过`context.WithTimeout`函数和`context.WithDeadline`函数可以创建一个有超时时间的Context。
+- 超时控制。 通过`context.WithTimeout`函数和`context.WithDeadline`函数可以创建一个有超时时间的Context。通过Context的`Done`函数可以判断是否超时了。
 
   ```go
   func WithTimeout(parent Context, timeout time.Duration) (Context, CancelFunc)
   func WithDeadline(parent Context, d time.Time) (Context, CancelFunc)
   ```
 
-- 取消信号。通过`context.WithCancel`函数可以创建一个可以发出主动cancel信号的Context。
+- 取消信号。通过`context.WithCancel`函数可以创建一个接收cancel信号的Context。通过Context的`Done`函数可以判断是否发出了cancel信号。父Context发出的cancel信号，子Context也可以接收到。
 
   ```go
   func WithCancel(parent Context) (ctx Context, cancel CancelFunc)
   ```
 
-- 附加参数信息。通过`context.WithValue`函数可以给Context添加参数。其中key和value都是空接口类型(`interface{}`)。
+- 附加参数信息。通过`context.WithValue`函数可以给Context添加参数。其中key和value都是空接口类型(`interface{}`)。通过Context的`Value`函数可以获取附加参数信息。
 
   ```go
   func WithValue(parent Context, key, val any) Context
@@ -79,22 +79,30 @@ Context可以通过超时设置、携带取消信号、附加参数信息来方�
 
 ## 常见错误
 
-Coming back to our topic, here is a concrete mistake I’ve seen.
+在Context使用过程中有以下几个常见错误：
 
-A Go application was based on [*urfave/cli*](https://github.com/urfave/cli) (if you don’t know it, that’s a nice library to create command-line applications in Go). Once started, the developer *inherits* from a sort of application context. It means when the application is stopped, the library will use this context to send a cancellation signal.
+* 第一，不执行`cancel`函数去释放Context资源。
 
-What I experienced is that this very context was directly passed while calling a gRPC endpoint for example. This is **not** what we want to do.
+  * 对于`context.WithTimeout`、`context.WithDeadline`、`context.WithCancel`函数返回的cancel函数，需要做执行。官方说明如下：
 
-Instead, we want to indicate to the gRPC library: *Please cancel the request either when the application is being stopped or after 100 ms for example.*
+    > Canceling this context releases resources associated with it, so code should call cancel as soon as the operations running in this Context complete:
 
-To achieve this, we can simply create a composed context. If `parent` is the name of the application context (created by *urfave/cli*), then we can simply do this:
+    参考代码示例：
 
-```go
-ctx, cancel := context.WithTimeout(parent, 100 * time.Millisecond)
-response, err := grpcClient.Send(ctx, request)
-```
+    ```go
+    func slowOperationWithTimeout(ctx context.Context) (Result, error) {
+    	ctx, cancel := context.WithTimeout(ctx, 100*time.Millisecond)
+    	defer cancel()  // releases resources if slowOperation completes before timeout elapses
+    	return slowOperation(ctx)
+    }
+    ```
 
-Contexts are not that complex to understand and it is one of the best feature of the language in my opinion.
+* 第二，不加超时控制，如果执行了非常耗时的rpc操作或者数据库操作，就会阻塞程序。如果rpc调用接口或者数据库操作接口支持传递Context参数，建议加上超时设置。代码示例参考如下：
+
+  ```go
+  ctx, cancel := context.WithTimeout(parent, 100 * time.Millisecond)
+  response, err := grpcClient.Send(ctx, request)
+  ```
 
 
 
