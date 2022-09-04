@@ -10,13 +10,15 @@
 
 ## Context是什么
 
-Go语言里的[context.Context](https://pkg.go.dev/context)包非常有用，但是也经常被开发者误解。
+Go语言标准库里有一个package叫`context`，该package里定义了[context.Context](https://pkg.go.dev/context)类型，在并发编程里非常有用，但是也经常被开发者误解。
 
 官方对Context的表述是：
 
 > Package context defines the Context type, which carries deadlines, cancellation signals, and other request-scoped values across API boundaries and between processes.
 
 光看这段描述，还是很容易让人迷糊的，我们接下来具体看看Context到底是什么以及可以帮助我们做什么事情。
+
+Context顾名思义，表示的是goroutine的上下文，Context定义如下所示：
 
 ```go
 // A Context carries a deadline, cancellation signal, and request-scoped values
@@ -39,9 +41,7 @@ type Context interface {
 }
 ```
 
-
-
-总结起来，Context有3个能力，
+Context可以通过超时设置、携带取消信号、附加参数信息来方便goroutine里做相应的逻辑控制。
 
 - 超时控制。 通过`context.WithTimeout`函数和`context.WithDeadline`函数可以创建一个有超时时间的Context。
 
@@ -50,28 +50,30 @@ type Context interface {
   func WithDeadline(parent Context, d time.Time) (Context, CancelFunc)
   ```
 
-  
-
 - 取消信号。通过`context.WithCancel`函数可以创建一个可以发出主动cancel信号的Context。
 
   ```go
   func WithCancel(parent Context) (ctx Context, cancel CancelFunc)
   ```
 
-  
-
-- 附加值。通过Context的`WithValue`函数可以给Context添加附加值。其中key和value都是空接口类型(`interface{}`)。
+- 附加参数信息。通过`context.WithValue`函数可以给Context添加参数。其中key和value都是空接口类型(`interface{}`)。
 
   ```go
   func WithValue(parent Context, key, val any) Context
   ```
 
-  通过Context的
+在实际开发过程中，Context的使用流程一般是：
+
+* Step 1: 创建Context，给Context指定超时时间，设置取消信号，或者附加参数(链路跟踪里经常使用Context里的附加参数，传递IP等链路跟踪信息)。
+* Step 2: goroutine使用Step 1里的Context作为第一个参数，在该goroutine里就可以做如下事情：
+  * 使用Context里的`Done`函数判断是否达到了Context设置的超时时间或者Context是否被主动取消了。
+  * 使用Context里的`Value`函数获取该Context里的附加参数信息。
+  * 使用Context里的`Err`函数获取错误原因，目前原因就2个，要么是超时，要么是主动取消。
 
 有2点要补充：
 
-* 第一，Context是可以组合的。比如，我们可以通过`context.WithTimeout`创建一个有超时时间的Context，同时调用Context里的`WithValue`给这个`Context`添加一些附加值。
-* 第二，多个goroutine可以共享同一个Context，因此一个取消信号可以停止多个goroutine。
+* 第一，Context是可以组合的。比如，我们可以通过`context.WithTimeout`创建一个有超时时间的Context，再调用`context.WithValue`添加一些附加参数信息。
+* 第二，多个goroutine可以共享同一个Context，可以通过该Context的超时设置、携带取消信号以及附加参数来控制多个goroutine的行为。
 
 
 
@@ -138,8 +140,8 @@ Contexts are not that complex to understand and it is one of the best feature of
 
 ## References
 
-* https://itnext.io/the-top-10-most-common-mistakes-ive-seen-in-go-projects-4b79d4f6cd65
-* https://pkg.go.dev/context
-* https://go.dev/blog/context
-* https://mp.weixin.qq.com/s/PoXSEDHRyKCyjibFGS0wHw
+* 参考文章：https://itnext.io/the-top-10-most-common-mistakes-ive-seen-in-go-projects-4b79d4f6cd65
+* 官方文档：https://pkg.go.dev/context
+* 官方Context入门介绍：https://go.dev/blog/context
+* Context使用介绍：https://mp.weixin.qq.com/s/PoXSEDHRyKCyjibFGS0wHw
 * https://www.digitalocean.com/community/tutorials/how-to-use-contexts-in-go
