@@ -87,6 +87,9 @@
   * [一文读懂Go匿名结构体的使用场景](./workspace/senior/p5)
   * [Go语言中fmt.Println(true)的结果一定是true么？](./workspace/senior/p19)
   * [Go语言中命名函数参数和命名函数返回值的注意事项](./workspace/senior/p21)
+* 并发编程
+  * [Go语言中Context并发模式](./workspace/senior/p31/01-go-context.md)
+
 * 泛型
   * [泛型：Go泛型入门官方教程](./workspace/senior/p6)
   * [泛型：一文读懂Go泛型设计和使用场景](./workspace/senior/p7)

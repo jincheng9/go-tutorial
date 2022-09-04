@@ -18,6 +18,29 @@ Go语言里的[context.Context](https://pkg.go.dev/context)包非常有用，但
 
 光看这段描述，还是很容易让人迷糊的，我们接下来具体看看Context到底是什么以及可以帮助我们做什么事情。
 
+```go
+// A Context carries a deadline, cancellation signal, and request-scoped values
+// across API boundaries. Its methods are safe for simultaneous use by multiple
+// goroutines.
+type Context interface {
+    // Done returns a channel that is closed when this Context is canceled
+    // or times out.
+    Done() <-chan struct{}
+
+    // Err indicates why this context was canceled, after the Done channel
+    // is closed.
+    Err() error
+
+    // Deadline returns the time when this Context will be canceled, if any.
+    Deadline() (deadline time.Time, ok bool)
+
+    // Value returns the value associated with key or nil if none.
+    Value(key interface{}) interface{}
+}
+```
+
+
+
 总结起来，Context有3个能力，
 
 - 超时控制。 通过`context.WithTimeout`函数和`context.WithDeadline`函数可以创建一个有超时时间的Context。
