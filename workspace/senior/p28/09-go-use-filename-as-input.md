@@ -10,9 +10,9 @@
 
 ## 问题场景
 
-一个常见错误是把文件名作为函数参数。
+一个常见错误是把文件名作为函数参数，在函数里读取文件内容。
 
-假设我们要实现一个函数，用来统计指定文件里有多少空行，最自然的实现方式如下：
+比如，我们要实现一个函数，用来统计指定文件里有多少空行，很多人最容易联想到的实现方式如下：
 
 ```go
 func count(filename string) (int, error) {
@@ -38,21 +38,24 @@ func count(filename string) (int, error) {
 * 文件名作为函数入参
 * 函数里读取文件每一行数据，判断是否为空行，如果是空行就计数+1
 
+这种方式其实也没大问题，比较好理解。只是可扩展性不强，没有充分利用到Go语言里关于数据读写的接口(interface)类型的优势。
 
-
-Now, let’s say we want to implement **unit tests** on top of this function to test with a normal file, an empty file, a file with a different encoding type, etc. It could easily become very hard to manage.
-
-Also, if we want to implement the same logic but for an HTTP body, for example, we will have to create another function for that.
+试想下，如果你想对一个HTTP body里的内容实现相同的逻辑，那上面的代码无法支持，要另外实现一个新的函数。
 
 
 
 ## 解决方案
 
-Go comes with two great abstractions: `io.Reader` and `io.Writer`. Instead of passing a filename, we can simply pass an `io.Reader` that will **abstract** the data source.
+Go语言里有2个很好的抽象接口(interface)，分别是`io.Reader`和`io.Writer`。
 
-Is it a file? An HTTP body? A byte buffer? It’s not important as we are still going to use the same `Read` method.
+和上面函数传参使用文件名不一样，我们可以使用`io.Reader`作为函数的参数类型。
 
-In our case, we can even buffer the input to read it line by line. So, we can use `bufio.Reader` and its `ReadLine` method:
+因为文件、HTTP body、[bytes.Buffer](https://pkg.go.dev/bytes#Buffer)都实现了`io.Reader`，所以
+
+* 使用`io.Reader`作为函数参数可以兼容不同类型的数据源。
+* 不同的数据源，可以统一使用`io.Reader`类型里的`Read`方法来读取数据。
+
+具体到这个例子里，我们可以使用`bufio.Reader`和其`ReadLine`方法，代码如下所示：
 
 ```go
 func count(reader *bufio.Reader) (int, error) {
@@ -74,9 +77,11 @@ func count(reader *bufio.Reader) (int, error) {
 }
 ```
 
+err为`io.EOF`，就表示读到了空行。
 
+> EOF is the error returned by Read when no more input is available. (Read must return EOF itself, not an error wrapping EOF, because callers will test for EOF using ==.) Functions should return EOF only to signal a graceful end of input. If the EOF occurs unexpectedly in a structured data stream, the appropriate error is either ErrUnexpectedEOF or some other error giving more detail.
 
-The responsibility of opening the file itself is now delegated to the `count` client:
+有了上面的`count`函数，我们就可以使用如下的方式打开文件，计算文件里空行的数量。
 
 ```go
 file, err := os.Open(filename)
@@ -87,15 +92,13 @@ defer file.Close()
 count, err := count(bufio.NewReader(file))
 ```
 
+这种实现方式，我们就可以在计算逻辑里不需要关心真实的数据来源。同时，也可以方便我们做单元测试。
 
-
-With the second implementation, the function can be called **regardless** of the actual data source. Meanwhile, and it will **facilitate** our unit tests as we can simply create a `bufio.Reader` from a `string`:
+比如我们可以直接把字符串作为输入，来测试上面实现的`count`函数。
 
 ```go
 count, err := count(bufio.NewReader(strings.NewReader("input")))
 ```
-
-
 
 
 
