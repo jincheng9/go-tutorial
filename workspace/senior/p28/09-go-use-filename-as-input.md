@@ -8,11 +8,11 @@
 
 
 
-## 常见问题
+## 问题场景
 
-Another common mistake is to pass a filename to a function.
+一个常见错误是把文件名作为函数参数。
 
-Let’s say we have to implement a function to count the number of empty lines in a file. The most natural implementation would be something like this:
+假设我们要实现一个函数，用来统计指定文件里有多少空行，最自然的实现方式如下：
 
 ```go
 func count(filename string) (int, error) {
@@ -33,13 +33,20 @@ func count(filename string) (int, error) {
 }
 ```
 
+这段代码逻辑很简单：
+
+* 文件名作为函数入参
+* 函数里读取文件每一行数据，判断是否为空行，如果是空行就计数+1
 
 
-`filename` is given as an input, so we open it and then we implement our logic, right?
 
 Now, let’s say we want to implement **unit tests** on top of this function to test with a normal file, an empty file, a file with a different encoding type, etc. It could easily become very hard to manage.
 
 Also, if we want to implement the same logic but for an HTTP body, for example, we will have to create another function for that.
+
+
+
+## 解决方案
 
 Go comes with two great abstractions: `io.Reader` and `io.Writer`. Instead of passing a filename, we can simply pass an `io.Reader` that will **abstract** the data source.
 
@@ -108,9 +115,9 @@ count, err := count(bufio.NewReader(strings.NewReader("input")))
 
 * [Go十大常见错误第7篇：不使用-race选项做并发竞争检测](https://mp.weixin.qq.com/s?__biz=Mzg2MTcwNjc1Mg==&mid=2247484299&idx=1&sn=583c3470a76e93b0af0d5fc04fe29b55&chksm=ce124ce4f965c5f20de5887b113eab91f7c2654a941491a789e4ac53c298fbadb4367acee9bb&token=1918756920&lang=zh_CN#rd)
 
-* [Go面试题系列，看看你会几题？](https://mp.weixin.qq.com/mp/appmsgalbum?__biz=Mzg2MTcwNjc1Mg==&action=getalbum&album_id=2199553588283179010#wechat_redirect)
+* [Go十大常见错误第8篇：并发编程中Context使用常见错误](https://mp.weixin.qq.com/s?__biz=Mzg2MTcwNjc1Mg==&mid=2247484317&idx=1&sn=474dad373684979fc96ba59182f08cf5&chksm=ce124cf2f965c5e4a29e313b4654faacef03e78da7aaf2ba6912d7b490a1df851a1bcbfec1c9&token=1918756920&lang=zh_CN#rd)
 
-* [Go编译器的race detector可以发现所有的并发冲突么？](https://medium.com/@val_deleplace/does-the-race-detector-catch-all-data-races-1afed51d57fb)
+* [Go面试题系列，看看你会几题？](https://mp.weixin.qq.com/mp/appmsgalbum?__biz=Mzg2MTcwNjc1Mg==&action=getalbum&album_id=2199553588283179010#wechat_redirect)
 
   
 
