@@ -92,9 +92,9 @@ defer file.Close()
 count, err := count(bufio.NewReader(file))
 ```
 
-这种实现方式，我们就可以在计算逻辑里不需要关心真实的数据来源。同时，也可以方便我们做单元测试。
+这种实现方式可以让我们在计算逻辑里不需要关心真正的数据来源。同时，也可以方便我们做单元测试。
 
-比如我们可以直接把字符串作为输入，来测试上面实现的`count`函数。
+比如下面的例子，我们直接把字符串作为输入，来测试上面实现的`count`函数。
 
 ```go
 count, err := count(bufio.NewReader(strings.NewReader("input")))
