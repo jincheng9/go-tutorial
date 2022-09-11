@@ -118,6 +118,9 @@
 * 高性能Go
   * [high performance go workshop](https://dave.cheney.net/high-performance-go-workshop/dotgo-paris.html)
 
+* Go安全
+  * [Go的全新漏洞检测工具govulncheck来了](./workspace/senior/p32/01-go-vulnerability-management.md)
+
 * Go版本演进
   * [Go 1.19要来了，看看都有哪些变化：第1篇](./workspace/senior/p29/readme.md)
   * [Go 1.19要来了，看看都有哪些变化：第2篇](./workspace/senior/p29/readme2.md)
