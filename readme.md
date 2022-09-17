@@ -152,7 +152,7 @@
 
 10. [Go Quiz: 从Go面试题看panic注意事项第1篇](./workspace/senior/p18)
 
-10. [Go Quiz: 从Go面试题看panic注意事项第2篇](./workspace/senior/p18/readme2.md)
+10. [Go Quiz: 从Go面试题看recover注意事项第1篇](./workspace/senior/p18/readme2.md)
 
 9. [Go Quiz: 从Go面试题看函数命名返回值的注意事项](./workspace/senior/p20)
 
