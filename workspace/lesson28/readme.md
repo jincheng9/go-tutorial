@@ -29,7 +29,7 @@ panic和recover是Go的2个内置函数，用于程序运行期抛出异常(pani
 
 * 既然可以用panic来抛运行期异常，那就有相应办法可以捕获异常，让程序正常往下执行。Go通过结合内置函数recover和defer语义，来实现捕获运行期异常。
 
-* **对于标准Go编译期，有些致命错误是无法被recover捕捉的，比如栈溢出(stack overflow)或者内存超限(out of memory)，遇到这种情况程序就会crash。**
+* **对于标准Go编译器，有些致命错误是无法被recover捕捉的，比如栈溢出(stack overflow)或者内存超限(out of memory)，遇到这种情况程序就会crash。**
 
 ## recover
 
