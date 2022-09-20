@@ -129,7 +129,24 @@
     }
     ```
     
-    
+
+* string可以用`+`做字符串拼接
+
+  ```go
+  // string5.go
+  package main
+  
+  import "fmt"
+  
+  func main() {
+  	a := "ch"
+  	b := "ina"
+  	c := a + b
+  	fmt.Println(c) // china
+  }
+  ```
+
+* string的更多用法可以参考：https://yourbasic.org/golang/string-functions-reference-cheat-sheet/
 
 ## bool
 
@@ -160,3 +177,4 @@
 
 * https://gfw.go101.org/article/basic-types-and-value-literals.html
 * https://www.callicoder.com/golang-basic-types-operators-type-conversion/
+* https://yourbasic.org/golang/string-functions-reference-cheat-sheet/
