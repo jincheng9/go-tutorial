@@ -357,4 +357,8 @@
 
 * coding进阶：分享Go语言入门、中级到高级教程，以及微服务、云原生架构
 
-  ![coding进阶](./workspace/img/wechat.png)  
+  ![coding进阶](./workspace/img/wechat.png)
+
+##   微信赞助
+
+![img](./workspace/img/wechat-payment.png) 
