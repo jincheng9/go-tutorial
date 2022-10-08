@@ -114,6 +114,7 @@
   * [第8篇：并发编程中Context使用常见错误](./workspace/senior/p28/08-go-context-management.md)
   * [第9篇：使用文件名称作为函数输入](./workspace/senior/p28/09-go-use-filename-as-input.md)
   * [第10篇：Goroutine和循环变量一起使用的坑](./workspace/senior/p28/10-go-goroutine-loop-var.md)
+  * [第11篇：意外的变量隐藏](./workspace/senior/p28/11-go-unintended-variable-shadowing.md)
 
 * 高性能Go
   * [high performance go workshop](https://dave.cheney.net/high-performance-go-workshop/dotgo-paris.html)
