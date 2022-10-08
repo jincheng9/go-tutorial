@@ -12,7 +12,16 @@ func data() int {
 	return 0
 }
 
+func varTest() (r int) {
+	fmt.Printf("%v, %p\n", &r, &r)
+	r, a := 10, 11
+	fmt.Printf("%v, %p\n", &r, &r)
+	fmt.Printf("%v, %p\n", &a, &a)
+	return r
+}
+
 func main() {
+	varTest()
 	fmt.Println(i)
 	a := 10
 	fmt.Printf("%v, %p\n", &a, &a)
