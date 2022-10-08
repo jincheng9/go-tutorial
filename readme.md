@@ -362,3 +362,9 @@
 ##   微信赞助
 
 ![img](./workspace/img/wechat-payment.png) 
+
+## 微信群交流
+
+加我微信，入群交流
+
+![](./workspace/img/wechat-group.png)  
