@@ -60,9 +60,11 @@ if tracing {
 * 在后面的代码逻辑里，根据不同情况创建不同的client
 * 最后使用赋值后的client做业务操作
 
-但是，我们要注意到，在if/else里对`client`变量赋值时，使用了`:=`。这个会直接创建一个新的局部变量`client`，而不是对我们最开始定义的`client`变量进行赋值，这个就是variable shadowing现象。
+但是，我们要注意到，在if/else里对`client`变量赋值时，使用了`:=`。
 
-这段代码带来的问题就是我们最开始定义的变量`client`的值会是`nil`。
+这个会直接创建一个新的局部变量`client`，而不是对我们最开始定义的`client`变量进行赋值，这就是variable shadowing现象。
+
+这段代码带来的问题就是我们最开始定义的变量`client`的值会是`nil`，不符合我们的预期。
 
 那我们应该怎么写代码，才能对我们最开始定义的`client`变量赋值呢？有以下2种解决方案。
 
@@ -106,7 +108,7 @@ if tracing {
 
 * 代码会更精简，只需要直接对最终用到的变量做一次赋值即可。方案1里要做2次赋值，先赋值给临时变量`c`，再赋值给变量`client`。
 
-* 可以对error统一处理。不需要在if/else里都对返回的error做判断，方案2里我们可以直接在if/else外面对error做判断和处理，代码示例如下：
+* 可以对error统一处理。不需要在if/else里对返回的error做判断，方案2里我们可以直接在if/else外面对error做判断和处理，代码示例如下：
 
   ```go
   if tracing {
@@ -125,7 +127,7 @@ if tracing {
 
 靠人肉去排查还是容易遗漏的，Go工具链里有一个`shadow`命令可以帮助我们排查代码里潜在的variable shadowing问题。
 
-* 第一步，安装`shadow`
+* 第一步，安装`shadow`命令
 
   ```bash
   go install golang.org/x/tools/go/analysis/passes/shadow/cmd/shadow
@@ -145,7 +147,7 @@ $ go vet -vettool=$(which shadow)
 ./main.go:9:6: declaration of "i" shadows declaration at line 8
 ```
 
-此外，shadow命令也可以单独使用，不需要结合`go vet`。shadow后面可以带上package名称或者.go源代码文件名。
+此外，shadow命令也可以单独使用，不需要结合`go vet`。shadow后面需要带上package名称或者.go源代码文件名。
 
 ```bash
 $ shadow example.com/shadow
@@ -159,7 +161,7 @@ $ shadow main.go
 ## 总结
 
 * 遇到variable shadowing的情况，我们需要小心，避免出现上述例子里的情况。
-* 可以结合`shadow`工具做variable shadowing的检测。
+* 可以结合`shadow`工具做variable shadowing的自动检测。
 
 
 
@@ -205,7 +207,9 @@ $ shadow main.go
 
 我为大家整理了一份后端开发学习资料礼包，包含编程语言入门到进阶知识(Go、C++、Python)、后端开发技术栈、面试题等。
 
-关注公众号「coding进阶」，发送消息 **backend** 领取资料礼包，这份资料会不定期更新，加入我觉得有价值的资料。还可以发送消息「**进群**」，和同行一起交流学习，答疑解惑。
+关注公众号「coding进阶」，发送消息 **backend** 领取资料礼包，这份资料会不定期更新，加入我觉得有价值的资料。
+
+发送消息「**进群**」，和同行一起交流学习，答疑解惑。
 
 
 
