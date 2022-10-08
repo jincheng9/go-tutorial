@@ -1,20 +1,20 @@
-# Go常见错误第11篇：意外的变量隐藏
+# Go常见错误第11篇：意外的变量遮蔽
 
 ## 前言
 
-这是Go常见错误系列的第11篇：Go语言中意外的变量隐藏。素材来源于Go布道者，现Docker公司资深工程师[Teiva Harsanyi](https://teivah.medium.com/)。
+这是Go常见错误系列的第11篇：Go语言中意外的变量遮蔽。素材来源于Go布道者，现Docker公司资深工程师[Teiva Harsanyi](https://teivah.medium.com/)。
 
 本文涉及的源代码全部开源在：[Go常见错误源代码](https://github.com/jincheng9/go-tutorial/tree/main/workspace/senior/p28)，欢迎大家关注公众号，及时获取本系列最新更新。
 
 
 
-##  什么是变量隐藏
+##  什么是变量遮蔽
 
-变量隐藏的英文原词是 variable shadowing，我们来看看维基百科上的定义：
+变量遮蔽的英文原词是 variable shadowing，我们来看看维基百科上的定义：
 
 > In [computer programming](https://en.wikipedia.org/wiki/Computer_programming), **variable shadowing** occurs when a variable declared within a certain [scope](https://en.wikipedia.org/wiki/Scope_(computer_science)) (decision block, method, or [inner class](https://en.wikipedia.org/wiki/Inner_class)) has the same name as a variable declared in an outer scope. At the level of [identifiers](https://en.wikipedia.org/wiki/Identifier_(computer_languages)) (names, rather than variables), this is known as [name masking](https://en.wikipedia.org/wiki/Name_masking). This outer variable is said to be shadowed by the inner variable, while the inner identifier is said to *mask* the outer identifier. This can lead to confusion, as it may be unclear which variable subsequent uses of the shadowed variable name refer to, which depends on the [name resolution](https://en.wikipedia.org/wiki/Name_resolution_(programming_languages)) rules of the language.
 
-简单来说，如果某个作用域里声明了一个变量，同时在这个作用域的外层作用域又有一个相同名字的变量，就叫variable shadowing(变量隐藏)。
+简单来说，如果某个作用域里声明了一个变量，同时在这个作用域的外层作用域又有一个相同名字的变量，就叫variable shadowing(变量遮蔽)。
 
 ```go
 func test() {
@@ -28,7 +28,7 @@ func test() {
 
 比如上面这段代码，在for循环里面和外面都有一个变量`i`。
 
-for循环里面`fmt.Println(i)`用到的变量`i`是for循环里面定义的变量`i`，for循环外面的`i`在for循环里面是不可见的，被隐藏了。
+for循环里面`fmt.Println(i)`用到的变量`i`是for循环里面定义的变量`i`，for循环外面的`i`在for循环里面是不可见的，被遮蔽了。
 
 
 
