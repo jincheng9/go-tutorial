@@ -8,13 +8,35 @@
 
 
 
+##  什么是变量隐藏
+
+变量隐藏的英文原词是 variable shadowing，我们来看看维基百科上的定义：
+
+> In [computer programming](https://en.wikipedia.org/wiki/Computer_programming), **variable shadowing** occurs when a variable declared within a certain [scope](https://en.wikipedia.org/wiki/Scope_(computer_science)) (decision block, method, or [inner class](https://en.wikipedia.org/wiki/Inner_class)) has the same name as a variable declared in an outer scope. At the level of [identifiers](https://en.wikipedia.org/wiki/Identifier_(computer_languages)) (names, rather than variables), this is known as [name masking](https://en.wikipedia.org/wiki/Name_masking). This outer variable is said to be shadowed by the inner variable, while the inner identifier is said to *mask* the outer identifier. This can lead to confusion, as it may be unclear which variable subsequent uses of the shadowed variable name refer to, which depends on the [name resolution](https://en.wikipedia.org/wiki/Name_resolution_(programming_languages)) rules of the language.
+
+简单来说，如果某个作用域里声明了一个变量，同时在这个作用域的外层作用域又有一个相同名字的变量，就叫variable shadowing(变量隐藏)。
+
+```go
+func test() {
+	i := -100
+	for i := 0; i < 10; i++ {
+		fmt.Println(i)
+	}
+	fmt.Println(i)
+}
+```
+
+比如上面这段代码，在for循环里面和外面都有一个变量`i`。
+
+for循环里面`fmt.Println(i)`用到的变量`i`是for循环里面定义的变量`i`，for循环外面的`i`在for循环里面是不可见的，被隐藏了。
+
+
+
 ## 常见错误
 
-The scope of a variable refers to the places a variable can be referenced: in other words, the part of an application where a name binding is valid. In Go, a variable name declared in a block can be redeclared in an inner block. This principle, called *variable shadowing*, is prone to common mistakes.
+对于下面这段代码，大家思考下，看看会有什么问题：
 
-The following example shows an unintended side effect because of a shadowed variable. It creates an HTTP client in two different ways, depending on the value of a tracing Boolean:
-
-```
+```go
 var client *http.Client
 if tracing {
     client, err := createClientWithTracing()
@@ -32,21 +54,21 @@ if tracing {
 // Use client
 ```
 
-In this example, we first declare a client variable. Then, we use the short variable declaration operator (:=) in both inner blocks to assign the result of the function call to the inner client variables—not the outer one. As a result, the outer variable is always nil.
+这段代码逻辑分3步：
 
-##### NOTE
+* 首先定义了一个变量`client`
+* 在后面的代码逻辑里，根据不同情况创建不同的client
+* 最后使用赋值后的client做业务操作
 
-This code compiles because the inner client variables are used in the logging calls. If not, we would have compilation errors such as client declared and not used.
+但是，我们要注意到，在if/else里对`client`变量赋值时，使用了`:=`。这个会直接创建一个新的局部变量`client`，而不是对我们最开始定义的`client`变量进行赋值，这个就是variable shadowing现象。
 
-How can we ensure that a value is assigned to the original client variable? There are two different options.
+这段代码带来的问题就是我们最开始定义的变量`client`的值会是`nil`。
 
-
+那我们应该怎么写代码，才能对我们最开始定义的`client`变量赋值呢？有以下2种解决方案。
 
 ### 解决方案1
 
-The first option uses temporary variables in the inner blocks this way:
-
-```
+```go
 var client *http.Client
 if tracing {
     c, err := createClientWithTracing()
@@ -59,11 +81,9 @@ if tracing {
 }
 ```
 
-Here, we assign the result to a temporary variable, c, whose scope is only within the if block. Then, we assign it back to the client variable. Meanwhile, we do the same for the else part.
+在if/else里定义一个临时变量`c`，然后把`c`赋值给变量`client`。
 
 ### 解决方案2
-
-The second option uses the assignment operator (=) in the inner blocks to directly assign the function results to the client variable. However, this requires creating an error variable because the assignment operator works only if a variable name has already been declared. For example:
 
 ```
 var client *http.Client
@@ -78,28 +98,68 @@ if tracing {
 }
 ```
 
-Instead of assigning to a temporary variable first, we can directly assign the result to client.
+直接先把`error`变量提前定义好，在if/else里直接用`=`做赋值，而不用`:=`。
 
-Both options are perfectly valid. The main difference between the two alternatives is that we perform only one assignment in the second option, which may be considered easier to read. Also, with the second option, we can mutualize and implement error handling outside the if/else statements, as this example shows:
+### 方案区别
 
+上面这2种方案其实都可以满足业务需求。我个人比较推荐方案2，主要理由如下：
+
+* 代码会更精简，只需要直接对最终用到的变量做一次赋值即可。方案1里要做2次赋值，先赋值给临时变量`c`，再赋值给变量`client`。
+
+* 可以对error统一处理。不需要在if/else里都对返回的error做判断，方案2里我们可以直接在if/else外面对error做判断和处理，代码示例如下：
+
+  ```go
+  if tracing {
+      client, err = createClientWithTracing()
+  } else {
+      client, err = createDefaultClient()
+  }
+  if err != nil {
+      // Common error handling
+  }
+  ```
+
+
+
+## 如何自动发现variable shadowing
+
+靠人肉去排查还是容易遗漏的，Go工具链里有一个`shadow`命令可以帮助我们排查代码里潜在的variable shadowing问题。
+
+* 第一步，安装`shadow`
+
+  ```bash
+  go install golang.org/x/tools/go/analysis/passes/shadow/cmd/shadow
+  ```
+
+* 第二步，使用`shadow`检查代码里是否有variable shadowing
+
+  ```bash
+  go vet -vettool=$(which shadow)
+  ```
+
+比如，我检查后的结果如下：
+
+```bash
+$ go vet -vettool=$(which shadow)
+# example.com/shadow
+./main.go:9:6: declaration of "i" shadows declaration at line 8
 ```
-if tracing {
-    client, err = createClientWithTracing()
-} else {
-    client, err = createDefaultClient()
-}
-if err != nil {
-    // Common error handling
-}
+
+此外，shadow命令也可以单独使用，不需要结合`go vet`。shadow后面可以带上package名称或者.go源代码文件名。
+
+```bash
+$ shadow example.com/shadow
+11-variable-shadowing/main.go:9:6: declaration of "i" shadows declaration at line 8
+$ shadow main.go
+11-variable-shadowing/main.go:9:6: declaration of "i" shadows declaration at line 8
 ```
 
 
 
 ## 总结
 
-Variable shadowing occurs when a variable name is redeclared in an inner block, but we saw that this practice is prone to mistakes. Imposing a rule to forbid shadowed variables depends on personal taste. For example, sometimes it can be convenient to reuse an existing variable name like err for errors. Yet, in general, we should remain cautious because we now know that we can face a scenario where the code compiles, but the variable that receives the value is not the one expected. Later in this chapter, we will also see how to detect shadowed variables, which may help us spot possible bugs.
-
-The following section shows why it is important to avoid abusing nested code.
+* 遇到variable shadowing的情况，我们需要小心，避免出现上述例子里的情况。
+* 可以结合`shadow`工具做variable shadowing的检测。
 
 
 
@@ -122,6 +182,8 @@ The following section shows why it is important to avoid abusing nested code.
 * [Go十大常见错误第8篇：并发编程中Context使用常见错误](https://mp.weixin.qq.com/s?__biz=Mzg2MTcwNjc1Mg==&mid=2247484317&idx=1&sn=474dad373684979fc96ba59182f08cf5&chksm=ce124cf2f965c5e4a29e313b4654faacef03e78da7aaf2ba6912d7b490a1df851a1bcbfec1c9&token=1918756920&lang=zh_CN#rd)
 
 * [Go十大常见错误第9篇：使用文件名称作为函数输入](https://mp.weixin.qq.com/s?__biz=Mzg2MTcwNjc1Mg==&mid=2247484325&idx=1&sn=689c1b3823697cc583e1e818c4c76ee5&chksm=ce124ccaf965c5dce4e497f6251c5f0a8473b8e2ae3824bd72fe8c532d6dd84e6375c3990b3e&token=1266762504&lang=zh_CN#rd)
+
+* [Go十大常见错误第10篇：Goroutine和循环变量一起使用的坑](https://mp.weixin.qq.com/s?__biz=Mzg2MTcwNjc1Mg==&mid=2247484335&idx=1&sn=cc8c6ceae72b30ec6f4d4e7b4367baca&chksm=ce124cc0f965c5d60410f977cdf31f127694fd0d49c35e2061ce8fb5fb9387bfa321196db438&token=1656737387&lang=zh_CN#rd)
 
 * [Go面试题系列，看看你会几题？](https://mp.weixin.qq.com/mp/appmsgalbum?__biz=Mzg2MTcwNjc1Mg==&action=getalbum&album_id=2199553588283179010#wechat_redirect)
 
