@@ -296,7 +296,7 @@
 * [Valentin Deleplace-Google Engineer](https://medium.com/@val_deleplace)
 * [Jay Conrod-Ex Google Go Team Member](https://jayconrod.com/posts)
 * [Medium: A Journey with Go](https://medium.com/a-journey-with-go)
-* [Teiva Harsanyi-100 Go Mistakes author](https://teivah.medium.com/)
+* [Teiva Harsanyi-100 Go Mistakes author](https://teivah.github.io/)
 * [Carl M. Johnson.net-Tech Director of Spotlight PA](https://carlmjohnson.net/)
 * [Alex Edwards-A full stack Web Developer](https://www.alexedwards.net/blog)
 * [golang.design](https://golang.design/)
