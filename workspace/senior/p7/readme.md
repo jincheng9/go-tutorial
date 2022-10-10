@@ -314,7 +314,7 @@ func min(T constraints.Ordered) (x, y T) T {
 }
 
 var a, b, m1, m2 float64
-// 方式1：显示指定type argument
+// 方式1：显式指定type argument
 m1 = min[float64](a, b)
 // 方式2：不指定type argument，让编译器自行推导
 m2 = min(a, b)

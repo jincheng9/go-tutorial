@@ -33,7 +33,7 @@
 
   
 
-* **注意**：Go不支持隐式类型转换，要做数据类型转换必须按照type_name(expression)方式做显示的类型转换
+* **注意**：Go不支持隐式类型转换，要做数据类型转换必须按照type_name(expression)方式做显式的类型转换
 
   ```go
   package main

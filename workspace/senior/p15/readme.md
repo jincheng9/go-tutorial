@@ -72,7 +72,7 @@ func main() {
 > deferred functions are executed after any result parameters are set by that 
 > return statement but before the function returns to its caller.
 
-Go的规定是：如果在函数A里执行了 defer B(xx)，函数A显示地通过return语句来返回时，会先把返回值赋值给A的返回值参数，然后执行被defer的函数B，最后才真正地返回给函数A的调用者。
+Go的规定是：如果在函数A里执行了 defer B(xx)，函数A显式地通过return语句来返回时，会先把返回值赋值给A的返回值参数，然后执行被defer的函数B，最后才真正地返回给函数A的调用者。
 
 对于`test1`函数，执行`return i`时，先把`i`的值赋值给`test1`的返回值，defer语句里对`i`的赋值并不会改变函数`test1`的返回值，`test1`函数返回0。
 
