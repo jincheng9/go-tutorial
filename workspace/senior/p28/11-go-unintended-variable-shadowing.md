@@ -130,7 +130,7 @@ if tracing {
 * 第一步，安装`shadow`命令
 
   ```bash
-  go install golang.org/x/tools/go/analysis/passes/shadow/cmd/shadow
+  go install golang.org/x/tools/go/analysis/passes/shadow/cmd/shadow@latest
   ```
 
 * 第二步，使用`shadow`检查代码里是否有variable shadowing
