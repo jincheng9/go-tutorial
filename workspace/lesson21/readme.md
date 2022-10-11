@@ -88,7 +88,7 @@ func main() {
 
 * **注意事项**
 
-  * WaitGroup不要拷贝传值，如果要显示地把WaitGroup作为函数参数，**一定要传指针**。
+  * WaitGroup不要拷贝传值，如果要显式地把WaitGroup作为函数参数，**一定要传指针**。
 
     WaitGroup给函数A传值，在函数A内部这个WaitGroup会是一个局部变量，对WaitGroup的操作只会在函数内部生效。示例如下：
 

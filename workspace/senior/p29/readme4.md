@@ -147,7 +147,7 @@ Go标准库在Go 1.19版本有很多细微的改动和优化，主要涵盖以�
 
   `.js`扩展名的文件本来应该被mime包识别为 `text/plain`类型，但是在Windows系统上有bug，会导致以`.js`为扩展名的文件被mime包识别为`text/javascript; charset=utf-8`类型。
 
-  如果在Windows系统上，想让以`.js`为扩展名的文件被mime包识别为 `text/plain` ，必须显示调用 [`AddExtensionType`](https://tip.golang.org/pkg/mime/#AddExtensionType)。
+  如果在Windows系统上，想让以`.js`为扩展名的文件被mime包识别为 `text/plain` ，必须显式调用 [`AddExtensionType`](https://tip.golang.org/pkg/mime/#AddExtensionType)。
 
 - [net/http](https://tip.golang.org/pkg/net/http/)
 

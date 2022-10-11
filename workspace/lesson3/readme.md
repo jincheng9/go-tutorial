@@ -107,7 +107,7 @@ var (
 
 ## 变量类型及其零值
 
-* 零值：英文叫[zero vaue](https://go.dev/ref/spec#The_zero_value)，没有显示初始化的变量，Go编译器会给一个默认值，也叫零值。
+* 零值：英文叫[zero vaue](https://go.dev/ref/spec#The_zero_value)，没有显式初始化的变量，Go编译器会给一个默认值，也叫零值。
 
 * 数值：所有数值类型的零值都是0
 
