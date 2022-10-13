@@ -51,7 +51,7 @@ func min(x, y float64) float64 {
 对于这个场景，使用泛型代码更简洁，效率也更优。支持比较不同数值类型的泛型min函数实现如下：
 
 ```go
-func min(T constraints.Ordered) (x, y T) T {
+func min[T constraints.Ordered] (x, y T) T {
 	if x < y {
 		return x
 	}
@@ -86,7 +86,7 @@ m := min[int](2, 3)
 上面的`min[int](2, 3)`调用还可以替换为如下代码：
 
 ```go
-func min(T constraints.Ordered) (x, y T) T {
+func min[T constraints.Ordered] (x, y T) T {
 	if x < y {
 		return x
 	}
@@ -135,7 +135,7 @@ var stringTree Tree[string]
 类型限制往往包含了多个具体类型，这些具体类型就构成了类型集。
 
 ```go
-func min(T constraints.Ordered) (x, y T) T {
+func min[T constraints.Ordered] (x, y T) T {
 	if x < y {
 		return x
 	}
@@ -306,7 +306,7 @@ https://github.com/golang/go/blob/master/src/constraints/constraints.go
 我们看下面的代码示例：
 
 ```go
-func min(T constraints.Ordered) (x, y T) T {
+func min[T constraints.Ordered] (x, y T) T {
 	if x < y {
 		return x
 	}
