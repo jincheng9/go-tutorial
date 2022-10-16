@@ -28,7 +28,7 @@
   
   func main() {
     a, b := 1, 2
-    res = add(a, b)
+    res := add(a, b)
     fmt.Println("a=", a, "b=", b, "a+b=", res)
     fmt.Println("g=", g)
     fmt.Println("hello world!")
