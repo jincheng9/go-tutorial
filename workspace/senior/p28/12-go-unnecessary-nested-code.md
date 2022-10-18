@@ -2,11 +2,15 @@
 
 ## 前言
 
-这是Go常见错误系列的第12篇：Go语言中冗余的嵌套代码。素材来源于Go布道者，现Docker公司资深工程师[Teiva Harsanyi](https://teivah.github.io/)。
+这是Go常见错误系列的第12篇：Go语言中冗余的嵌套代码，俗称箭头型代码。
+
+![](../../img/arrow-code.jpeg) 
+
+素材来源于Go布道者，现Docker公司资深工程师[Teiva Harsanyi](https://teivah.github.io/)。
 
 本文涉及的源代码全部开源在：[Go常见错误源代码](https://github.com/jincheng9/go-tutorial/tree/main/workspace/senior/p28)，欢迎大家关注公众号，及时获取本系列最新更新。
 
-
+ 
 
 ## 常见错误
 
@@ -129,6 +133,8 @@ func concatenate(s1 string, s2 string) (string, error) {
 
 * 归纳上面2个原则，其实就是能先return的就先return，减少不必要的代码嵌套。
 
+  感兴趣的也可以看看参考资料里"左耳朵耗子"写过的一篇文章"如何重构箭头型代码"，
+
 下一篇文章，我们会讲解下Go语言里init函数的常见错误和最佳实践。
 
 
@@ -186,3 +192,4 @@ func concatenate(s1 string, s2 string) (string, error) {
 ## References
 
 * https://livebook.manning.com/book/100-go-mistakes-how-to-avoid-them/chapter-2/
+* https://coolshell.cn/articles/17757.html
