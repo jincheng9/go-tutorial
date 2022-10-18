@@ -115,6 +115,7 @@
   * [第9篇：使用文件名称作为函数输入](./workspace/senior/p28/09-go-use-filename-as-input.md)
   * [第10篇：Goroutine和循环变量一起使用的坑](./workspace/senior/p28/10-go-goroutine-loop-var.md)
   * [第11篇：意外的变量遮蔽(variable shadowing)](./workspace/senior/p28/11-go-unintended-variable-shadowing.md)
+  * [第12篇：冗余的嵌套代码](./workspace/senior/p28/12-go-unnecessary-nested-code.md)
 
 * 高性能Go
   * [high performance go workshop](https://dave.cheney.net/high-performance-go-workshop/dotgo-paris.html)
