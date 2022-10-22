@@ -23,7 +23,7 @@ Go语言里的init函数有如下特点：
 * init函数没有参数，没有返回值。如果加了参数或返回值，会编译报错。
 * 一个package下面的每个.go源文件都可以有自己的init函数。当这个package被import时，就会执行该package下的init函数。
 * 一个.go源文件里可以有一个或者多个init函数，虽然函数签名完全一样，但是Go允许这么做。
-* .go源文件里的全局常量和变量会先被编译期解析，然后再执行init函数。
+* .go源文件里的全局常量和变量会先被编译器解析，然后再执行init函数。
 
 ### 示例1
 
@@ -132,13 +132,11 @@ func Store(key, value string) error {
 
 到现在为止，大家对package里的init函数应该有了一个比较清晰的理解，接下来我们看看init函数的常见错误和最佳实践。
 
-### 何时使用init函数
+### init函数的错误用法
 
-我们先看看
+我们先看看init函数一种常见的不太好的用法。
 
-First, let’s look at an example where using an init function can be considered inappropriate: holding a database connection pool. In the init function in the example, we open a database using sql.Open. We make this database a global variable that other functions can later use:
-
-```
+```go
 var db *sql.DB
  
 func init() {
@@ -156,22 +154,23 @@ func init() {
 }
 ```
 
-In this example, we open the database, check whether we can ping it, and then assign it to the global variable. What should we think about this implementation? Let’s describe three main downsides.
+上面的程序做了如下几个事情：
 
-First, error management in an init function is limited. Indeed, as an init function doesn’t return an error, one of the only ways to signal an error is to panic, leading the application to be stopped. In our example, it might be OK to stop the application anyway if opening the database fails. However, it shouldn’t necessarily be up to the package itself to decide whether to stop the application. Perhaps a caller might have preferred implementing a retry or using a fallback mechanism. In this case, opening the database within an init function prevents client packages from implementing their error-handling logic.
+* 创建一个数据库连接实例
+* 对数据库做ping检查
+* 如果连接数据库和ping检查都通过的话，会把数据库连接实例赋值给全局变量`db`
 
-Another important downside is related to testing. If we add tests to this file, the init function will be executed before running the test cases, which isn’t necessarily what we want (for example, if we add unit tests on a utility function that doesn’t require this connection to be created). Therefore, the init function in this example complicates writing unit tests.
+大家可以先思考下这段程序会有哪些问题。
 
-The last downside is that the example requires assigning the database connection pool to a global variable. Global variables have some severe drawbacks; for example:
+* 第一，init函数里面做错误管理的方式是很有限的。比如，init函数没法返回error，因为init函数是不能有返回值的。那如果init函数出现了error要让外界感知的话，得主动触发panic，让程序停止。对于上面的示例程序，虽然init函数遇到错误时，表示数据库连接失败，去停止程序运行或许是可以的。但是在init函数里去创建数据库连接，如果失败的话，就不好做重试或者容错处理。试想，如果是在一个普通函数里去创建数据库连接，那这个普通函数可以在创建数据库连接失败的时候返回error信息，然后函数的调用者来决定做重试或者退出的操作。
 
-- Any functions can alter global variables within the package.
-- Unit tests can be more complicated because a function that depends on a global variable won’t be isolated anymore.
+* 第二，会影响代码的单元测试。因为init函数在测试代码执行之前就会运行，如果我们仅仅是想测试这个package里某个不需要做数据库连接的基础函数，那测试的时候还是会执行init函数，去创建数据库连接，这显然并不是我们想要的效果，增加了单元测试的复杂性。
 
-In most cases, we should favor encapsulating a variable rather than keeping it global.
+* 第三，这段程序把数据库连接赋值给了全局变量。用全局变量会有一些潜在的风险，比如这个package里的其它函数可以修改这个全局变量的值，导致被误修改；单元测试也得考虑这个全局变量，一些和数据库连接无关的单元测试也得考虑这个全局变量。
 
-For these reasons, the previous initialization should probably be handled as part of a plain old function like so:
+那我们如何对上面的程序做修改来解决以上问题呢？参考如下代码：
 
-```
+```go
 func createClient(dsn string) (*sql.DB, error) {
     db, err := sql.Open("mysql", dsn)
     if err != nil {
@@ -184,15 +183,17 @@ func createClient(dsn string) (*sql.DB, error) {
 }
 ```
 
-Using this function, we tackled the main downsides discussed previously. Here’s how:
+通过这个函数来创建数据库连接就可以解决以上3个问题了。
 
-- The responsibility of error handling is left up to the caller.
-- It’s possible to create an integration test to check that this function works.
-- The connection pool is encapsulated within the function.
+- 错误处理可以交给createClient函数的调用者去管理，调用者可以选择退出程序或者重试。
+- 单元测试既可以测试和数据库无关的基础函数，也可以测试createClient来检查和数据库连接的代码实现。
+- 没有暴露全局变量，数据库连接实例在createClient函数里面创建和返回。
 
-Is it necessary to avoid init functions at all costs? Not really. There are still use cases where init functions can be helpful. For example, the official Go blog (http://mng.bz/PW6w) uses an init function to set up the static HTTP configuration:
+### 何时使用init函数
 
-```
+init函数也并不是完全不建议用，在有些场景下是可以考虑使用的。比如Go的官方blog的[源码实现](https://cs.opensource.google/go/x/website/+/e0d934b4:blog/blog.go;l=32)就用到了init函数。
+
+```go
 func init() {
     redirect := func(w http.ResponseWriter, r *http.Request) {
         http.Redirect(w, r, "/", http.StatusFound)
@@ -210,17 +211,22 @@ func init() {
 }
 ```
 
-In this example, the init function cannot fail (http.HandleFunc can panic, but only if the handler is nil, which isn’t the case here). Meanwhile, there’s no need to create any global variables, and the function will not impact possible unit tests. Therefore, this code snippet provides a good example of where init functions can be helpful. 
+这段源码里，init函数不可能失败，因为http.HandleFunc只有在第2个handler参数为nil的时候才会panic，显然这段程序里http.HandleFunc的第2个handler参数都是合法值。
 
-In summary, we saw that init functions can lead to some issues:
+同时，这里也无需创建全局变量，这个函数也不会影响单元测试。
 
-- They can limit error management.
-- They can complicate how to implement tests (for example, an external dependency must be set up, which may not be necessary for the scope of unit tests).
-- If the initialization requires us to set a state, that has to be done through global variables.
-
-We should be cautious with init functions. They can be helpful in some situations, however, such as defining static configuration, as we saw in this section. Otherwise, and in most cases, we should handle initializations through ad hoc functions.
+因此这是一个适合用init函数的场景示例。
 
 ## 总结
+
+init函数要慎用，如果使用不当可能会带来问题，千万不要在代码里依赖同一package下不同.go文件init的执行顺序。
+
+最后回顾下Go语言init函数的注意事项：
+
+* init函数没有参数，没有返回值。如果加了参数或返回值，会编译报错。
+* 一个package下面的每个.go源文件都可以有自己的init函数。当这个package被import时，就会执行该package下的init函数。
+* 一个.go源文件里可以有一个或者多个init函数，虽然函数签名完全一样，但是Go允许这么做。
+* .go源文件里的全局常量和变量会先被编译器解析，然后再执行init函数。
 
 
 
