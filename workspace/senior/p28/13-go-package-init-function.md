@@ -134,6 +134,8 @@ func Store(key, value string) error {
 
 ### 何时使用init函数
 
+我们先看看
+
 First, let’s look at an example where using an init function can be considered inappropriate: holding a database connection pool. In the init function in the example, we open a database using sql.Open. We make this database a global variable that other functions can later use:
 
 ```
@@ -208,7 +210,9 @@ func init() {
 }
 ```
 
-In this example, the init function cannot fail (http.HandleFunc can panic, but only if the handler is nil, which isn’t the case here). Meanwhile, there’s no need to create any global variables, and the function will not impact possible unit tests. Therefore, this code snippet provides a good example of where init functions can be helpful. In summary, we saw that init functions can lead to some issues:
+In this example, the init function cannot fail (http.HandleFunc can panic, but only if the handler is nil, which isn’t the case here). Meanwhile, there’s no need to create any global variables, and the function will not impact possible unit tests. Therefore, this code snippet provides a good example of where init functions can be helpful. 
+
+In summary, we saw that init functions can lead to some issues:
 
 - They can limit error management.
 - They can complicate how to implement tests (for example, an external dependency must be set up, which may not be necessary for the scope of unit tests).
