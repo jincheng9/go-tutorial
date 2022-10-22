@@ -25,6 +25,8 @@ Go语言里的init函数有如下特点：
 * 一个.go源文件里可以有一个或者多个init函数，虽然函数签名完全一样，但是Go允许这么做。
 * .go源文件里的全局常量和变量会先被编译期解析，然后再执行init函数。
 
+### 示例1
+
 我们来看如下的代码示例：
 
 ```go
@@ -50,7 +52,7 @@ var a = func() int {
 }()
 ```
 
-这段程序的输出结果是：
+`go run main.go`执行这段程序的结果是：
 
 ```bash
 var
@@ -61,9 +63,9 @@ main
 
 全局变量`a`的定义虽然放在了最后面，但是先被编译器解析，然后执行init函数，最后执行main函数。
 
+### 示例2
 
-
-An init function is executed when a package is initialized. In the following example, we define two packages, main and redis, where main depends on redis. First, main .go from the main package:
+有2个package: `main`和`redis`，`main`这个package依赖了`redis`这个package。
 
 ```go
 package main
@@ -84,7 +86,7 @@ func main() {
 }
 ```
 
-And then redis.go from the redis package:
+
 
 ```go
 package redis
@@ -100,82 +102,35 @@ func Store(key, value string) error {
 }
 ```
 
-Because main depends on redis, the redis package’s init function is executed first, followed by the init of the main package, and then the main function itself. Figure 2.2 shows this sequence.
+因为`main` import了`redis`，所以`redis`这个package里的init函数先执行，然后再执行`main`这个package里的init函数。
 
-We can define multiple init functions per package. When we do, the execution order of the init function inside the package is based on the source files’ alphabetical order. For example, if a package contains an a.go file and a b.go file and both have an init function, the a.go init function is executed first.
-
-##### Figure 2.2 The init function of the redis package is executed first, then the init function of main, and finally the main function.
+* 如果一个package下面有多个.go源文件，每个.go源文件里都有各自的init函数，那会按照.go源文件名的字典序执行init函数。比如有a.go和b.go这2个源文件，里面都有init函数，那a.go里的init函数比b.go里的init函数先执行。
+* 如果一个.go源文件里有多个init函数，那按照代码里的先后顺序执行。
 
 ![img](https://drek4537l1klr.cloudfront.net/harsanyi/Figures/CH02_F02_Harsanyi.png)
 
-We shouldn’t rely on the ordering of init functions within a package. Indeed, it can be dangerous as source files can be renamed, potentially impacting the execution order.
+* 我们在工程实践里，不要去依赖init函数的执行顺序。如果预设了init函数的执行顺序，通常是很危险的，也不是Go语言的最佳实践。因为源文件名是有可能被修改的。
 
-We can also define multiple init functions within the same source file. For example, this code is perfectly valid:
+* init函数不能被直接调用，否则会编译报错。
 
-```
-package main
- 
-import "fmt"
- 
-func init() {
-    fmt.Println("init 1")
-}
- 
-func init() {
-    fmt.Println("init 2")
-}
- 
-func main() {
-}
-```
+  ```go
+  package main
+   
+  func init() {}
+   
+  func main() {
+      init()
+  }
+  ```
 
-The first init function executed is the first one in the source order. Here’s the output:
+  上面这段代码编译报错如下：
 
-```
-1
-2init 1
-init 2
-```
+  ```go
+  $ go build .
+  ./main.go:6:2: undefined: init
+  ```
 
-We can also use init functions for side effects. In the next example, we define a main package that doesn’t have a strong dependency on foo (for example, there’s no direct use of a public function). However, the example requires the foo package to be initialized. We can do that by using the _ operator this way:
-
-```
-package main
- 
-import (
-    "fmt"
- 
-    _ "foo"
-)
- 
-func main() {
-    // ...
-}
-```
-
-In this case, the foo package is initialized before main. Hence, the init functions of foo are executed.
-
-Another aspect of an init function is that it can’t be invoked directly, as in the following example:
-
-```
-package main
- 
-func init() {}
- 
-func main() {
-    init()
-}
-```
-
-This code produces the following compilation error:
-
-```
-1
-2$ go build .
-./main.go:6:2: undefined: init
-```
-
-Now that we’ve refreshed our minds about how init functions work, let’s see when we should use or not use them. The following section sheds some light on this.
+到现在为止，大家对package里的init函数应该有了一个比较清晰的理解，接下来我们看看init函数的常见错误和最佳实践。
 
 ### 何时使用init函数
 
