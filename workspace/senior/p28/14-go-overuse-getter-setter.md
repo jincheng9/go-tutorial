@@ -1,8 +1,8 @@
-# Go常见错误第14篇：init函数的常见错误和最佳实践
+# Go常见错误第14篇：过度使用getter和setter方法
 
 ## 前言
 
-这是Go常见错误系列的第14篇：init函数的常见错误和最佳实践。
+这是Go常见错误系列的第14篇：过度使用getter和setter方法。
 
 素材来源于Go布道者，现Docker公司资深工程师[Teiva Harsanyi](https://teivah.github.io/)。
 
@@ -12,48 +12,108 @@
 
 ## 常见错误和最佳实践
 
-In programming, data encapsulation refers to hiding the values or state of an object. Getters and setters are means to enable encapsulation by providing exported methods on top of unexported object fields.
+### 现状
 
-In Go, there is no automatic support for getters and setters as we see in some languages. It is also considered neither mandatory nor idiomatic to use getters and setters to access struct fields. For example, the standard library implements structs in which some fields are accessible directly, such as the time.Timer struct:
+写Java或者C++的人，可能会习惯下面的编程模式：
 
+* 将不希望外部直接访问的类成员变量设置为private私有成员。
+* 在类里定义public的get和set方法，用于外部获取和修改这个成员变量的值。get方法我们叫做getter，set方法叫做setter。
+
+这是一种数据封装模式，在Java和C++里被广泛使用。
+
+但是在Go语言里，官方从来没有建议使用getter和setter，我们可以直接访问结构体里的成员变量。
+
+成员变量的可见性通过结构体标识符首字母大小写以及成员变量首字母大小写来控制到package这个层面。
+
+* 如果结构体要被其它package使用，那结构体的标识符或者说结构体的名称首字母要大写。
+* 如果结构体的成员要被其它package使用，那结构体和结构体的成员标识符首字母都要大写，否则只能在当前包里使用。
+
+举个Go标准库里的time.Timer结构体的例子：
+
+```go
+// The Timer type represents a single event.
+// When the Timer expires, the current time will be sent on C,
+// unless the Timer was created by AfterFunc.
+// A Timer must be created with NewTimer or AfterFunc.
+type Timer struct {
+	C <-chan Time
+	r runtimeTimer
+}
 ```
-timer := time.NewTimer(time.Second)
-<-timer.C
+
+Timer结构体定义如上所示，里面有一个成员变量`C`用于接收Timer到点后的当前时间。
+
+Timer和C都是大写，所以我们可以直接在下面的代码里访问Timer里的成员变量C拿到当前时间。
+
+```go
+package main
+
+import (
+	"fmt"
+	"time"
+)
+
+func main() {
+	// print current time
+	fmt.Println(time.Now())
+
+	// NewTimer creates a new Timer that will send
+	// the current time on its channel after at least duration d.
+	timer := time.NewTimer(5 * time.Second)
+
+	// print current time
+	fmt.Println(<-timer.C)
+}
 ```
 
-Although it’s not recommended, we could even modify C directly (but we wouldn’t receive events anymore). However, this example illustrates that the standard Go library doesn’t enforce using getters and/or setters even when we shouldn’t modify a field.
+上面程序执行结果是：
 
-On the other hand, using getters and setters presents some advantages, including these:
-
-- They encapsulate a behavior associated with getting or setting a field, allowing new functionality to be added later (for example, validating a field, returning a computed value, or wrapping the access to a field around a mutex).
-- They hide the internal representation, giving us more flexibility in what we expose.
-- They provide a debugging interception point for when the property changes at run time, making debugging easier.
-
-If we fall into these cases or foresee a possible use case while guaranteeing forward compatibility, using getters and setters can bring some value. For example, if we use them with a field called balance, we should follow these naming conventions:
-
-- The getter method should be named Balance (not GetBalance).
-- The setter method should be named SetBalance.
-
-Here’s an example:
-
+```bash
+2022-11-06 13:07:07.706011 +0800 CST m=+0.000174256
+2022-11-06 13:07:12.709128 +0800 CST m=+5.003141645
 ```
+
+这种写法当然不是Go官方所预期的，因为成员变量`C`一般来说是不直接对外访问。
+
+如果`C`暴露了可以对外访问，那我们甚至修改`C`的值，导致程序出错。
+
+尽管不推荐这种写法，但是通过这个例子，我们可以知道如下事实：
+
+**Go标准库里对于结构体里不应该修改的字段，也没有使用getter和setter方法**。
+
+
+
+### 辩证来看
+
+尽管Go官方没有使用getter和setter，但是从另一方面来说，在一些特定场景下使用getter和setter是有好处的。
+
+- getter和setter隐藏了内部实现，我们可以自己灵活控制该暴露哪些东西。
+- 如果成员变量的值发生了预期之外的变化，那通过getter和setter，我们可以方便做一些调试，更快发现问题。
+
+Go语言里如果要使用getter和setter方法，有一些命名规范需要遵循。
+
+假设我们要对结构体里的成员变量balance增加getter和setter方法，那么规范如下：
+
+- getter方法应该被命名为Balance(而不是GetBalance)。
+- setter方法应该被命名为SetBalance。
+- 首字母大写是因为要被外部package使用，要大写来保证可见性。
+
+示例如下：
+
+```go
 currentBalance := customer.Balance()
 if currentBalance < 0 {
     customer.SetBalance(0)
 }
 ```
 
-In summary, we shouldn’t overwhelm our code with getters and setters on structs if they don’t bring any value. We should be pragmatic and strive to find the right balance between efficiency and following idioms that are sometimes considered indisputable in other programming paradigms.
-
-Remember that Go is a unique language designed for many characteristics, including simplicity. However, if we find a need for getters and setters or, as mentioned, foresee a future need while guaranteeing forward compatibility, there’s nothing wrong with using them.
-
-Next, we will discuss the problem of overusing interfaces.
-
 
 
 ## 总结
 
-
+* Java/C++等语言里常用的getter和setter，在Go语言里并不是惯例和规范。
+* 但是如果发现有上面讲到的需要使用到getter和setter的场景，那还是应该使用的，而不是完全不用。
+* getter和setter方法命名参考上面提到的命名规范。
 
 
 
@@ -114,4 +174,4 @@ Next, we will discuss the problem of overusing interfaces.
 ## References
 
 * https://livebook.manning.com/book/100-go-mistakes-how-to-avoid-them/chapter-2/
-* https://github.com/jincheng9/go-tutorial/tree/main/workspace/lesson27
+* https://github.com/jincheng9/go-tutorial/tree/main/workspace/lesson12
