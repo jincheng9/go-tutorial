@@ -78,9 +78,13 @@ Filippo Valsorda的技术博客[How Go Mitigates Supply Chain Attacks](https://g
 - “[Writing your Applications Faster and More Securely with Go](https://opensourcelive.withgoogle.com/events/go-day-2022/watch?talk=talk3)”, by Cody Oss at Go Day on Google Open Source Live
 - “[Respecting Memory Limits in Go](https://opensourcelive.withgoogle.com/events/go-day-2022/watch?talk=talk4), by Michael Knyszek at Go Day on Google Open Source Live
 
-### Go文章
+### Go里程碑
 
-One other milestone for this year was the publication of “[The Go Programming Language and Environment](https://cacm.acm.org/magazines/2022/5/260357-the-go-programming-language-and-environment/fulltext)”, by Russ Cox, Robert Griesemer, Rob Pike, Ian Lance Taylor, and Ken Thompson, in *Communications of the ACM*. The article, by the original designers and implementers of Go, explains what we believe makes Go so popular and productive. In short, it is that Go effort focuses on delivering a full development environment targeting the entire software development process, with a focus on scaling both to large software engineering efforts and large deployments.
+今年还有一个重要的里程碑是我们在权威期刊Communications of the ACM里发表了文章[The Go Programming Language and Environment](https://cacm.acm.org/magazines/2022/5/260357-the-go-programming-language-and-environment/fulltext)。作者都是Go语言的早期设计者和主要实现者，包括Russ Cox, Robert Griesemer, Rob Pike, Ian Lance Taylor和Ken Thompson。
+
+这篇文章里详细阐述了为什么Go语言会如此流行和提高开发效率。
+
+简而言之，Go语言专注为软件研发流程提供一个高效的开发语言和环境。同时提供强大的可扩展性，支持大规模软件项目开发和大规模系统部署。
 
 ### 展望
 
