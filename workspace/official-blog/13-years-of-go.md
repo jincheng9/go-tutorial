@@ -44,9 +44,15 @@ Go团队还在维护2个Go语言开发工具VS Code Go扩展插件以及Gopls语
 
 ### Go供应链安全
 
-Another part of development scale is the number of dependencies in a project. A month or so after Go’s 12th birthday, the [Log4shell vulnerability](https://en.wikipedia.org/wiki/Log4Shell) served as a wake-up call for the industry about the importance of supply chain security.
+Go语言开源12周年后的一个月左右，爆发了全球轰动的[Log4shell vulnerability](https://en.wikipedia.org/wiki/Log4Shell)安全漏洞事件，给大家敲醒了警钟，在做开发过程中需要考虑到依赖库的的安全性。
 
- Go’s module system was designed specifically for this purpose, to help you understand and track your dependencies, identify which specific ones you are using, and determine whether any of them have known vulnerabilities. Filippo Valsorda’s blog post “[How Go Mitigates Supply Chain Attacks](https://go.dev/blog/supply-chain)” gives an overview of our approach. In September, we previewed Go’s approach to vulnerability management in Julie Qiu’s blog post “[Vulnerability Management for Go](https://go.dev/blog/vuln)”. The core of that work is a new, curated vulnerability database and a new [govulncheck command](https://pkg.go.dev/golang.org/x/vuln/cmd/govulncheck), which uses advanced static analysis to eliminate most of the false positives that would result from using module requirements alone.
+Go语言在设计之初就考虑到了供应链安全问题，可以帮助Go开发者更好地理解和跟踪依赖Module的安全性。
+
+Filippo Valsorda的技术博客[How Go Mitigates Supply Chain Attacks](https://go.dev/blog/supply-chain)就介绍了如何管理依赖包的安全。
+
+在今年9月的时候，我们在Julie Qiu的技术博客[Vulnerability Management for Go](https://go.dev/blog/vuln)里预发布了Go语言漏洞管理机制。
+
+该漏洞管理机制的核心是维护了一个新的、经过筛选的安全漏洞数据库以及一个新的Go命令[govulncheck](https://pkg.go.dev/golang.org/x/vuln/cmd/govulncheck)用于找出Go代码里的安全漏洞。
 
 ### Go开发者调查
 
