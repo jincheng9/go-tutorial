@@ -66,7 +66,9 @@ Filippo Valsorda的技术博客[How Go Mitigates Supply Chain Attacks](https://g
 
 ### Go年度会议活动
 
-As the world starts traveling more, we’ve also been happy to meet many of you in person at Go conferences in 2022, particularly at GopherCon Europe in Berlin in July and at GopherCon in Chicago in October. Last week we held our annual virtual event, [Go Day on Google Open Source Live](https://opensourcelive.withgoogle.com/events/go-day-2022). Here are some of the talks we’ve given at those events:
+2022年举办了多场Go语言开发者会议。包括7月份在欧洲柏林举办的GopherCon Europe、10月份在芝加哥举行的GopherCon。
+
+上周，我们在Google开源直播活动中举办了Go语言日的线上活动，主要分享了以下内容：
 
 - “[How Go Became its Best Self](https://www.youtube.com/watch?v=vQm_whJZelc)”, by Cameron Balahan, at GopherCon Europe.
 - “[Go team Q&A](https://www.youtube.com/watch?v=KbOTTU9yEpI)”, with Cameron Balahan, Michael Knyszek, and Than McIntosh, at GopherCon Europe.
