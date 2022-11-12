@@ -54,9 +54,15 @@ Filippo Valsorda的技术博客[How Go Mitigates Supply Chain Attacks](https://g
 
 该漏洞管理机制的核心是维护了一个新的、经过筛选的安全漏洞数据库以及一个新的Go命令[govulncheck](https://pkg.go.dev/golang.org/x/vuln/cmd/govulncheck)用于找出Go代码里的安全漏洞。
 
-### Go开发者调查
+### Go开发者调研
 
-Part of our effort to understand Go users is our annual end-of-year Go survey. This year, our user experience researchers added a lightweight mid-year Go survey as well. We aim to gather enough responses to be statistically significant without being a burden on the Go community as a whole. For the results, see Alice Merrick’s blog post “[Go Developer Survey 2021 Results](https://go.dev/blog/survey2021-results)” and Todd Kulesza’s post “[Go Developer Survey 2022 Q2 Results](https://go.dev/blog/survey2022-q2-results)”.
+我们以前都是每年年尾向Go开发者做关于Go语言的年度使用调研。
+
+今年我们改变了调研频率，改为一年调研，每次调研的内容减少。这样可以保证我们既可以收集到足够多的调研结果，也能减轻被调研者的负担。
+
+2021年调研结果参考Alice Merrick的文章[Go Developer Survey 2021 Results](https://go.dev/blog/survey2021-results)。
+
+2022年上半年的调研结果参考Todd Kulesza的文章[Go Developer Survey 2022 Q2 Results](https://go.dev/blog/survey2022-q2-results)。
 
 ### Go年度会议活动
 
