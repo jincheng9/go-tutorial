@@ -8,7 +8,7 @@
 
 Russ首先回顾了2022年3月份发布的Go 1.18版本引入的工作区模式(Go Workspace)、模糊测试(Fuzzing)和泛型设计。
 
-展望Go语言的第14年，
+接着介绍了Go 1.19版本引入的新优化、Go开发工具链、Go供应链安全以及其它重要的里程碑事件。
 
 本人针对Russ的原文做了一个翻译，以飨读者。
 
@@ -88,18 +88,20 @@ Filippo Valsorda的技术博客[How Go Mitigates Supply Chain Attacks](https://g
 
 ### 展望
 
-In Go’s 14th year, we’ll keep working to make Go the best environment for software engineering at scale. We plan to focus particularly on supply chain security, improved compatibility, and structured logging, all of which have been linked already in this post. And there will be plenty of other improvements as well, including profile-guided optimization.
+在Go语言的第14个年头，我们会继续让Go语言成为软件工程里最好的开发语言。
 
+我们会重点提升软件供应链安全、程序兼容性和结构化的logging。
 
+同时，还会有其它大量功能改进和优化，比如基于profling结果的优化。大家敬请关注。
 
 ## 推荐阅读
 
 * [Go面试题系列，看看你会几题？](https://mp.weixin.qq.com/mp/appmsgalbum?__biz=Mzg2MTcwNjc1Mg==&action=getalbum&album_id=2199553588283179010#wechat_redirect)
-* [Go泛型]
-* [Go工作区模式]
-* [Go Fuzzing]
-* [Go常见错误和最佳实践系列]
-* [Go进阶系列]
+* [Go泛型的使用教程和设计原理](https://mp.weixin.qq.com/mp/appmsgalbum?__biz=Mzg2MTcwNjc1Mg==&action=getalbum&album_id=2184751156453834753#wechat_redirect)
+* [Go工作区模式](https://mp.weixin.qq.com/mp/appmsgalbum?__biz=Mzg2MTcwNjc1Mg==&action=getalbum&album_id=2339933847347544066#wechat_redirect)
+* [Go Fuzzing模糊测试使用详解](https://mp.weixin.qq.com/mp/appmsgalbum?__biz=Mzg2MTcwNjc1Mg==&action=getalbum&album_id=2287546159059566596#wechat_redirect)
+* [Go语言常见错误和最佳实践系列](https://mp.weixin.qq.com/mp/appmsgalbum?__biz=Mzg2MTcwNjc1Mg==&action=getalbum&album_id=2549657749539028992#wechat_redirect)
+* [Go开发进阶系列](https://mp.weixin.qq.com/mp/appmsgalbum?__biz=Mzg2MTcwNjc1Mg==&action=getalbum&album_id=2549661543605764097#wechat_redirect)
 
 
 
