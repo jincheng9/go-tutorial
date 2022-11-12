@@ -1,10 +1,12 @@
-# Go开源13周年啦
+# Go语言开源13周年啦，看看负责人说了啥
 
 ## 前言
 
  不知不觉，Go语言已经开源13年了。
 
-日前，Go团队负责人Russ Cox在官方博客上发表了Go开源13年的感想，回顾了2021年发布的Go 1.16版本和Go 1.17版本的改进，Go周边工具集的强大功能。
+日前，Go团队负责人Russ Cox在官方博客上发表了Go开源13年的感想。
+
+Russ首先回顾了2022年3月份发布的Go 1.18版本引入的工作区模式(Go Workspace)、模糊测试(Fuzzing)和泛型设计。
 
 展望2022年，Go 1.18版本会正式引入泛型，这也是Go团队2022年的主要工作聚集点。
 
@@ -18,17 +20,15 @@
 
 2022.11.10
 
-Today we celebrate the thirteenth birthday of the Go open source release. [The Gopher](https://go.dev/doc/gopher) is a teenager!
+今天我们可以开心地庆祝Go语言开源13年啦。
 
-It’s been an eventful year for Go. The most significant event was the release of [Go 1.18 in March](https://go.dev/blog/go1.18), which brought many improvements but most notably Go workspaces, fuzzing, and generics.
+对Go语言而言，今年有非常多的重要事项。最重要的当然是在今年3月份我们发布了Go 1.18版本，这个版本引入了非常多的新功能，包括大家熟知的Go workspace工作区模式、Go Fuzzing模糊测试和Go泛型。
 
-Workspaces make it easy to work on multiple modules simultaneously, which is most helpful when you are maintaining a set of related modules with module dependencies between them. To learn about workspaces, see Beth Brown’s blog post “[Get familiar with workspaces](https://go.dev/blog/get-familiar-with-workspaces)” and the [workspace reference](https://go.dev/ref/mod#workspaces).
+* Go workspace工作区模式让开发者可以同时开发多个互相有依赖的Module。想了解Go工作区模式的，可以参考Beth Brown's的文章[Get familiar with workspaces](https://go.dev/blog/get-familiar-with-workspaces)以及 [workspace reference](https://go.dev/ref/mod#workspaces)。
+* Fuzzing模糊测试是go test的一个新功能，可以生成随机的输入用于检测代码的正确性以及漏洞。想了解Go Fuzzing的可以参考 [Getting started with fuzzing](https://go.dev/doc/tutorial/fuzz)和 [fuzzing reference](https://go.dev/security/fuzz/)。另外，Fuzzing作者katie Hockman在GopherCon 2022会议上分享的主题“Fuzz Testing Made Easy”也即将上线，敬请关注。
+* 泛型可能是Go语言里被开发者提及最多的feature。想了解Go泛型入门的，可以参考教程[Getting started with generics](https://go.dev/doc/tutorial/generics)。想了解Go泛型更多设计和使用细节的，可以参考官方博客[An Introduction to Generics](https://go.dev/blog/intro-generics) 和[When to Use Generics](https://go.dev/blog/when-generics)，以及Google 2021开源日的技术分享[Using Generics in Go](https://www.youtube.com/watch?v=nr8EpUO9jhw) 和GopherCon 2021上Go泛型作者Robert Griesemer和Ian Lance Taylor的技术分享[Generics!](https://www.youtube.com/watch?v=Pa_e9EeCdy8)。
 
-Fuzzing is a new feature of `go` `test` that helps you find inputs that your code doesn’t handle properly: you define a fuzz test that should pass for any input at all, and then fuzzing tries different random inputs, guided by code coverage, to try to make the fuzz test fail. Fuzzing is particularly useful when developing code that must be robust against arbitrary (even attacker-controlled) inputs. To learn more about fuzzing, see the tutorial “[Getting started with fuzzing](https://go.dev/doc/tutorial/fuzz)” and the [fuzzing reference](https://go.dev/security/fuzz/), and keep an eye out for Katie Hockman’s GopherCon 2022 talk “Fuzz Testing Made Easy”, which should be online soon.
-
-Generics, quite possibly Go’s most requested feature, adds parametric polymorphism to Go, to allow writing code that works with a variety of different types but is still statically checked at compile time. To learn more about generics, see the tutorial “[Getting started with generics](https://go.dev/doc/tutorial/generics)”. For more detail see the blog posts “[An Introduction to Generics](https://go.dev/blog/intro-generics)” and “[When to Use Generics](https://go.dev/blog/when-generics)”, or the talks “[Using Generics in Go](https://www.youtube.com/watch?v=nr8EpUO9jhw)” from Go Day on Google Open Source Live 2021, and “[Generics!](https://www.youtube.com/watch?v=Pa_e9EeCdy8)” from GopherCon 2021, by Robert Griesemer and Ian Lance Taylor.
-
-Compared to Go 1.18, the [Go 1.19 release in August](https://go.dev/blog/go1.19) was a relatively quiet one: it focused on refining and improving the features that Go 1.18 introduced as well as internal stability improvements and optimizations. One visible change in Go 1.19 was the addition of support for [links, lists, and headings in Go doc comments](https://go.dev/doc/comment). Another was the addition of a [soft memory limit](https://go.dev/doc/go1.19#runtime) for the garbage collector, which is particularly useful in container workloads. For more about recent garbage collector improvements, see Michael Knyszek’s blog post “[Go runtime: 4 years later](https://go.dev/blog/go119runtime)”, his talk “[Respecting Memory Limits in Go](https://www.youtube.com/watch?v=07wduWyWx8M&list=PLtoVuM73AmsJjj5tnZ7BodjN_zIvpULSx)”, and the new “[Guide to the Go Garbage Collector](https://go.dev/doc/gc-guide)”.
+和Go 1.18相比，今年8月份发布的Go 1.19版本相对修改少一些，吸引的关注也少一些。Go 1.19版本专注在继续优化Go 1.18引入的新特性。此外在Go 1.19版本中，我们支持在Go doc注释中添加超链接、列表以及标题，用于生成Go package的说明文档。另外我们针对Go的垃圾回收期(garbage collector)引入了软内存限制(soft memory limit)，这对于管理容器负载(container workloads)非常有用。关于GC更多的改进和优化，可以参考Michael Knyszek最近的博文[Go runtime: 4 years later](https://go.dev/blog/go119runtime)、视频[Respecting Memory Limits in Go](https://www.youtube.com/watch?v=07wduWyWx8M&list=PLtoVuM73AmsJjj5tnZ7BodjN_zIvpULSx) 和 [Guide to the Go Garbage Collector](https://go.dev/doc/gc-guide)。
 
 We’ve continued to work on making Go development scale gracefully to ever larger code bases, especially in our work on VS Code Go and the Gopls language server. This year, Gopls releases focused on improving stability and performance, while delivering support for generics as well as new analyses and code lenses. If you aren’t using VS Code Go or Gopls yet, give them a try. See Suzy Mueller’s talk “[Building Better Projects with the Go Editor](https://www.youtube.com/watch?v=jMyzsp2E_0U)” for an overview. And as a bonus, [Debugging Go in VS Code](https://go.dev/s/vscode-go-debug) got more reliable and powerful with Delve’s native [Debug Adapter Protocol](https://microsoft.github.io/debug-adapter-protocol/) support. Try Suzy’s “[Debugging Treasure Hunt](https://www.youtube.com/watch?v=ZPIPPRjwg7Q)”!
 
@@ -59,6 +59,9 @@ Go has always been far more than what the Go team at Google does. Thanks to all 
 ## 推荐阅读
 
 * [Go面试题系列，看看你会几题？](https://mp.weixin.qq.com/mp/appmsgalbum?__biz=Mzg2MTcwNjc1Mg==&action=getalbum&album_id=2199553588283179010#wechat_redirect)
+* [Go泛型]
+* [Go工作区模式]
+* [Go Fuzzing]
 * [Go常见错误和最佳实践系列]
 * [Go进阶系列]
 
