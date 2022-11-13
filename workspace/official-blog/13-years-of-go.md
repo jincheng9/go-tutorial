@@ -32,7 +32,7 @@ Russ首先回顾了2022年3月份发布的Go 1.18版本引入的工作区模式(
 
 ### Go 1.19
 
-和Go 1.18相比，今年8月份发布的Go 1.19版本相对修改少一些，吸引的关注也少一些。Go 1.19版本专注在继续优化Go 1.18引入的新特性。此外在Go 1.19版本中，我们支持在Go doc注释中添加超链接、列表以及标题，用于生成Go package的说明文档。另外我们针对Go的垃圾回收期(garbage collector)引入了软内存限制(soft memory limit)，这对于管理容器负载(container workloads)非常有用。关于GC更多的改进和优化，可以参考Michael Knyszek最近的博文[Go runtime: 4 years later](https://go.dev/blog/go119runtime)、视频[Respecting Memory Limits in Go](https://www.youtube.com/watch?v=07wduWyWx8M&list=PLtoVuM73AmsJjj5tnZ7BodjN_zIvpULSx) 和 [Guide to the Go Garbage Collector](https://go.dev/doc/gc-guide)。
+和Go 1.18相比，今年8月份发布的Go 1.19版本相对修改少一些，吸引的关注也少一些。Go 1.19版本专注在继续优化Go 1.18引入的新特性。此外在Go 1.19版本中，我们支持在Go doc注释中添加超链接、列表以及标题，用于生成Go package的说明文档。另外我们针对Go的垃圾回收器(garbage collector)引入了软内存限制(soft memory limit)，这对于管理容器负载(container workloads)非常有用。关于GC更多的改进和优化，可以参考Michael Knyszek最近的博文[Go runtime: 4 years later](https://go.dev/blog/go119runtime)、视频[Respecting Memory Limits in Go](https://www.youtube.com/watch?v=07wduWyWx8M&list=PLtoVuM73AmsJjj5tnZ7BodjN_zIvpULSx) 和 [Guide to the Go Garbage Collector](https://go.dev/doc/gc-guide)。
 
 ### Go开发工具
 
@@ -58,7 +58,7 @@ Filippo Valsorda的技术博客[How Go Mitigates Supply Chain Attacks](https://g
 
 我们以前都是每年年尾向Go开发者做关于Go语言的年度使用调研。
 
-今年我们改变了调研频率，改为一年调研，每次调研的内容减少。这样可以保证我们既可以收集到足够多的调研结果，也能减轻被调研者的负担。
+今年我们改变了调研频率，改为一年调研2次，每次调研的内容减少。这样可以保证我们既可以收集到足够多的调研结果，也能减轻被调研者的负担。
 
 2021年调研结果参考Alice Merrick的文章[Go Developer Survey 2021 Results](https://go.dev/blog/survey2021-results)。
 
