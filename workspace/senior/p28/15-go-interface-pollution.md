@@ -63,8 +63,6 @@ func copySourceToDest(source io.Reader, dest io.Writer) error {
 }
 ```
 
-[copy](javascript:void(0))
-
 This function would work with *os.File parameters (as *os.File implements both io.Reader and io.Writer) and any other type that would implement these interfaces. For example, we could create our own io.Writer that writes to a database, and the code would remain the same. It increases the genericity of the function; hence, its reusability.
 
 Furthermore, writing a unit test for this function is easier because, instead of having to handle files, we can use the strings and bytes packages that provide helpful implementations:
@@ -167,14 +165,7 @@ Another important use case is about decoupling our code from an implementation. 
 One benefit of decoupling can be related to unit testing. Let’s assume we want to implement a CreateNewCustomer method that creates a new customer and stores it. We decide to rely on the concrete implementation directly (let’s say a mysql.Store struct):
 
 ```
-1
-2
-3
-4
-5
-6
-7
-8type CustomerService struct {
+type CustomerService struct {
     store mysql.Store
 }
  
