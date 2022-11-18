@@ -12,7 +12,7 @@
 
 ## 常见错误和最佳实践
 
-## 2.5 #5: Interface pollution
+## Interface pollution
 
 Interfaces are one of the cornerstones of the Go language when designing and structuring our code. However, like many tools or concepts, abusing them is generally not a good idea. Interface pollution is about overwhelming our code with unnecessary abstractions, making it harder to understand. It’s a common mistake made by developers coming from another language with different habits. Before delving into the topic, let’s refresh our minds about Go’s interfaces. Then, we will see when it’s appropriate to use interfaces and when it may be considered pollution.
 
@@ -336,4 +336,3 @@ The following section continues with this thread and discusses a common interfac
 ## References
 
 * https://livebook.manning.com/book/100-go-mistakes-how-to-avoid-them/chapter-2/
-* https://github.com/jincheng9/go-tutorial/tree/main/workspace/lesson12
