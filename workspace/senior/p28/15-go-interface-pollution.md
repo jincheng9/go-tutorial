@@ -104,166 +104,94 @@ type ReadWriter interface {
 
 ### 何时使用interface
 
-When should we create interfaces in Go? Let’s look at three concrete use cases where interfaces are usually considered to bring value. Note that the goal isn’t to be exhaustive because the more cases we add, the more they would depend on the context. However, these three cases should give us a general idea:
+下面介绍2个常见的使用interface的场景。
 
-- Common behavior
-- Decoupling
-- Restricting behavior
+#### 公共行为可以抽象为interface
 
-#### Common behavior
+比如上面介绍过的io.Reader和io.Writer就是很好的例子。Go标准库里大量使用interface，感兴趣的可以去查阅源代码。
 
-The first option we will discuss is to use interfaces when multiple types implement a common behavior. In such a case, we can factor out the behavior inside an interface. If we look at the standard library, we can find many examples of such a use case. For example, sorting a collection can be factored out via three methods:
+#### 使用interface让Struct成员变量变为private
 
-- Retrieving the number of elements in the collection
-- Reporting whether one element must be sorted before another
-- Swapping two elements
+比如下面这段代码示例：
 
-Hence, the following interface was added to the sort package:
-
-```
-type Interface interface {
-    Len() int
-    Less(i, j int) bool
-    Swap(i, j int)
+```go
+package main
+type Halloween struct {
+   Day, Month string
+}
+func NewHalloween() Halloween {
+   return Halloween { Month: "October", Day: "31" }
+}
+func (o Halloween) UK(Year string) string {
+   return o.Day + " " + o.Month + " " + Year
+}
+func (o Halloween) US(Year string) string {
+   return o.Month + " " + o.Day + " " + Year
+}
+func main() {
+   o := NewHalloween()
+   s_uk := o.UK("2020")
+   s_us := o.US("2020")
+   println(s_uk, s_us)
 }
 ```
 
-This interface has a strong potential for reusability because it encompasses the common behavior to sort any collection that is index-based.
+变量o可以直接访问Halloween结构体里的所有成员变量。
 
-Throughout the sort package, we can find dozens of implementations. If at some point we compute a collection of integers, for example, and we want to sort it, are we necessarily interested in the implementation type? Is it important whether the sorting algorithm is a merge sort or a quicksort? In many cases, we don’t care. Hence, the sorting behavior can be abstracted, and we can depend on the sort.Interface.
+有时候我们可能想做一些限制，不希望结构体里的成员变量被随意访问和修改，那就可以借助interface。
 
-Finding the right abstraction to factor out a behavior can also bring many benefits. For example, the sort package provides utility functions that also rely on sort.Interface, such as checking whether a collection is already sorted. For instance,
-
-```
-func IsSorted(data Interface) bool {
-    n := data.Len()
-    for i := n - 1; i > 0; i-- {
-        if data.Less(i, i-1) {
-            return false
-        }
-    }
-    return true
+```go
+type Country interface {
+   UK(string) string
+   US(string) string
+}
+func NewHalloween() Country {
+   o := Halloween { Month: "October", Day: "31" }
+   return Country(o)
 }
 ```
 
-Because sort.Interface is the right level of abstraction, it makes it highly valuable.
+我们定义一个新的interface去实现Halloween的所有方法，然后NewHalloween返回这个interface类型。
 
-Let’s now see another main use case when using interfaces.
-
-#### Decoupling
-
-Another important use case is about decoupling our code from an implementation. If we rely on an abstraction instead of a concrete implementation, the implementation itself can be replaced with another without even having to change our code. This is the Liskov Substitution Principle (the *L* in Robert C. Martin’s SOLID design principles).
-
-One benefit of decoupling can be related to unit testing. Let’s assume we want to implement a CreateNewCustomer method that creates a new customer and stores it. We decide to rely on the concrete implementation directly (let’s say a mysql.Store struct):
-
-```
-type CustomerService struct {
-    store mysql.Store
-}
- 
-func (cs CustomerService) CreateNewCustomer(id string) error {
-    customer := Customer{id: id}
-    return cs.store.StoreCustomer(customer)
-}
-```
+那外部调用NewHalloween得到的对象就只能使用Halloween结构体里定义的方法，而不能只访问结构体的成员变量。
 
 
-
-Now, what if we want to test this method? Because customerService relies on the actual implementation to store a Customer, we are obliged to test it through integration tests, which requires spinning up a MySQL instance (unless we use an alternative technique such as go-sqlmock, but this isn’t the scope of this section). Although integration tests are helpful, that’s not always what we want to do. To give us more flexibility, we should decouple CustomerService from the actual implementation, which can be done via an interface like so:
-
-```
-type customerStorer interface {
-    StoreCustomer(Customer) error
-}
- 
-type CustomerService struct {
-    storer customerStorer
-}
- 
-func (cs CustomerService) CreateNewCustomer(id string) error {
-    customer := Customer{id: id}
-    return cs.storer.StoreCustomer(customer)
-}
-```
-
-Because storing a customer is now done via an interface, this gives us more flexibility in how we want to test the method. For instance, we can
-
-- Use the concrete implementation via integration tests
-- Use a mock (or any kind of test double) via unit tests
-- Or both
-
-Let’s now discuss another use case: to restrict a behavior.
-
-#### Restricting behavior
-
-The last use case we will discuss can be pretty counterintuitive at first sight. It’s about restricting a type to a specific behavior. Let’s imagine we implement a custom configuration package to deal with dynamic configuration. We create a specific container for int configurations via an IntConfig struct that also exposes two methods: Get and Set. Here’s how that code would look:
-
-```
-type IntConfig struct {
-    // ...
-}
- 
-func (c *IntConfig) Get() int {
-    // Retrieve configuration
-}
- 
-func (c *IntConfig) Set(value int) {
-    // Update configuration
-}
-```
-
-Now, suppose we receive an IntConfig that holds some specific configuration, such as a threshold. Yet, in our code, we are only interested in retrieving the configuration value, and we want to prevent updating it. How can we enforce that, semantically, this configuration is read-only, if we don’t want to change our configuration package? By creating an abstraction that restricts the behavior to retrieving only a config value:
-
-```
-type intConfigGetter interface {
-    Get() int
-}
-```
-
-Then, in our code, we can rely on intConfigGetter instead of the concrete implementation:
-
-```
-type Foo struct {
-    threshold intConfigGetter
-}
- 
-func NewFoo(threshold intConfigGetter) Foo {
-    return Foo{threshold: threshold}
-}
- 
-func (f Foo) Bar()  {
-    threshold := f.threshold.Get()
-    // ...
-}
-```
-
-In this example, the configuration getter is injected into the NewFoo factory method. It doesn’t impact a client of this function because it can still pass an IntConfig struct as it implements intConfigGetter. Then, we can only read the configuration in the Bar method, not modify it. Therefore, we can also use interfaces to restrict a type to a specific behavior for various reasons, such as semantics enforcement.
-
-In this section, we saw three potential use cases where interfaces are generally considered as bringing value: factoring out a common behavior, creating some decoupling, and restricting a type to a certain behavior. Again, this list isn’t exhaustive, but it should give us a general understanding of when interfaces are helpful in Go.
-
-Now, let’s finish this section and discuss the problems with interface pollution.
 
 ### 乱用Interface的场景
 
-It’s fairly common to see interfaces being overused in Go projects. Perhaps the developer’s background was C# or Java, and they found it natural to create interfaces before concrete types. However, this isn’t how things should work in Go.
+interface在Go代码里经常被乱用，不少C#或者Java开发背景的人在转Go的时候，通常会先把接口类型抽象好，再去定义具体的类型。
 
-As we discussed, interfaces are made to create abstractions. And the main caveat when programming meets abstractions is remembering that abstractions *should be discovered, not created*. What does this mean? It means we shouldn’t start creating abstractions in our code if there is no immediate reason to do so. We shouldn’t design with interfaces but wait for a concrete need. Said differently, we should create an interface when we need it, not when we foresee that we could need it.
+然后，这并不是Go里推荐的。
 
-What’s the main problem if we overuse interfaces? The answer is that they make the code flow more complex. Adding a useless level of indirection doesn’t bring any value; it creates a worthless abstraction making the code more difficult to read, understand, and reason about. If we don’t have a strong reason for adding an interface and it’s unclear how an interface makes a code better, we should challenge this interface’s purpose. Why not call the implementation directly?
+>  Don’t design with interfaces, discover them.
+>
+> —Rob Pike
 
-##### NOTE
+正如Rob Pike所说，不要一上来做代码设计的时候就先把interface给定义了。
 
-We may also experience performance overhead when calling a method through an interface. It requires a lookup in a hash table’s data structure to find the concrete type an interface points to. But this isn’t an issue in many contexts as the overhead is minimal.
+除非真的有需要，否则是不推荐一开始就在代码里使用interface的。
 
-In summary, we should be cautious when creating abstractions in our code—abstractions should be discovered, not created. It’s common for us, software developers, to overengineer our code by trying to guess what the perfect level of abstraction is, based on what we think we might need later. This process should be avoided because, in most cases, it pollutes our code with unnecessary abstractions, making it more complex to read.
+最佳实践应该是先不要想着interface，因为过度使用interface会让代码晦涩难懂。
 
-Don’t design with interfaces, discover them.
+我们应该先按照没有interface的场景去写代码，如果最后发现使用interface能带来额外的好处，再去使用interface。
 
-—Rob Pike
+### 注意事项
 
-Let’s not try to solve a problem abstractly but solve what has to be solved now. Last, but not least, if it’s unclear how an interface makes the code better, we should probably consider removing it to make our code simpler.
+使用interface进行方法调用的时候，有些开发者可能遇到过一些性能问题。
 
-The following section continues with this thread and discusses a common interface mistake: creating interfaces on the producer side.
+因为程序运行的时候，需要去哈希表数据结构里找到interface的具体实现类型，然后调用该类型的方法。
+
+但是这个开销是很小的，通常不需要关注。
+
+## 总结
+
+interface是Go语言里一个核心功能，但是使用不当也会导致代码晦涩难懂。
+
+因此，不要在写代码的时候一上来就先写interface。
+
+要先按照没有interface的场景去写代码，如果最后发现使用interface真的可以带来好处再去使用interface。
+
+如果使用interface没有让代码更好，那就不要使用interface，这样会让代码更简洁易懂。
 
 
 
