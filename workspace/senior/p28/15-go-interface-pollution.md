@@ -12,15 +12,20 @@
 
 ## 常见错误和最佳实践
 
-Interface是Go语言里的核心功能，但是在日常开发中，经常会出现interface
+Interface是Go语言里的核心功能，但是在日常开发中，经常会出现interface被乱用的情况，代码过度抽象，或者抽象不合理，导致代码晦涩难懂。
 
-Interfaces are one of the cornerstones of the Go language when designing and structuring our code. However, like many tools or concepts, abusing them is generally not a good idea. Interface pollution is about overwhelming our code with unnecessary abstractions, making it harder to understand. It’s a common mistake made by developers coming from another language with different habits. Before delving into the topic, let’s refresh our minds about Go’s interfaces. Then, we will see when it’s appropriate to use interfaces and when it may be considered pollution.
+本文先带大家回顾下interface的重要概念，然后讲解使用interface的常见错误和最佳实践。
 
-### 2.5.1 Concepts
+### interface概念
 
-An interface provides a way to specify the behavior of an object. We use interfaces to create common abstractions that multiple objects can implement. What makes Go interfaces so different is that they are satisfied implicitly. There is no explicit keyword like implements to mark that an object X implements interface Y.
+interface里面包含了若干个方法，大家可以理解为一个interface代表了一类群体的共同行为。
 
-To understand what makes interfaces so powerful, we will dig into two popular ones from the standard library: io.Reader and io.Writer. The io package provides abstractions for I/O primitives. Among these abstractions, io.Reader relates to reading data from a data source and io.Writer to writing data to a target, as represented in figure 2.3.
+结构体要实现interface不需要通过类似implement的关键字，只要该结构体实现了interface里的所有方法即可。
+
+我们拿Go语言里的io标准库来说明interface的强大之处。io标准库包含了2个interface：
+
+* io.Reader：表示从某个数据源读数据
+* io.Writer：表示写数据到目标
 
 ##### Figure 2.3 io.Reader reads from a data source and fills a byte slice, whereas io.Writer writes to a target from a byte slice.
 
@@ -110,7 +115,7 @@ As Einstein said, “Everything should be made as simple as possible, but no sim
 
 Let’s now discuss common cases where interfaces are recommended.
 
-### 2.5.2 When to use interfaces
+### 何时使用interface
 
 When should we create interfaces in Go? Let’s look at three concrete use cases where interfaces are usually considered to bring value. Note that the goal isn’t to be exhaustive because the more cases we add, the more they would depend on the context. However, these three cases should give us a general idea:
 
@@ -251,7 +256,7 @@ In this section, we saw three potential use cases where interfaces are generally
 
 Now, let’s finish this section and discuss the problems with interface pollution.
 
-### 2.5.3 Interface pollution
+### 乱用Interface的场景
 
 It’s fairly common to see interfaces being overused in Go projects. Perhaps the developer’s background was C# or Java, and they found it natural to create interfaces before concrete types. However, this isn’t how things should work in Go.
 
@@ -272,10 +277,6 @@ Don’t design with interfaces, discover them.
 Let’s not try to solve a problem abstractly but solve what has to be solved now. Last, but not least, if it’s unclear how an interface makes the code better, we should probably consider removing it to make our code simpler.
 
 The following section continues with this thread and discusses a common interface mistake: creating interfaces on the producer side.
-
-## 总结
-
-
 
 
 
@@ -309,6 +310,8 @@ The following section continues with this thread and discusses a common interfac
 
 * [Go常见错误第13篇：init函数的常见错误和最佳实践](https://mp.weixin.qq.com/s?__biz=Mzg2MTcwNjc1Mg==&mid=2247484553&idx=1&sn=a4de11c452157193ae4381ab3555c42c&chksm=ce124be6f965c2f0885b8acf21c867e82d09807eba7be7890c54c01acf2b6fc413267e90d371&token=2029492652&lang=zh_CN#rd)
 
+* [Go常见错误第14篇：过度使用getter和setter方法 ](https://mp.weixin.qq.com/s?__biz=Mzg2MTcwNjc1Mg==&mid=2247484568&idx=1&sn=2f078aa6561093691b4aeae58de44830&chksm=ce124bf7f965c2e17b99896393dfb684d5868156ea4e0b324bc86e2dcc596ea55d5e6c562c29&token=1629431500&lang=zh_CN#rd)
+
   
 
 ## 开源地址
@@ -336,3 +339,4 @@ The following section continues with this thread and discusses a common interfac
 ## References
 
 * https://livebook.manning.com/book/100-go-mistakes-how-to-avoid-them/chapter-2/
+* https://github.com/jincheng9/go-tutorial/tree/main/workspace/lesson18
