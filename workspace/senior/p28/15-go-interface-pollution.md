@@ -16,22 +16,22 @@ Interface是Go语言里的核心功能，但是在日常开发中，经常会出
 
 本文先带大家回顾下interface的重要概念，然后讲解使用interface的常见错误和最佳实践。
 
-### interface概念
+### interface重要概念回顾
 
 interface里面包含了若干个方法，大家可以理解为一个interface代表了一类群体的共同行为。
 
-结构体要实现interface不需要通过类似implement的关键字，只要该结构体实现了interface里的所有方法即可。
+结构体要实现interface不需要类似implement的关键字，只要该结构体实现了interface里的所有方法即可。
 
 我们拿Go语言里的io标准库来说明interface的强大之处。io标准库包含了2个interface：
 
 * io.Reader：表示从某个数据源读数据
-* io.Writer：表示写数据到目标
+* io.Writer：表示写数据到目标位置，比如写到指定文件或者数据库
 
 ##### Figure 2.3 io.Reader reads from a data source and fills a byte slice, whereas io.Writer writes to a target from a byte slice.
 
 ![img](https://drek4537l1klr.cloudfront.net/harsanyi/Figures/CH02_F03_Harsanyi.png)
 
-The io.Reader contains a single Read method:
+io.Reader这个interface里只有一个Read方法：
 
 ```
 type Reader interface {
@@ -39,11 +39,15 @@ type Reader interface {
 }
 ```
 
+> Read reads up to len(p) bytes into p. It returns the number of bytes read (0 <= n <= len(p)) and any error encountered. Even if Read returns n < len(p), it may use all of p as scratch space during the call. If some data is available but not len(p) bytes, Read conventionally returns what is available instead of waiting for more.
 
+如果某个结构体要实现io.Reader，需要实现Read方法。这个方法要包含以下逻辑：
 
-Custom implementations of the io.Reader interface should accept a slice of bytes, filling it with its data and returning either the number of bytes read or an error.
+* 入参：接受元素类型为byte的slice作为方法的入参。
+* 方法逻辑：把Reader对象里的数据读出来赋值给p。比如Reader对象可能是一个strings.Reader，那调用Read方法就是把string的值赋值给p。
+* 返回值：要么返回读到的字节数，要么返回error。
 
-On the other hand, io.Writer defines a single method, Write:
+io.Writer这个interface里只有一个Write方法：
 
 ```
 type Writer interface {
@@ -51,56 +55,45 @@ type Writer interface {
 }
 ```
 
+> Write writes len(p) bytes from p to the underlying data stream. It returns the number of bytes written from p (0 <= n <= len(p)) and any error encountered that caused the write to stop early. Write must return a non-nil error if it returns n < len(p). Write must not modify the slice data, even temporarily.
 
+如果某个结构体要实现io.Writer，需要实现Write方法。这个方法要包含以下逻辑：
 
-Custom implementations of io.Writer should write the data coming from a slice to a target and return either the number of bytes written or an error. Therefore, both interfaces provide fundamental abstractions:
+* 入参：接受元素类型为byte的slice作为方法的入参。
+* 方法逻辑：把p的值写入到Writer对象。比如Writer对象可能是一个os.File类型，那调用Write方法就是把p的值写入到文件里。
+* 返回值：要么返回写入的字节数，要么返回error。
 
-- io.Reader reads data from a source.
-- io.Writer writes data to a target.
+这2个函数看起来非常抽象，很多Go初级开发者都不太理解，为啥要设计这样2个interface？
 
-What is the rationale for having these two interfaces in the language? What is the point of creating these abstractions?
+假设我们要实现一个函数，功能是拷贝一个文件的内容到另一个文件。
 
-Let’s assume we need to implement a function that should copy the content of one file to another. We could create a specific function that would take as input two *os.Files. Or, we can choose to create a more generic function using io.Reader and io.Writer abstractions:
+* 方式1：这个函数用2个*os.Files作为参数，来从一个文件读内容，写入到另一个文件
 
-```
-func copySourceToDest(source io.Reader, dest io.Writer) error {
-    // ...
-}
-```
+  ```go
+  func copySourceToDest(source *io.File, dest *io.File) error {
+      // ...
+  }
+  ```
 
-This function would work with *os.File parameters (as *os.File implements both io.Reader and io.Writer) and any other type that would implement these interfaces. For example, we could create our own io.Writer that writes to a database, and the code would remain the same. It increases the genericity of the function; hence, its reusability.
+* 方式2：使用io.Reader和io.Writer作为参数。由于os.Fil实现了io.Reader和io.Writer，所以os.File也可以作为下面函数的参数，传参给source和dest。
 
-Furthermore, writing a unit test for this function is easier because, instead of having to handle files, we can use the strings and bytes packages that provide helpful implementations:
+  ```go
+  func copySourceToDest(source io.Reader, dest io.Writer) error {
+      // ...
+  }
+  ```
 
-```
-func TestCopySourceToDest(t *testing.T) {
-    const input = "foo"
-    source := strings.NewReader(input)
-    dest := bytes.NewBuffer(make([]byte, 0))
- 
-    err := copySourceToDest(source, dest)
-    if err != nil {
-        t.FailNow()
-    }
- 
-    got := dest.String()
-    if got != input {
-        t.Errorf("expected: %s, got: %s", input, got)
-    }
-}
-```
+  方法2的实现会更通用一些，source既可以是文件，也可以是字符串对象(strings.Reader)，dest既可以是文件，也可以是其它数据库对象(比如我们自己实现一个io.Writer，Write方法是把数据写入到数据库)。
 
+在设计interface的时候要考虑到简洁性，如果interface里定义的方法很多，那这个interface的抽象就会不太好。
 
+引用Go语言设计者Rob Pike在Gopherfest 2015上的技术分享[Go Proverbs with Rob Pike](https://www.youtube.com/watch?v=PAAkCSZUG1c&t=318s)中关于interface的说明：
 
-In the example, source is a *strings.Reader, whereas dest is a *bytes.Buffer. Here, we test the behavior of copySourceToDest without creating any files.
+> The bigger the interface, the weaker the abstraction.
 
-While designing interfaces, the granularity (how many methods the interface contains) is also something to keep in mind. A known proverb in Go (https://www.youtube.com/watch?v=PAAkCSZUG1c&t=318s) relates to how big an interface should be:
+当然，我们也可以把多个interface结合为一个interface，在有些场景下是可以方便代码编写的。
 
-The bigger the interface, the weaker the abstraction.
-
-—Rob Pike
-
-Indeed, adding methods to an interface can decrease its level of reusability. io.Reader and io.Writer are powerful abstractions because they cannot get any simpler. Furthermore, we can also combine fine-grained interfaces to create higher-level abstractions. This is the case with io.ReadWriter, which combines the reader and writer behaviors:
+比如io.ReaderWriter就结合了io.Reader和io.Writer的方法。
 
 ```
 type ReadWriter interface {
@@ -108,12 +101,6 @@ type ReadWriter interface {
     Writer
 }
 ```
-
-##### NOTE
-
-As Einstein said, “Everything should be made as simple as possible, but no simpler.” Applied to interfaces, this denotes that finding the perfect granularity for an interface isn’t necessarily a straightforward process.
-
-Let’s now discuss common cases where interfaces are recommended.
 
 ### 何时使用interface
 
@@ -340,3 +327,4 @@ The following section continues with this thread and discusses a common interfac
 
 * https://livebook.manning.com/book/100-go-mistakes-how-to-avoid-them/chapter-2/
 * https://github.com/jincheng9/go-tutorial/tree/main/workspace/lesson18
+* https://bbs.huaweicloud.com/blogs/348512
