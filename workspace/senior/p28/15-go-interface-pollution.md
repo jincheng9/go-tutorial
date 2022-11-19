@@ -12,7 +12,7 @@
 
 ## 常见错误和最佳实践
 
-Interface是Go语言里的核心功能，但是在日常开发中，经常会出现interface被乱用的情况，代码过度抽象，或者抽象不合理，导致代码晦涩难懂。
+interface是Go语言里的核心功能，但是在日常开发中，经常会出现interface被乱用的情况，代码过度抽象，或者抽象不合理，导致代码晦涩难懂。
 
 本文先带大家回顾下interface的重要概念，然后讲解使用interface的常见错误和最佳实践。
 
@@ -65,7 +65,7 @@ type Writer interface {
 
 这2个函数看起来非常抽象，很多Go初级开发者都不太理解，为啥要设计这样2个interface？
 
-假设我们要实现一个函数，功能是拷贝一个文件的内容到另一个文件。
+试想这样一个场景，假设我们要实现一个函数，功能是拷贝一个文件的内容到另一个文件。
 
 * 方式1：这个函数用2个*os.Files作为参数，来从一个文件读内容，写入到另一个文件
 
@@ -75,7 +75,7 @@ type Writer interface {
   }
   ```
 
-* 方式2：使用io.Reader和io.Writer作为参数。由于os.Fil实现了io.Reader和io.Writer，所以os.File也可以作为下面函数的参数，传参给source和dest。
+* 方式2：使用io.Reader和io.Writer作为参数。由于os.File实现了io.Reader和io.Writer，所以os.File也可以作为下面函数的参数，传参给source和dest。
 
   ```go
   func copySourceToDest(source io.Reader, dest io.Writer) error {
@@ -153,7 +153,7 @@ func NewHalloween() Country {
 
 我们定义一个新的interface去实现Halloween的所有方法，然后NewHalloween返回这个interface类型。
 
-那外部调用NewHalloween得到的对象就只能使用Halloween结构体里定义的方法，而不能只访问结构体的成员变量。
+那外部调用NewHalloween得到的对象就只能使用Halloween结构体里定义的方法，而不能访问结构体的成员变量。
 
 
 
