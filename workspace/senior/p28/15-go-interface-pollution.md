@@ -161,7 +161,7 @@ func NewHalloween() Country {
 
 interface在Go代码里经常被乱用，不少C#或者Java开发背景的人在转Go的时候，通常会先把接口类型抽象好，再去定义具体的类型。
 
-然后，这并不是Go里推荐的。
+然而，这并不是Go里推荐的。
 
 >  Don’t design with interfaces, discover them.
 >
