@@ -41,7 +41,7 @@ Uber的编码规范开源在GitHub，业界认可度最高。
 
 需要申明的是，这是Google推出的Go语言编码规范，并不是Go团队自己单独推出的Go语言编码规范。
 
-这次发布的Go语言编码规范主要包含以下Style Guide，Style Decisions和Best Practices这三部分内容。
+这次发布的Go语言编码规范主要包含Style Guide，Style Decisions和Best Practices这三部分内容。
 
 | Document            | Link                                                  | Primary Audience    | [Normative](https://google.github.io/styleguide/go/index#normative) | [Canonical](https://google.github.io/styleguide/go/index#canonical) |
 | ------------------- | ----------------------------------------------------- | ------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
@@ -63,7 +63,7 @@ Uber的编码规范开源在GitHub，业界认可度最高。
 
 Go package的命名要短小，且只有小写字母。如果package的名字由多个单词组成，需要全部小写，且中间不要用任何符号做分隔。
 
-例如推荐用`tabwriter`，不推荐用`tabWriter`，`TabWriter`，`tab_writer`。
+例如，推荐用`tabwriter`，不推荐用`tabWriter`，`TabWriter`，`tab_writer`。
 
 ### Receiver命名
 
