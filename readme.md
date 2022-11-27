@@ -103,6 +103,7 @@
   * [Go 1.18：工作区模式最佳实践](./workspace/official-blog/go1.18-workspace-best-practice.md)
 * 语言规范
   * [Practical Go：如何写出更好维护的Go代码](https://github.com/jincheng9/practical-go-cn)
+  * [Google的Go语言编码规范](./workspace/style/google.md)
 * Go开发中的常见错误
   * [第1篇：go未知枚举值](./workspace/senior/p28/01-unknown-enum-value.md)
   * [第2篇：go benchmark性能测试的坑](./workspace/senior/p28/02-go-benchmark-inline.md)
@@ -184,7 +185,7 @@
 
 ### 代码规范
 
-* [Go语言代码规范](./workspace/style)
+* [Google的Go语言编码规范](./workspace/style/google.md)
 * [Practical Go中文版本](https://github.com/jincheng9/practical-go-cn)
 
 ### Web框架
