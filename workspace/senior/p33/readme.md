@@ -98,13 +98,17 @@ u := make([]byte, 0)
 u0 := (*[0]byte)(u)      // u0 != nil
 ```
 
-Go 1.20 extends this to allow conversions from a slice to an array: given a slice `x`, `[4]byte(x)` can now be written instead of `*(*[4]byte)(x)`.
 
 
+#### unsafe包
 
-#### unsafe
+Go 1.17版本在unsafe package里引入了Slice函数，如下所示：
 
-go标准库里的unsafe package定义了3个新的函数：
+```go
+func Slice(ptr *ArbitraryType, len IntegerType) []ArbitraryType
+```
+
+在Go 1.20版本里，标准库unsafe package定义了3个新的函数：
 
 ```go
 func SliceData(slice []ArbitraryType) *ArbitraryType
@@ -112,37 +116,77 @@ func String(ptr *byte, len IntegerType) string
 func StringData(str string) *byte
 ```
 
-Go 1.17版本在unsafe package里引入过Slice函数，如下所示：
+有了这4个函数，可以构造和解构slice和string。
 
-```go
-func Slice(ptr *ArbitraryType, len IntegerType) []ArbitraryType
-```
-
-有了这4个函数，可以构造和解构slice和string，不需要依赖它们的真实表示。
-
-具体细节可以参考：https://tip.golang.org/ref/spec#Package_unsafe
-
-
-
-The [`unsafe` package](https://tip.golang.org/ref/spec/#Package_unsafe) defines three new functions `SliceData`, `String`, and `StringData`. Along with Go 1.17's `Slice`, these functions now provide the complete ability to construct and deconstruct slice and string values, without depending on their exact representation.
+具体细节可以参考：https://tip.golang.org/ref/spec#Package_unsafe。
 
 
 
 #### 值比较
 
+Go语言说明现在明确指出结构体变量的值每次只比较一个字段，字段比较的顺序和字段在结构体里定义的顺序保持一致。
+
+一旦某个字段的值比较出现不一致，就会马上停止比较。
+
+以前的说明可能会让Go开发者有误解，以为结构体变量的比较需要比较所有字段，实际并不是。
+
+类似的，数组的比较也是每次只比较一个元素，按照数组的下标索引由小到大逐个比较数组里每个元素的值。
+
+这块只是改了说明而已，对大家的代码没有任何影响。
 
 
-The specification now defines that struct values are compared one field at a time, considering fields in the order they appear in the struct type definition, and stopping at the first mismatch. The specification could previously have been read as if all fields needed to be compared beyond the first mismatch. 
-
-Similarly, the specification now defines that array values are compared one element at a time, in increasing index order. 
-
-
-
-In both cases, the difference affects whether certain comparisons must panic. Existing programs are unchanged: the new spec wording describes what the implementations have always done.
 
 #### Comparable类型
 
-[Comparable types](https://tip.golang.org/ref/spec#Comparison_operators) (such as ordinary interfaces) may now satisfy `comparable` constraints, even if the type arguments are not strictly comparable (comparison may panic at runtime). This makes it possible to instantiate a type parameter constrained by `comparable` (e.g., a type parameter for a user-defined generic map key) with a non-strictly comparable type argument such as an interface type, or a composite type containing an interface type.
+Go泛型里comparable这个类型约束(type constraint)有个坑，就是和Go语言里定义的可比较类型([Comparable types](https://tip.golang.org/ref/spec#Comparison_operators))并不一致。
+
+有些可比较类型的变量不能作为类型实参(type argument)赋值给声明了comparable类型约束的类型参数(type parameter)。
+
+例如Go语言说明里有如下这段内容：
+
+> Interface values are comparable. Two interface values are equal if they have [identical](https://tip.golang.org/ref/spec#Type_identity) dynamic types and equal dynamic values or if both have value `nil`.
+
+这里明确指出，接口类型的值是可比较的，但是我们不能把2个interface作为类型实参给到类型参数。
+
+参考如下代码示例：
+
+```go
+// example4.g0
+package main
+
+import "fmt"
+
+func IsEqual[T comparable](a T, b T) bool {
+	return a == b
+}
+
+func main() {
+	var a interface{} = 1
+	var b interface{} = []int{1}
+	fmt.Println(a == b) // false
+  // go1.20之前的版本编译报错，go1.20开始支持
+	fmt.Println(IsEqual(a, b)) 
+}
+```
+
+对于上面最后一行代码，Go 1.20之前的版本编译报错。
+
+```bash
+$ go1.18 run example4.go
+./example4.go:13:21: interface{} does not implement comparable
+```
+
+因为Go 1.20之前的版本认为空接口类型interface{}并没有实现comparable类型约束，不能作为类型实参传给类型参数。
+
+从Go 1.20版本开始，不会编译报错，因为interface类型是comparable type，程序执行结果如下：
+
+```bash
+$ go1.20rc1 run example4.go
+false
+false
+```
+
+具体哪些类型是comparable type可以参考：[Comparable types](https://tip.golang.org/ref/spec#Comparison_operators) 里的说明。
 
 
 
