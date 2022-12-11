@@ -98,44 +98,6 @@ u := make([]byte, 0)
 u0 := (*[0]byte)(u)      // u0 != nil
 ```
 
-
-
-#### unsafe包
-
-Go 1.17版本在unsafe package里引入了Slice函数，如下所示：
-
-```go
-func Slice(ptr *ArbitraryType, len IntegerType) []ArbitraryType
-```
-
-在Go 1.20版本里，标准库unsafe package定义了3个新的函数：
-
-```go
-func SliceData(slice []ArbitraryType) *ArbitraryType
-func String(ptr *byte, len IntegerType) string
-func StringData(str string) *byte
-```
-
-有了这4个函数，可以构造和解构slice和string。
-
-具体细节可以参考：https://tip.golang.org/ref/spec#Package_unsafe。
-
-
-
-#### 值比较
-
-Go语言说明现在明确指出结构体变量的值每次只比较一个字段，字段比较的顺序和字段在结构体里定义的顺序保持一致。
-
-一旦某个字段的值比较出现不一致，就会马上停止比较。
-
-以前的说明可能会让Go开发者有误解，以为结构体变量的比较需要比较所有字段，实际并不是。
-
-类似的，数组的比较也是每次只比较一个元素，按照数组的下标索引由小到大逐个比较数组里每个元素的值。
-
-这块只是改了说明而已，对大家的代码没有任何影响。
-
-
-
 #### Comparable类型
 
 Go泛型里comparable这个类型约束(type constraint)有个坑，就是和Go语言里定义的可比较类型([Comparable types](https://tip.golang.org/ref/spec#Comparison_operators))并不一致。
@@ -193,6 +155,38 @@ false
 ```
 
 具体哪些类型是comparable type可以参考：[Comparable types](https://tip.golang.org/ref/spec#Comparison_operators) 里的说明。
+
+#### unsafe包
+
+Go 1.17版本在unsafe package里引入了Slice函数，如下所示：
+
+```go
+func Slice(ptr *ArbitraryType, len IntegerType) []ArbitraryType
+```
+
+在Go 1.20版本里，标准库unsafe package定义了3个新的函数：
+
+```go
+func SliceData(slice []ArbitraryType) *ArbitraryType
+func String(ptr *byte, len IntegerType) string
+func StringData(str string) *byte
+```
+
+有了这4个函数，可以构造和解构slice和string。
+
+具体细节可以参考：https://tip.golang.org/ref/spec#Package_unsafe。
+
+#### 值比较
+
+Go语言说明现在明确指出结构体变量的值每次只比较一个字段，字段比较的顺序和字段在结构体里定义的顺序保持一致。
+
+一旦某个字段的值比较出现不一致，就会马上停止比较。
+
+以前的说明可能会让Go开发者有误解，以为结构体变量的比较需要比较所有字段，实际并不是。
+
+类似的，数组的比较也是每次只比较一个元素，按照数组的下标索引由小到大逐个比较数组里每个元素的值。
+
+这块只是改了说明而已，对大家的代码没有任何影响。
 
 
 
