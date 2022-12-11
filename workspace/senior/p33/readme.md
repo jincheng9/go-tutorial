@@ -102,7 +102,7 @@ u0 := (*[0]byte)(u)      // u0 != nil
 
 Go泛型里comparable这个类型约束(type constraint)有个坑，就是和Go语言里定义的可比较类型([Comparable types](https://tip.golang.org/ref/spec#Comparison_operators))并不一致。
 
-什么事comparable types，简单来说就是可以用`==`和`!=`来进行比较的类型就是comparable types。
+什么是comparable types，简单来说就是可以用`==`和`!=`来进行比较的类型就是comparable types。
 
 > The equality operators `==` and `!=` apply to operands that are *comparable*. 
 >
