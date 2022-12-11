@@ -140,6 +140,12 @@ Go语言说明现在明确指出结构体变量的值每次只比较一个字段
 
 Go泛型里comparable这个类型约束(type constraint)有个坑，就是和Go语言里定义的可比较类型([Comparable types](https://tip.golang.org/ref/spec#Comparison_operators))并不一致。
 
+什么事comparable types，简单来说就是可以用`==`和`!=`来进行比较的类型就是comparable types。
+
+> The equality operators `==` and `!=` apply to operands that are *comparable*. 
+>
+> The ordering operators `<`, `<=`, `>`, and `>=` apply to operands that are *ordered*. 
+
 有些可比较类型的变量不能作为类型实参(type argument)赋值给声明了comparable类型约束的类型参数(type parameter)。
 
 例如Go语言说明里有如下这段内容：
