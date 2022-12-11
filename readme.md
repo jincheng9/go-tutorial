@@ -187,6 +187,7 @@
 
 * [Google的Go语言编码规范](./workspace/style/google.md)
 * [Practical Go中文版本](https://github.com/jincheng9/practical-go-cn)
+* [Go谚语 by  Rob Pike](https://go-proverbs.github.io/)
 
 ### Web框架
 
