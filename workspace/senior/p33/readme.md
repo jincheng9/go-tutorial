@@ -240,3 +240,4 @@ GOARCH=riscv64
 ## References
 
 * https://tip.golang.org/doc/go1.20
+* https://sorcererxw.com/articles/go-comparable-type
