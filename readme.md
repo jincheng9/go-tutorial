@@ -172,8 +172,9 @@
 
     
 
-
 ##  Go标准库
+
+* [Go标准库脑图](./workspace/img/go-std-lib-mindmap.png)
 
 * [Go标准库之log使用详解](./workspace/std/01)
 
