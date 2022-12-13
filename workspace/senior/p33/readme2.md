@@ -27,7 +27,11 @@ $ go1.20rc1 download
 
 ### Go command
 
-The directory `$GOROOT/pkg` no longer stores pre-compiled package archives for the standard library: `go` `install` no longer writes them, the `go` build no longer checks for them, and the Go distribution no longer ships them. Instead, packages in the standard library are built as needed and cached in the build cache, just like packages outside `GOROOT`. This change reduces the size of the Go distribution and also avoids C toolchain skew for packages that use cgo.
+`$GOROOT/pkg`路径不再存储标准库预先编译好的
+
+The directory `$GOROOT/pkg` no longer stores pre-compiled package archives for the standard library: `go` `install` no longer writes them, the `go` build no longer checks for them, and the Go distribution no longer ships them. 
+
+Instead, packages in the standard library are built as needed and cached in the build cache, just like packages outside `GOROOT`. This change reduces the size of the Go distribution and also avoids C toolchain skew for packages that use cgo.
 
 The implementation of `go` `test` `-json` has been improved to make it more robust. Programs that run `go` `test` `-json` do not need any updates. Programs that invoke `go` `tool` `test2json` directly should now run the test binary with `-v=test2json` (for example, `go` `test` `-v=test2json` or `./pkg.test` `-test.v=test2json`) instead of plain `-v`.
 
