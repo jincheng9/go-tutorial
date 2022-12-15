@@ -53,9 +53,11 @@ The `go` `build`, `go` `install`, and other build-related commands now support a
 
 The `go` `build`, `go` `install`, and other build-related commands now support a `-cover` flag that builds the specified target with code coverage instrumentation. This is described in more detail in the [Cover](https://tip.golang.org/doc/go1.20#cover) section below.
 
-#### `go` `version`
+#### go version
 
-The `go` `version` `-m` command now supports reading more types of Go binaries, most notably, Windows DLLs built with `go` `build` `-buildmode=c-shared` and Linux binaries without execute permission.
+`go version -m`命令支持读取和解析更多类型的Go二进制文件。
+
+比如通过`go build -buildmode=c-share`编译出来的Windows DLL文件以及没有可执行权限的Linux二进制文件，现在都可以被`go version -m`解析和识别到。
 
 ### Cgo
 
