@@ -41,11 +41,11 @@ The `go` command now defines architecture feature build tags, such as `amd64.v2`
 
 The `go` subcommands now accept `-C` `<dir>` to change directory to <dir> before performing the command, which may be useful for scripts that need to execute commands in multiple different modules.
 
-The `go` `build` and `go` `test` commands no longer accept the `-i` flag, which has been [deprecated since Go 1.16](https://go.dev/issue/41696).
+`go` `build` 和 `go` `test` 命令不再支持`-i`参数，这个参数从 [Go 1.16版本开始弃用](https://go.dev/issue/41696)。
 
-The `go` `generate` command now accepts `-skip` `<pattern>` to skip `//go:generate` directives matching `<pattern>`.
+`go generate` 命令接受 `-skip` `<pattern>` 参数，可以跳过匹配 `<pattern>`格式的 `//go:generate` 指令。
 
-The `go` `test` command now accepts `-skip` `<pattern>` to skip tests, subtests, or examples matching `<pattern>`.
+`go test`命令接受`-skip` `<pattern>` 参数，可以跳过匹配 `<pattern>`格式的测试用例。
 
 When the main module is located within `GOPATH/src`, `go` `install` no longer installs libraries for non-`main` packages to `GOPATH/pkg`, and `go` `list` no longer reports a `Target` field for such packages. (In module mode, compiled packages are stored in the [build cache](https://pkg.go.dev/cmd/go#hdr-Build_and_test_caching) only, but [a bug](https://go.dev/issue/37015) had caused the `GOPATH` install targets to unexpectedly remain in effect.)
 
@@ -61,7 +61,9 @@ The `go` `build`, `go` `install`, and other build-related commands now support a
 
 ### Cgo
 
-The `go` command now disables `cgo` by default on systems without a C toolchain. More specifically, when the `CGO_ENABLED` environment variable is unset, the `CC` environment variable is unset, and the default C compiler (typically `clang` or `gcc`) is not found in the path, `CGO_ENABLED` defaults to `0`. As always, you can override the default by setting `CGO_ENABLED` explicitly.
+The `go` command now disables `cgo` by default on systems without a C toolchain. 
+
+More specifically, when the `CGO_ENABLED` environment variable is unset, the `CC` environment variable is unset, and the default C compiler (typically `clang` or `gcc`) is not found in the path, `CGO_ENABLED` defaults to `0`. As always, you can override the default by setting `CGO_ENABLED` explicitly.
 
 The most important effect of the default change is that when Go is installed on a system without a C compiler, it will now use pure Go builds for packages in the standard library that use cgo, instead of using pre-distributed package archives (which have been removed, as [noted above](https://tip.golang.org/doc/go1.20#go-command)) or attempting to use cgo and failing. This makes Go work better in some minimal container environments as well as on macOS, where pre-distributed package archives have not been used for cgo-based packages since Go 1.16.
 
@@ -91,9 +93,11 @@ The `vet` tool now reports references to loop variables following a call to [`T.
 
 The tool also detects reference mistakes in more places. Previously it would only consider the last statement of the loop body, but now it recursively inspects the last statements within if, switch, and select statements.
 
-#### New diagnostic for incorrect time formats
+#### 检查错误时间格式
 
-The vet tool now reports use of the time format 2006-02-01 (yyyy-dd-mm) with [`Time.Format`](https://tip.golang.org/pkg/time/#Time.Format) and [`time.Parse`](https://tip.golang.org/pkg/time/#Parse). This format does not appear in common date standards, but is frequently used by mistake when attempting to use the ISO 8601 date format (yyyy-mm-dd).
+对于 [`Time.Format`](https://tip.golang.org/pkg/time/#Time.Format) 和[`time.Parse`](https://tip.golang.org/pkg/time/#Parse)，如果代码里要转成yyyy-dd-mm的格式，会进行提示。
+
+因为yyyy-dd-mm不符合常用的日期格式标准，ISO 8601日期格式是yyyy-mm-dd格式。
 
 ## 总结
 
