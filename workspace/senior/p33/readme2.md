@@ -67,11 +67,19 @@ The packages in the standard library that use cgo are [`net`](https://tip.golang
 
 On macOS, the race detector has been rewritten not to use cgo: race-detector-enabled programs can be built and run without Xcode. On Linux and other Unix systems, and on Windows, a host C toolchain is required to use the race detector.
 
-### Cover
+### Cover(代码覆盖率检测)
 
-Go 1.20 supports collecting code coverage profiles for programs (applications and integration tests), as opposed to just unit tests.
+Go 1.20版本之前只支持对单元测试场景收集代码覆盖率，从Go 1.20版本开始支持对任何Go程序做代码覆盖率收集。
 
-To collect coverage data for a program, build it with `go` `build`'s `-cover` flag, then run the resulting binary with the environment variable `GOCOVERDIR` set to an output directory for coverage profiles. See the ['coverage for integration tests' landing page](https://go.dev/testing/coverage) for more on how to get started. For details on the design and implementation, see the [proposal](https://golang.org/issue/51430).
+那如何收集呢？需要做如下操作：
+
+* 给`go build`编译命令增加`-cover`标记
+* 给环境变量`GOCOVERDIR`赋值为某个路径
+* 运行`go build`编译出来的可执行程序时，会把代码覆盖率文件输出到`GOCOVERDIR`指定的路径下。
+
+详细的介绍文档和使用说明可以参考： [coverage for integration tests' landing page](https://go.dev/testing/coverage) 。
+
+想了解设计原理和实现的可以参考： [proposal](https://golang.org/issue/51430)。
 
 ### Vet
 
