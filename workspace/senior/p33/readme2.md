@@ -27,25 +27,78 @@ $ go1.20rc1 download
 
 ### Go command
 
-`$GOROOT/pkg`路径不再存储标准库预先编译好的
+`$GOROOT/pkg`路径不再存储标准库源代码编译后生成的文件，包括以下几点：
 
-The directory `$GOROOT/pkg` no longer stores pre-compiled package archives for the standard library: `go` `install` no longer writes them, the `go` build no longer checks for them, and the Go distribution no longer ships them. 
+* `go install`不再往`$GOROOT/pkg`目录写文件。
+* `go build`不再检查`$GOROOT/pkg`下的文件。
+* Go发布包不再带有这些编译文件。
 
-Instead, packages in the standard library are built as needed and cached in the build cache, just like packages outside `GOROOT`. This change reduces the size of the Go distribution and also avoids C toolchain skew for packages that use cgo.
+以MAC环境来演示：在Go 1.16版本里，`$GOROOT/pkg`目录下的内容如下：
 
-The implementation of `go` `test` `-json` has been improved to make it more robust. Programs that run `go` `test` `-json` do not need any updates. Programs that invoke `go` `tool` `test2json` directly should now run the test binary with `-v=test2json` (for example, `go` `test` `-v=test2json` or `./pkg.test` `-test.v=test2json`) instead of plain `-v`.
+```bash
+$ go version
+go version go1.16.5 darwin/amd64
+$ go env GOROOT
+/usr/local/opt/go/libexec
+$ ls /usr/local/opt/go/libexec/pkg
+darwin_amd64		darwin_amd64_race	include			tool
+```
 
-A related change to `go` `test` `-json` is the addition of an event with `Action` set to `start` at the beginning of each test program's execution. When running multiple tests using the `go` command, these start events are guaranteed to be emitted in the same order as the packages named on the command line.
+但是在Go 1.20rc1版本里，`$GOROOT/pkg`目录下的内容如下：
 
-The `go` command now defines architecture feature build tags, such as `amd64.v2`, to allow selecting a package implementation file based on the presence or absence of a particular architecture feature. See [`go` `help` `buildconstraint`](https://tip.golang.org/cmd/go#hdr-Build_constraints) for details.
+```bash
+$ go1.20rc1 version
+go version go1.20rc1 darwin/amd64
+$ go1.20rc1 env GOROOT
+/Users/xxx/sdk/go1.20rc1
+$ ls /Users/xxx/sdk/go1.20rc1/pkg
+include	tool
+```
 
-The `go` subcommands now accept `-C` `<dir>` to change directory to <dir> before performing the command, which may be useful for scripts that need to execute commands in multiple different modules.
+少了`darwin_amd64`和`darwin_amd64_race`这2个文件夹：
+
+```bash
+$ ls /usr/local/opt/go/libexec/pkg/darwin_amd64
+archive		database	go		io		net.a		runtime		testing.a
+bufio.a		debug		hash		io.a		os		runtime.a	text
+bytes.a		embed.a		hash.a		log		os.a		sort.a		time
+cmd		encoding	html		log.a		path		strconv.a	time.a
+compress	encoding.a	html.a		math		path.a		strings.a	unicode
+container	errors.a	image		math.a		plugin.a	sync		unicode.a
+context.a	expvar.a	image.a		mime		reflect.a	sync.a		vendor
+crypto		flag.a		index		mime.a		regexp		syscall.a
+crypto.a	fmt.a		internal	net		regexp.a	testing
+$ ls /usr/local/opt/go/libexec/pkg/darwin_amd64_race/
+archive		debug		hash		io.a		os		runtime.a	text
+bufio.a		embed.a		hash.a		log		os.a		sort.a		time
+bytes.a		encoding	html		log.a		path		strconv.a	time.a
+compress	encoding.a	html.a		math		path.a		strings.a	unicode
+container	errors.a	image		math.a		plugin.a	sync		unicode.a
+context.a	expvar.a	image.a		mime		reflect.a	sync.a		vendor
+crypto		flag.a		index		mime.a		regexp		syscall.a
+crypto.a	fmt.a		internal	net		regexp.a	testing
+database	go		io		net.a		runtime		testing.a
+```
+
+从Go 1.20开始，标准库的package会按需编译，编译后生成的文件会缓存在编译缓存(build cache)里，就像非`GOROOT`下的package一样。这个修改减小了Go安装包的大小。
+
+
+
+`go test -json`的实现在Go 1.20版本更加鲁棒，对使用`go test -json`的开发者来说，不用做任何改变。
+
+但是，直接调用Go工具`test2json`的开发者，需要给测试的可执行程序增加`-v=test2json`参数，例如`go test -v=test2json`或者`./pkg.test -test.v=test2json`，而不是仅仅加一个`-v`标记。
+
+`go test -json`的另外一个修改是在每个测试程序执行的开始，增加了一个`Action`事件。当使用go命令同时运行多个测试程序时，这些`Action`事件的执行会按照命令行里的package的顺序按序执行。
+
+`go`命令现在新增了和CPU架构相关的编译标记参数，例如`amd64.v2`。有了这个参数后，在业务代码实现的时候就可以根据CPU架构的不同而做不同的处理。更多细节可以参考：[`go help buildconstraint`](https://tip.golang.org/cmd/go#hdr-Build_constraints) 。
+
+`go`子命令现在支持`-C <dir>`参数，可以在执行命令前改变目录到`<dir>`下。如果一个脚本要在多个不同的Go module下执行，这个特性会带来方便。
 
 `go` `build` 和 `go` `test` 命令不再支持`-i`参数，这个参数从 [Go 1.16版本开始弃用](https://go.dev/issue/41696)。
 
-`go generate` 命令接受 `-skip` `<pattern>` 参数，可以跳过匹配 `<pattern>`格式的 `//go:generate` 指令。
+`go generate` 命令接受 `-skip <pattern>` 参数，可以跳过匹配 `<pattern>`格式的 `//go:generate` 指令。
 
-`go test`命令接受`-skip` `<pattern>` 参数，可以跳过匹配 `<pattern>`格式的测试用例。
+`go test`命令接受`-skip <pattern>` 参数，可以跳过匹配 `<pattern>`格式的测试用例。
 
 When the main module is located within `GOPATH/src`, `go` `install` no longer installs libraries for non-`main` packages to `GOPATH/pkg`, and `go` `list` no longer reports a `Target` field for such packages. (In module mode, compiled packages are stored in the [build cache](https://pkg.go.dev/cmd/go#hdr-Build_and_test_caching) only, but [a bug](https://go.dev/issue/37015) had caused the `GOPATH` install targets to unexpectedly remain in effect.)
 
@@ -73,7 +126,7 @@ On macOS, the race detector has been rewritten not to use cgo: race-detector-ena
 
 ### Cover(代码覆盖率检测)
 
-Go 1.20版本之前只支持对单元测试场景收集代码覆盖率，从Go 1.20版本开始支持对任何Go程序做代码覆盖率收集。
+Go 1.20版本之前只支持对单元测试(unit test)收集代码覆盖率，从Go 1.20版本开始支持对任何Go程序做代码覆盖率收集。
 
 那如何收集呢？需要做如下操作：
 
@@ -89,13 +142,17 @@ Go 1.20版本之前只支持对单元测试场景收集代码覆盖率，从Go 1
 
 #### Improved detection of loop variable capture by nested functions
 
-The `vet` tool now reports references to loop variables following a call to [`T.Parallel()`](https://tip.golang.org/pkg/testing/#T.Parallel) within subtest function bodies. Such references may observe the value of the variable from a different iteration (typically causing test cases to be skipped) or an invalid state due to unsynchronized concurrent access.
+The `vet` tool now reports references to loop variables following a call to [`T.Parallel()`](https://tip.golang.org/pkg/testing/#T.Parallel) within subtest function bodies. 
 
-The tool also detects reference mistakes in more places. Previously it would only consider the last statement of the loop body, but now it recursively inspects the last statements within if, switch, and select statements.
+Such references may observe the value of the variable from a different iteration (typically causing test cases to be skipped) or an invalid state due to unsynchronized concurrent access.
+
+The tool also detects reference mistakes in more places. 
+
+Previously it would only consider the last statement of the loop body, but now it recursively inspects the last statements within if, switch, and select statements.
 
 #### 检查错误时间格式
 
-对于 [`Time.Format`](https://tip.golang.org/pkg/time/#Time.Format) 和[`time.Parse`](https://tip.golang.org/pkg/time/#Parse)，如果代码里要转成yyyy-dd-mm的格式，会进行提示。
+对于 [`Time.Format`](https://tip.golang.org/pkg/time/#Time.Format) 和[`time.Parse`](https://tip.golang.org/pkg/time/#Parse)，如果代码里要转成yyyy-dd-mm的格式，会给出提示。
 
 因为yyyy-dd-mm不符合常用的日期格式标准，ISO 8601日期格式是yyyy-mm-dd格式。
 
