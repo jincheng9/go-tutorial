@@ -100,11 +100,9 @@ database	go		io		net.a		runtime		testing.a
 
 `go test`命令接受`-skip <pattern>` 参数，可以跳过匹配 `<pattern>`格式的测试用例。
 
-When the main module is located within `GOPATH/src`, `go` `install` no longer installs libraries for non-`main` packages to `GOPATH/pkg`, and `go` `list` no longer reports a `Target` field for such packages. (In module mode, compiled packages are stored in the [build cache](https://pkg.go.dev/cmd/go#hdr-Build_and_test_caching) only, but [a bug](https://go.dev/issue/37015) had caused the `GOPATH` install targets to unexpectedly remain in effect.)
+`go build`, `go install`和其它编译相关的命令新增了一个`-pgo`标记参数，可以辅助开发者做程序优化。`-pgo`指定的是profile文件的路径。如果`-pgo=auto`，那go命令会在main这个包的路径下去找名为`default.pgo`的文件。`-pgo=off`可以关闭优化。详情可以参考：[PGO Proposal](https://github.com/golang/go/issues/55022)。
 
-The `go` `build`, `go` `install`, and other build-related commands now support a `-pgo` flag that enables profile-guided optimization, which is described in more detail in the [Compiler](https://tip.golang.org/doc/go1.20#compiler) section below. The `-pgo` flag specifies the file path of the profile. Specifying `-pgo=auto` causes the `go` command to search for a file named `default.pgo` in the main package's directory and use it if present. This mode currently requires a single main package to be specified on the command line, but we plan to lift this restriction in a future release. Specifying `-pgo=off` turns off profile-guided optimization.
-
-The `go` `build`, `go` `install`, and other build-related commands now support a `-cover` flag that builds the specified target with code coverage instrumentation. This is described in more detail in the [Cover](https://tip.golang.org/doc/go1.20#cover) section below.
+`go build`, `go install`和其他编译相关的命令新增了一个`-cover`标记参数，可以用来对编译出来的可执行程序做代码覆盖率收集，详情可以参考本文后面介绍。
 
 #### go version
 
