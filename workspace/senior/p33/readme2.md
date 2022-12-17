@@ -148,15 +148,38 @@ Go 1.20版本之前只支持对单元测试(unit test)收集代码覆盖率，�
 
 ### Vet
 
-#### Improved detection of loop variable capture by nested functions
+#### 检测循环变量被嵌套子函数错误使用的场景
 
-The `vet` tool now reports references to loop variables following a call to [`T.Parallel()`](https://tip.golang.org/pkg/testing/#T.Parallel) within subtest function bodies. 
+```go
+func TestTLog(t *testing.T) {
+	t.Parallel()
+	tests := []struct {
+		name  string
+		value int
+	}{
+		{name: "test 1", value: 1},
+		{name: "test 2", value: 2},
+		{name: "test 3", value: 3},
+		{name: "test 4", value: 4},
+	}
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+      t.Parallel()
+			// Here you test tc.value against a test function.
+			// Let's use t.Log as our test function :-)
+			t.Log(tc.value)
+		})
+	}
+}
+```
 
-Such references may observe the value of the variable from a different iteration (typically causing test cases to be skipped) or an invalid state due to unsynchronized concurrent access.
+大家可以猜一下这段程序里t.Log打印的结果是什么？结果是为1,2,3,4还是4,4,4,4？是否和自己的预期相符。
 
-The tool also detects reference mistakes in more places. 
+想了解详情的可以参考：[Be Careful with Table Driven Tests and t.Parallel()](https://gist.github.com/posener/92a55c4cd441fc5e5e85f27bca008721)。
 
-Previously it would only consider the last statement of the loop body, but now it recursively inspects the last statements within if, switch, and select statements.
+这个本质上和goroutine与闭包函数一起使用时，遇到的循环变量问题一样。
+
+Go 1.20版本开始通过`go vet`可以检测出单元测试里的这类问题。
 
 #### 检查错误时间格式
 
