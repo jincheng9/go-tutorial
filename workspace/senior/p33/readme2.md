@@ -33,7 +33,7 @@ $ go1.20rc1 download
 * `go build`不再检查`$GOROOT/pkg`下的文件。
 * Go发布包不再带有这些编译文件。
 
-以MAC环境来演示：在Go 1.16版本里，`$GOROOT/pkg`目录下的内容如下：
+以macOS环境来演示：在Go 1.16版本里，`$GOROOT/pkg`目录下的内容如下：
 
 ```bash
 $ go version
@@ -112,15 +112,25 @@ database	go		io		net.a		runtime		testing.a
 
 ### Cgo
 
-The `go` command now disables `cgo` by default on systems without a C toolchain. 
+早期Go语言的一些标准库是用C语言实现的，需要依赖cgo来作为go语言和C语言的桥梁。
 
-More specifically, when the `CGO_ENABLED` environment variable is unset, the `CC` environment variable is unset, and the default C compiler (typically `clang` or `gcc`) is not found in the path, `CGO_ENABLED` defaults to `0`. As always, you can override the default by setting `CGO_ENABLED` explicitly.
+现在Go语言开始去除对C语言的的依赖。
 
-The most important effect of the default change is that when Go is installed on a system without a C compiler, it will now use pure Go builds for packages in the standard library that use cgo, instead of using pre-distributed package archives (which have been removed, as [noted above](https://tip.golang.org/doc/go1.20#go-command)) or attempting to use cgo and failing. This makes Go work better in some minimal container environments as well as on macOS, where pre-distributed package archives have not been used for cgo-based packages since Go 1.16.
+从Go 1.20版本开始，如果机器上没有C语言的工具链，go命令会默认禁用`cgo`。
 
-The packages in the standard library that use cgo are [`net`](https://tip.golang.org/pkg/net/), [`os/user`](https://tip.golang.org/pkg/os/user/), and [`plugin`](https://tip.golang.org/pkg/plugin/). On macOS, the `net` and `os/user` packages have been rewritten not to use cgo: the same code is now used for cgo and non-cgo builds as well as cross-compiled builds. On Windows, the `net` and `os/user` packages have never used cgo. On other systems, builds with cgo disabled will use a pure Go version of these packages.
+具体而言：如果没有设置`CGO_ENABLED`和`CC`环境变量，而且默认的C语言编译器(例如`clang`和`gcc`)也找不到，那`CGO_ENABLED`会默认为0。当然开发者可以通过设置`CGO_ENABLED`环境变量的值来改变`CGO_ENABLED`的值。
 
-On macOS, the race detector has been rewritten not to use cgo: race-detector-enabled programs can be built and run without Xcode. On Linux and other Unix systems, and on Windows, a host C toolchain is required to use the race detector.
+这个修改会让Go语言减少对C语言工具链的依赖，适配更多的环境，尤其是最小化的容器环境以及macOS环境。
+
+Go标准库里使用了cgo的package有： [`net`](https://tip.golang.org/pkg/net/), [`os/user`](https://tip.golang.org/pkg/os/user/) 和 [`plugin`](https://tip.golang.org/pkg/plugin/)。
+
+在macOS环境，`net`和`os/user`包已经被重写了，不再依赖cgo。现在`net`和`os/user`的代码实现既可以用cgo编译，也可以不用cgo编译。同时，在macOS环境，race detector已经被重写了，不再依赖cgo。
+
+在Windows环境，`net`和`os/user`没有使用过cgo。
+
+在其它操作系统上，如果编译的时候禁用了cgo，那会使用这些包的纯go语言实现。
+
+在macOS环境，race detector已经被重写了，不再依赖cgo。
 
 ### Cover(代码覆盖率检测)
 
