@@ -135,6 +135,7 @@
   * [Go 1.20要来了，看看都有哪些变化：第1篇](./workspace/senior/p33/readme.md)
   * [Go 1.20要来了，看看都有哪些变化：第2篇](./workspace/senior/p33/readme2.md)
   * [Go 1.20要来了，看看都有哪些变化：第3篇](./workspace/senior/p33/readme3.md)
+  * [Go 1.20要来了，看看都有哪些变化：第4篇](./workspace/senior/p33/readme4.md)
 
 
 
