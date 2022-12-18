@@ -130,8 +130,6 @@ Go标准库里使用了cgo的package有： [`net`](https://tip.golang.org/pkg/ne
 
 在其它操作系统上，如果编译的时候禁用了cgo，那会使用这些包的纯go语言实现。
 
-在macOS环境，race detector已经被重写了，不再依赖cgo。
-
 ### Cover(代码覆盖率检测)
 
 Go 1.20版本之前只支持对单元测试(unit test)收集代码覆盖率，从Go 1.20版本开始支持对任何Go程序做代码覆盖率收集。
