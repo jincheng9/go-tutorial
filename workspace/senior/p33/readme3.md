@@ -1,4 +1,4 @@
-# Go 1.20要来了，看看都有哪些变化-第2篇
+# Go 1.20要来了，看看都有哪些变化-第3篇
 
 ## 前言
 
@@ -27,7 +27,9 @@ $ go1.20rc1 download
 
 ## Runtime
 
-The runtime now has experimental support for memory-safe arena allocation that makes it possible to eagerly free memory in bulk. When used appopriately, it has the potential to improve CPU performance by up to 15% in memory-allocation-heavy applications. To try it out, build your Go program with `GOEXPERIMENT=arenas`, which will make the `arena` package visible to your program. Source files that import the `arena` package must require the `goexperiment.arenas` build tag.
+The runtime now has experimental support for memory-safe arena allocation that makes it possible to eagerly free memory in bulk. 
+
+When used appopriately, it has the potential to improve CPU performance by up to 15% in memory-allocation-heavy applications. To try it out, build your Go program with `GOEXPERIMENT=arenas`, which will make the `arena` package visible to your program. Source files that import the `arena` package must require the `goexperiment.arenas` build tag.
 
 Some of the garbage collector's internal data structures were reorganized to be both more space and CPU efficient. This change reduces memory overheads and improves overall CPU performance by up to 2%.
 
@@ -37,7 +39,11 @@ Go 1.20 adds a new `runtime/coverage` package containing APIs for writing covera
 
 ## Compiler
 
-Go 1.20 adds preview support for profile-guided optimization (PGO). PGO enables the toolchain to perform application- and workload-specific optimizations based on run-time profile information. Currently, the compiler supports pprof CPU profiles, which can be collected through usual means, such as the `runtime/pprof` or `net/http/pprof` packages. To enable PGO, pass the path of a pprof profile file via the `-pgo` flag to `go` `build`, as mentioned [above](https://tip.golang.org/doc/go1.20#go-command). Go 1.20 uses PGO to more aggressively inline functions at hot call sites. Benchmarks for a representative set of Go programs show enabling profile-guided inlining optimization improves performance about 3–4%. We plan to add more profile-guided optimizations in future releases. Note that profile-guided optimization is a preview, so please use it with appropriate caution.
+Go 1.20 adds preview support for profile-guided optimization (PGO). 
+
+PGO enables the toolchain to perform application- and workload-specific optimizations based on run-time profile information. Currently, the compiler supports pprof CPU profiles, which can be collected through usual means, such as the `runtime/pprof` or `net/http/pprof` packages. 
+
+To enable PGO, pass the path of a pprof profile file via the `-pgo` flag to `go` `build`, as mentioned [above](https://tip.golang.org/doc/go1.20#go-command). Go 1.20 uses PGO to more aggressively inline functions at hot call sites. Benchmarks for a representative set of Go programs show enabling profile-guided inlining optimization improves performance about 3–4%. We plan to add more profile-guided optimizations in future releases. Note that profile-guided optimization is a preview, so please use it with appropriate caution.
 
 The Go 1.20 compiler upgraded its front-end to use a new way of handling the compiler's internal data, which fixes several generic-types bugs and enables local types in generic functions and methods.
 
@@ -55,7 +61,13 @@ Go 1.20 uses `go:` and `type:` prefixes for compiler-generated symbols rather th
 
 ## Bootstrap
 
-When building a Go release from source and `GOROOT_BOOTSTRAP` is not set, previous versions of Go looked for a Go 1.4 or later bootstrap toolchain in the directory `$HOME/go1.4` (`%HOMEDRIVE%%HOMEPATH%\go1.4` on Windows). Go 1.18 and Go 1.19 looked first for `$HOME/go1.17` or `$HOME/sdk/go1.17` before falling back to `$HOME/go1.4`, in ancitipation of requiring Go 1.17 for use when bootstrapping Go 1.20. Go 1.20 does require a Go 1.17 release for bootstrapping, but we realized that we should adopt the latest point release of the bootstrap toolchain, so it requires Go 1.17.13. Go 1.20 looks for `$HOME/go1.17.13` or `$HOME/sdk/go1.17.13` before falling back to `$HOME/go1.4` (to support systems that hard-coded the path $HOME/go1.4 but have installed a newer Go toolchain there). In the future, we plan to move the bootstrap toolchain forward approximately once a year, and in particular we expect that Go 1.22 will require the final point release of Go 1.20 for bootstrap.
+When building a Go release from source and `GOROOT_BOOTSTRAP` is not set, previous versions of Go looked for a Go 1.4 or later bootstrap toolchain in the directory `$HOME/go1.4` (`%HOMEDRIVE%%HOMEPATH%\go1.4` on Windows). 
+
+Go 1.18 and Go 1.19 looked first for `$HOME/go1.17` or `$HOME/sdk/go1.17` before falling back to `$HOME/go1.4`, in ancitipation of requiring Go 1.17 for use when bootstrapping Go 1.20. 
+
+Go 1.20 does require a Go 1.17 release for bootstrapping, but we realized that we should adopt the latest point release of the bootstrap toolchain, so it requires Go 1.17.13. Go 1.20 looks for `$HOME/go1.17.13` or `$HOME/sdk/go1.17.13` before falling back to `$HOME/go1.4` (to support systems that hard-coded the path $HOME/go1.4 but have installed a newer Go toolchain there). 
+
+In the future, we plan to move the bootstrap toolchain forward approximately once a year, and in particular we expect that Go 1.22 will require the final point release of Go 1.20 for bootstrap.
 
 ## 总结
 
