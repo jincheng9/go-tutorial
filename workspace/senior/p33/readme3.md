@@ -27,15 +27,17 @@ $ go1.20rc1 download
 
 ## Runtime
 
-The runtime now has experimental support for memory-safe arena allocation that makes it possible to eagerly free memory in bulk. 
+Go 1.20版本的运行时新增了arena内存分配这个新功能的实验性支持，可以让Go程序释放更多内存空间，节省内存占用。
 
-When used appopriately, it has the potential to improve CPU performance by up to 15% in memory-allocation-heavy applications. To try it out, build your Go program with `GOEXPERIMENT=arenas`, which will make the `arena` package visible to your program. Source files that import the `arena` package must require the `goexperiment.arenas` build tag.
+想了解什么是arena内存分配的，可以参考:https://github.com/golang/go/issues/51317。
 
-Some of the garbage collector's internal data structures were reorganized to be both more space and CPU efficient. This change reduces memory overheads and improves overall CPU performance by up to 2%.
+如果area内存分配使用恰当，对于需要频繁内存分配的应用，可以提升多达15%的CPU性能。
 
-The garbage collector behaves less erratically with respect to goroutine assists in some circumstances.
+使用方式为编译Go程序时，添加 `GOEXPERIMENT=arenas`参数。代码里如果有`import arena`，也需要添加这个编译参数。
 
-Go 1.20 adds a new `runtime/coverage` package containing APIs for writing coverage profile data at runtime from long-running and/or server programs that do not terminate via `os.Exit()`.
+此外，垃圾回收器的一些内部数据结构的设计做了优化，在时间和空间上更高效，可以节省内存开销，提升2%左右的CPU总体性能。
+
+Go 1.20还新增了一个`runtime/coverage`包，调用这个包的API可以把程序运行的代码覆盖率数据输出到指定文件。
 
 ## Compiler
 
