@@ -65,21 +65,29 @@ type I interface {
 
 ## Linker
 
-On Linux, the linker now selects the dynamic interpreter for `glibc` or `musl` at link time.
+在Linux环境，链接器会在进行link操作的时候，为`glibc`或者`musl`选择动态解释器。
 
-On Windows, the Go linker now supports modern LLVM-based C toolchains.
+在Windows环境，链接器现在支持基于LLVM的C语言工具链。
 
-Go 1.20 uses `go:` and `type:` prefixes for compiler-generated symbols rather than `go.` and `type.`. This avoids confusion for user packages whose name starts with `go.`. The [`debug/gosym`](https://tip.golang.org/pkg/debug/gosym) package understands this new naming convention for binaries built with Go 1.20 and newer.
+Go 1.20版本开始，使用`go:`和`type:`作为前缀，用于编译器生成的符号，而抛弃使用`go.`和`type.`作为前缀。
 
-## Bootstrap
+这可以避免歧义，因为有的go package的命名是以`go.`开始的。
 
-When building a Go release from source and `GOROOT_BOOTSTRAP` is not set, previous versions of Go looked for a Go 1.4 or later bootstrap toolchain in the directory `$HOME/go1.4` (`%HOMEDRIVE%%HOMEPATH%\go1.4` on Windows). 
+## Bootstrap(自举)
 
-Go 1.18 and Go 1.19 looked first for `$HOME/go1.17` or `$HOME/sdk/go1.17` before falling back to `$HOME/go1.4`, in ancitipation of requiring Go 1.17 for use when bootstrapping Go 1.20. 
+如果要编译Go语言本身的源代码，必须要设置`GOROOT_BOOTSTRAP`环境变量。
 
-Go 1.20 does require a Go 1.17 release for bootstrapping, but we realized that we should adopt the latest point release of the bootstrap toolchain, so it requires Go 1.17.13. Go 1.20 looks for `$HOME/go1.17.13` or `$HOME/sdk/go1.17.13` before falling back to `$HOME/go1.4` (to support systems that hard-coded the path $HOME/go1.4 but have installed a newer Go toolchain there). 
+在 1.4 版本开始，Go语言实现了自举，即可以通过1.4版本来编译安装之后版本的编译器。
 
-In the future, we plan to move the bootstrap toolchain forward approximately once a year, and in particular we expect that Go 1.22 will require the final point release of Go 1.20 for bootstrap.
+假设`GOROOT_BOOTSTRAP`环境变量没有设置，那Go 1.17版本及之前的版本，会尝试在 `$HOME/go1.4` (`%HOMEDRIVE%%HOMEPATH%\go1.4` on Windows)寻找Go 1.4或者更新的bootstrap工具链。
+
+Go 1.18和Go 1.19首先会找 `$HOME/go1.17` 或 `$HOME/sdk/go1.17`，找不到的话，就回退去找 `$HOME/go1.4`。
+
+Go 1.20要实现自举，需要依赖Go 1.17的最新子版本，即Go 1.17.13版本。
+
+Go 1.20会先找 `$HOME/go1.17.13` 或 `$HOME/sdk/go1.17.13`，如果找不到，就回退找`$HOME/go1.4` 。
+
+在接下来，Go官方会把自举的工具链每年向前推进一步。预期是Go 1.22会要求依赖Go 1.20的最新子版本用于Go 1.22的自举。
 
 ## 总结
 
