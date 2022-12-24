@@ -41,17 +41,27 @@ Go 1.20还新增了一个`runtime/coverage`包，调用这个包的API可以把�
 
 ## Compiler
 
-Go 1.20 adds preview support for profile-guided optimization (PGO). 
+Go 1.20新增了PGO(profile-guided optimization)特性，可以帮助开发者做程序性能优化。
 
-PGO enables the toolchain to perform application- and workload-specific optimizations based on run-time profile information. Currently, the compiler supports pprof CPU profiles, which can be collected through usual means, such as the `runtime/pprof` or `net/http/pprof` packages. 
+目前，编译器支持pprof CPU profile，这种类型的profile可以通过例如`runtime/pprof`或`net/http/pprof`收集得到。
 
-To enable PGO, pass the path of a pprof profile file via the `-pgo` flag to `go` `build`, as mentioned [above](https://tip.golang.org/doc/go1.20#go-command). Go 1.20 uses PGO to more aggressively inline functions at hot call sites. Benchmarks for a representative set of Go programs show enabling profile-guided inlining optimization improves performance about 3–4%. We plan to add more profile-guided optimizations in future releases. Note that profile-guided optimization is a preview, so please use it with appropriate caution.
+如果要开启PGO，在使用`go build`编译程序的时候，要增加`-pgo`参数。`-pgo`指定的是profile文件的路径。如果`-pgo=auto`，那go命令会在main这个包的路径下去找名为`default.pgo`的文件。`-pgo=off`可以关闭优化。详情可以参考：[PGO Proposal](https://github.com/golang/go/issues/55022)。
 
-The Go 1.20 compiler upgraded its front-end to use a new way of handling the compiler's internal data, which fixes several generic-types bugs and enables local types in generic functions and methods.
+如果使用了PGO，编译器会对被调用比较多的函数，更多地使用inline function的方式去做性能优化。
 
-The compiler now [disallows anonymous interface cycles](https://go.dev/issue/56103).
+性能测试表明，如果开启了profile-guided inlining optimization，可以提升3%-4%的性能，后期Go会加入更多的PGO优化支持。
 
-Relative to Go 1.19, generated code performance is generally slightly improved, build wall times are slightly increased, build user times are slightly decreased.
+注意，由于PGO并不是稳定版本，生产环境使用需要小心。
+
+此外，从Go 1.20开始，编译器禁止匿名interface嵌套，如下代码会编译失败。
+
+```go
+type I interface {
+  m() interface {
+    I 
+  }
+}
+```
 
 ## Linker
 
