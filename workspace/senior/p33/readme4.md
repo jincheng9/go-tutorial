@@ -118,97 +118,25 @@ proxyHandler := &httputil.ReverseProxy{
 
 ### 标准库的修改
 
-- [archive/tar](https://tip.golang.org/pkg/archive/tar/)
-
-  When the `GODEBUG=tarinsecurepath=0` environment variable is set, [`Reader.Next`](https://tip.golang.org/pkg/archive/tar/#Reader.Next) method will now return the error [`ErrInsecurePath`](https://tip.golang.org/pkg/archive/tar/#ErrInsecurePath) for an entry with a file name that is an absolute path, refers to a location outside the current directory, contains invalid characters, or (on Windows) is a reserved name such as `NUL`. A future version of Go may disable insecure paths by default.
-
-- [archive/zip](https://tip.golang.org/pkg/archive/zip/)
-
-  When the `GODEBUG=zipinsecurepath=0` environment variable is set, [`NewReader`](https://tip.golang.org/pkg/archive/zip/#NewReader) will now return the error [`ErrInsecurePath`](https://tip.golang.org/pkg/archive/zip/#ErrInsecurePath) when opening an archive which contains any file name that is an absolute path, refers to a location outside the current directory, contains invalid characters, or (on Windows) is a reserved names such as `NUL`. A future version of Go may disable insecure paths by default.Reading from a directory file that contains file data will now return an error. The zip specification does not permit directory files to contain file data, so this change only affects reading from invalid archives.
-
 - [bytes](https://tip.golang.org/pkg/bytes/)
 
-  The new [`CutPrefix`](https://tip.golang.org/pkg/bytes/#CutPrefix) and [`CutSuffix`](https://tip.golang.org/pkg/bytes/#CutSuffix) functions are like [`TrimPrefix`](https://tip.golang.org/pkg/bytes/#TrimPrefix) and [`TrimSuffix`](https://tip.golang.org/pkg/bytes/#TrimSuffix) but also report whether the string was trimmed.The new [`Clone`](https://tip.golang.org/pkg/bytes/#Clone) function allocates a copy of a byte slice.
+  新增了 [`CutPrefix`](https://tip.golang.org/pkg/bytes/#CutPrefix) 和 [`CutSuffix`](https://tip.golang.org/pkg/bytes/#CutSuffix) 函数，这2个函数功能上类似 [`TrimPrefix`](https://tip.golang.org/pkg/bytes/#TrimPrefix) 和 [`TrimSuffix`](https://tip.golang.org/pkg/bytes/#TrimSuffix) ，但是还会返回一个bool类型的变量，表示这个string是否被修改了。
 
-- [context](https://tip.golang.org/pkg/context/)
-
-  The new [`WithCancelCause`](https://tip.golang.org/pkg/context/#WithCancelCause) function provides a way to cancel a context with a given error. That error can be retrieved by calling the new [`Cause`](https://tip.golang.org/pkg/context/#Cause) function.
-
-- [crypto/ecdsa](https://tip.golang.org/pkg/crypto/ecdsa/)
-
-  The new [`PrivateKey.ECDH`](https://tip.golang.org/pkg/crypto/ecdsa/#PrivateKey.ECDH) method converts an `ecdsa.PrivateKey` to an `ecdh.PrivateKey`.
-
-- [crypto/ed25519](https://tip.golang.org/pkg/crypto/ed25519/)
-
-  The [`PrivateKey.Sign`](https://tip.golang.org/pkg/crypto/ed25519/#PrivateKey.Sign) method and the [`VerifyWithOptions`](https://tip.golang.org/pkg/crypto/ed25519/#VerifyWithOptions) function now support signing pre-hashed messages with Ed25519ph, indicated by an [`Options.HashFunc`](https://tip.golang.org/pkg/crypto/ed25519/#Options.HashFunc) that returns [`crypto.SHA512`](https://tip.golang.org/pkg/crypto/#SHA512). They also now support Ed25519ctx and Ed25519ph with context, indicated by setting the new [`Options.Context`](https://tip.golang.org/pkg/crypto/ed25519/#Options.Context) field.
-
-- [crypto/elliptic](https://tip.golang.org/pkg/crypto/elliptic/)
-
-  Use of custom [`Curve`](https://tip.golang.org/pkg/crypto/elliptic/#Curve) implementations not provided by this package (that is, curves other than [`P224`](https://tip.golang.org/pkg/crypto/elliptic/#P224), [`P256`](https://tip.golang.org/pkg/crypto/elliptic/#P256), [`P384`](https://tip.golang.org/pkg/crypto/elliptic/#P384), and [`P521`](https://tip.golang.org/pkg/crypto/elliptic/#P521)) is deprecated.
-
-- [crypto/rsa](https://tip.golang.org/pkg/crypto/rsa/)
-
-  The new field [`OAEPOptions.MGFHash`](https://tip.golang.org/pkg/crypto/rsa/#OAEPOptions.MGFHash) allows configuring the MGF1 hash separately for OAEP encryption.
-
-- [crypto/subtle](https://tip.golang.org/pkg/crypto/subtle/)
-
-  The new function [`XORBytes`](https://tip.golang.org/pkg/crypto/subtle/#XORBytes) XORs two byte slices together.
-
-- [crypto/tls](https://tip.golang.org/pkg/crypto/tls/)
-
-  The TLS client now shares parsed certificates across all clients actively using that certificate. The savings can be significant in programs that make many concurrent connections to a server or collection of servers sharing any part of their certificate chains.For a handshake failure due to a certificate verification failure, the TLS client and server now return an error of the new type [`CertificateVerificationError`](https://tip.golang.org/pkg/crypto/tls/#CertificateVerificationError), which includes the presented certificates.
-
-- [crypto/x509](https://tip.golang.org/pkg/crypto/x509/)
-
-  [`CreateCertificateRequest`](https://tip.golang.org/pkg/crypto/x509/#CreateCertificateRequest) and [`MarshalPKCS8PrivateKey`](https://tip.golang.org/pkg/crypto/x509/#MarshalPKCS8PrivateKey) now support keys of type [`*crypto/ecdh.PrivateKey`](https://tip.golang.org/pkg/crypto/ecdh.PrivateKey). [`CreateCertificate`](https://tip.golang.org/pkg/crypto/x509/#CreateCertificate) and [`MarshalPKIXPublicKey`](https://tip.golang.org/pkg/crypto/x509/#MarshalPKIXPublicKey) now support keys of type [`*crypto/ecdh.PublicKey`](https://tip.golang.org/pkg/crypto/ecdh.PublicKey). X.509 unmarshaling continues to unmarshal elliptic curve keys into `*ecdsa.PublicKey` and `*ecdsa.PrivateKey`. Use their new `ECDH` methods to convert to the `crypto/ecdh` form.The new [`SetFallbackRoots`](https://tip.golang.org/pkg/crypto/x509/#SetFallbackRoots) function allows a program to define a set of fallback root certificates in case the operating system verifier or standard platform root bundle is unavailable at runtime. It will most commonly be used with a new package, [golang.org/x/crypto/x509roots/fallback](https://tip.golang.org/pkg/golang.org/x/crypto/x509roots/fallback), which will provide an up to date root bundle.
-
-- [debug/elf](https://tip.golang.org/pkg/debug/elf/)
-
-  Attempts to read from a `SHT_NOBITS` section using [`Section.Data`](https://tip.golang.org/pkg/debug/elf/#Section.Data) or the reader returned by [`Section.Open`](https://tip.golang.org/pkg/debug/elf/#Section.Open) now return an error.Additional [`R_LARCH_*`](https://tip.golang.org/pkg/debug/elf/#R_LARCH) constants are defined for use with LoongArch systems.Additional [`R_PPC64_*`](https://tip.golang.org/pkg/debug/elf/#R_PPC64) constants are defined for use with PPC64 ELFv2 relocations.The constant value for [`R_PPC64_SECTOFF_LO_DS`](https://tip.golang.org/pkg/debug/elf/#R_PPC64_SECTOFF_LO_DS) is corrected, from 61 to 62.
-
-- [debug/gosym](https://tip.golang.org/pkg/debug/gosym/)
-
-  Due to a change of [Go's symbol naming conventions](https://tip.golang.org/doc/go1.20#linker), tools that process Go binaries should use Go 1.20's `debug/gosym` package to transparently handle both old and new binaries.
-
-- [debug/pe](https://tip.golang.org/pkg/debug/pe/)
-
-  Additional [`IMAGE_FILE_MACHINE_RISCV*`](https://tip.golang.org/pkg/debug/pe/#IMAGE_FILE_MACHINE_RISCV128) constants are defined for use with RISC-V systems.
+  新增了 [`Clone`](https://tip.golang.org/pkg/bytes/#Clone) 函数，会创建一个byte slice的拷贝。
 
 - [encoding/binary](https://tip.golang.org/pkg/encoding/binary/)
 
-  The [`ReadVarint`](https://tip.golang.org/pkg/encoding/binary/#ReadVarint) and [`ReadUvarint`](https://tip.golang.org/pkg/encoding/binary/#ReadUvarint) functions will now return `io.ErrUnexpectedEOF` after reading a partial value, rather than `io.EOF`.
-
-- [encoding/xml](https://tip.golang.org/pkg/encoding/xml/)
-
-  The new [`Encoder.Close`](https://tip.golang.org/pkg/encoding/xml/#Encoder.Close) method can be used to check for unclosed elements when finished encoding.The decoder now rejects element and attribute names with more than one colon, such as `<a:b:c>`, as well as namespaces that resolve to an empty string, such as `xmlns:a=""`.The decoder now rejects elements that use different namespace prefixes in the opening and closing tag, even if those prefixes both denote the same namespace.
+   [`ReadVarint`](https://tip.golang.org/pkg/encoding/binary/#ReadVarint) 和 [`ReadUvarint`](https://tip.golang.org/pkg/encoding/binary/#ReadUvarint)函数如果读的数据的值被损坏，比如只写了一部分内容，会返回 `io.ErrUnexpectedEOF`，而不是像之前返回`io.EOF`。
 
 - [errors](https://tip.golang.org/pkg/errors/)
 
-  The new [`Join`](https://tip.golang.org/pkg/errors/#Join) function returns an error wrapping a list of errors.
+  新的 [`Join`](https://tip.golang.org/pkg/errors/#Join) 函数可以封装多个error变量，返回一个新的error变量。
 
 - [fmt](https://tip.golang.org/pkg/fmt/)
 
+  
+
   The [`Errorf`](https://tip.golang.org/pkg/fmt/#Errorf) function supports multiple occurrences of the `%w` format verb, returning an error that unwraps to the list of all arguments to `%w`.The new [`FormatString`](https://tip.golang.org/pkg/fmt/#FormatString) function recovers the formatting directive corresponding to a [`State`](https://tip.golang.org/pkg/fmt/#State), which can be useful in [`Formatter`](https://tip.golang.org/pkg/fmt/#Formatter). implementations.
-
-- [go/ast](https://tip.golang.org/pkg/go/ast/)
-
-  The new [`RangeStmt.Range`](https://tip.golang.org/pkg/go/ast/#RangeStmt.Range) field records the position of the `range` keyword in a range statement.The new [`File.FileStart`](https://tip.golang.org/pkg/go/ast/#File.FileStart) and [`File.FileEnd`](https://tip.golang.org/pkg/go/ast/#File.FileEnd) fields record the position of the start and end of the entire source file.
-
-- [go/token](https://tip.golang.org/pkg/go/token/)
-
-  The new [`FileSet.RemoveFile`](https://tip.golang.org/pkg/go/token/#FileSet.RemoveFile) method removes a file from a `FileSet`. Long-running programs can use this to release memory associated with files they no longer need.
-
-- [go/types](https://tip.golang.org/pkg/go/types/)
-
-  The new [`Satisfies`](https://tip.golang.org/pkg/go/types/#Satisfies) function reports whether a type satisfies a constraint. This change aligns with the [new language semantics](https://tip.golang.org/doc/go1.20#language) that distinguish satisfying a constraint from implementing an interface.
-
-- [io](https://tip.golang.org/pkg/io/)
-
-  The new [`OffsetWriter`](https://tip.golang.org/pkg/io/#OffsetWriter) wraps an underlying [`WriterAt`](https://tip.golang.org/pkg/io/#WriterAt) and provides `Seek`, `Write`, and `WriteAt` methods that adjust their effective file offset position by a fixed amount.
-
-- [io/fs](https://tip.golang.org/pkg/io/fs/)
-
-  The new error [`SkipAll`](https://tip.golang.org/pkg/io/fs/#SkipAll) terminates a [`WalkDir`](https://tip.golang.org/pkg/io/fs/#WalkDir) immediately but successfully.
 
 - [math/rand](https://tip.golang.org/pkg/math/rand/)
 
