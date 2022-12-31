@@ -130,31 +130,35 @@ proxyHandler := &httputil.ReverseProxy{
 
 - [errors](https://tip.golang.org/pkg/errors/)
 
-  新的 [`Join`](https://tip.golang.org/pkg/errors/#Join) 函数可以封装多个error变量，返回一个新的error变量。
+  新的 `Join`函数可以把多个error变量的值组合在一起，封装为一个新的error变量。
 
 - [fmt](https://tip.golang.org/pkg/fmt/)
 
-  
-
-  The [`Errorf`](https://tip.golang.org/pkg/fmt/#Errorf) function supports multiple occurrences of the `%w` format verb, returning an error that unwraps to the list of all arguments to `%w`.The new [`FormatString`](https://tip.golang.org/pkg/fmt/#FormatString) function recovers the formatting directive corresponding to a [`State`](https://tip.golang.org/pkg/fmt/#State), which can be useful in [`Formatter`](https://tip.golang.org/pkg/fmt/#Formatter). implementations.
+  `Errorf`支持`%w`格式化字符串，可以返回一个实现了Unwrap方法的error类型变量。
 
 - [strings](https://tip.golang.org/pkg/strings/)
 
-  The new [`CutPrefix`](https://tip.golang.org/pkg/bytes/#CutPrefix) and [`CutSuffix`](https://tip.golang.org/pkg/bytes/#CutSuffix) functions are like [`TrimPrefix`](https://tip.golang.org/pkg/bytes/#TrimPrefix) and [`TrimSuffix`](https://tip.golang.org/pkg/bytes/#TrimSuffix) but also report whether the string was trimmed.The new [`Clone`](https://tip.golang.org/pkg/strings/#Clone) function allocates a copy of a string.
+  新增了`CutPrefix`和 `CutSuffix`函数，这2个函数功能上类似 `TrimPrefix`和`TrimSuffix` ，但是还会返回一个bool类型的变量，表示这个string是否被修改了。
+
+  新增了 `Clone`函数，会创建一个string的拷贝。
 
 - [sync](https://tip.golang.org/pkg/sync/)
 
-  The new [`Map`](https://tip.golang.org/pkg/sync/#Map) methods [`Swap`](https://tip.golang.org/pkg/sync/#Map.Swap), [`CompareAndSwap`](https://tip.golang.org/pkg/sync/#Map.CompareAndSwap), and [`CompareAndDelete`](https://tip.golang.org/pkg/sync/#Map.CompareAndDelete) allow existing map entries to be updated atomically.
+   [`Map`](https://tip.golang.org/pkg/sync/#Map) 类型新增了3个新方法： [`Swap`](https://tip.golang.org/pkg/sync/#Map.Swap)， [`CompareAndSwap`](https://tip.golang.org/pkg/sync/#Map.CompareAndSwap) 和[`CompareAndDelete`](https://tip.golang.org/pkg/sync/#Map.CompareAndDelete) ，允许对已有的map做原子更新。
 
 - [testing](https://tip.golang.org/pkg/testing/)
 
-  The new method [`B.Elapsed`](https://tip.golang.org/pkg/testing/#B.Elapsed) reports the current elapsed time of the benchmark, which may be useful for calculating rates to report with `ReportMetric`.
+  新增了[`B.Elapsed`](https://tip.golang.org/pkg/testing/#B.Elapsed) 方法，可以返回当前的benchmark性能测试耗时了多久。
 
 - [time](https://tip.golang.org/pkg/time/)
 
-  The new time layout constants [`DateTime`](https://tip.golang.org/pkg/time/#DateTime), [`DateOnly`](https://tip.golang.org/pkg/time/#DateOnly), and [`TimeOnly`](https://tip.golang.org/pkg/time/#TimeOnly) provide names for three of the most common layout strings used in a survey of public Go source code.The new [`Time.Compare`](https://tip.golang.org/pkg/time/#Time.Compare) method compares two times.[`Parse`](https://tip.golang.org/pkg/time/#Parse) now ignores sub-nanosecond precision in its input, instead of reporting those digits as an error.The [`Time.MarshalJSON`](https://tip.golang.org/pkg/time/#Time.MarshalJSON) and [`Time.UnmarshalJSON`](https://tip.golang.org/pkg/time/#Time.UnmarshalJSON) methods are now more strict about adherence to RFC 3339.
+  新增了3个常量`DateTime`， `DateOnly`和`TimeOnly`，方便开发者做格式转换，不用在代码里写死"2006-01-02 15:04:05"。
 
 ## 总结
+
+Go 1.20版本即将在2023年2月份发布。
+
+总体而言，Go 1.20版本没有大的修改，主要在细节方面做了各种优化。
 
 
 
