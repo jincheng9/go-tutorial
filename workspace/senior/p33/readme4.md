@@ -27,33 +27,66 @@ $ go1.20rc1 download
 
 本文重点介绍Go 1.20在核心库方面的优化。
 
-### New crypto/ecdh package
+### crypto/ecdh
 
-Go 1.20 adds a new [`crypto/ecdh`](https://tip.golang.org/pkg/crypto/ecdh/) package to provide direct support for Elliptic Curve Diffie-Hellman key exchange over NIST curves and Curve25519.
+Go 1.20新增了 [`crypto/ecdh`](https://tip.golang.org/pkg/crypto/ecdh/) 这个package，`ecdh`实现了Elliptic Curve Diffie-Hellman这个新的加密算法。
 
-Programs should prefer to use `crypto/ecdh` or [`crypto/ecdsa`](https://tip.golang.org/pkg/crypto/ecdsa/) instead of the lower-level functionality in [`crypto/elliptic`](https://tip.golang.org/pkg/crypto/elliptic/).
+### 封装多个error
 
-### Wrapping multiple errors
+Go 1.20允许一个error变量里封装多个error。
 
-Go 1.20 expands support for error wrapping to permit an error to wrap multiple other errors.
+```go
+package main
 
-An error `e` can wrap more than one error by providing an `Unwrap` method that returns a `[]error`.
+import (
+	"errors"
+	"fmt"
+)
 
-The [`errors.Is`](https://tip.golang.org/pkg/errors/#Is) and [`errors.As`](https://tip.golang.org/pkg/errors/#As) functions have been updated to inspect multiply wrapped errors.
+func main() {
+	err1 := errors.New("err1")
+	err2 := errors.New("err2")
+	err := errors.Join(err1, err2)
+	fmt.Printf("%T, %v\n", err, err)
+	if errors.Is(err, err1) {
+		fmt.Println("err is err1")
+	}
+	if errors.Is(err, err2) {
+		fmt.Println("err is err2")
+	}
+	err3 := fmt.Errorf("error3: %w", err)
+	fmt.Printf("%T, %v\n", err3, errors.Unwrap(err3))
+	if errors.Is(err3, err1) {
+		fmt.Println("err3 is err1")
+	}
+	if errors.Is(err3, err2) {
+		fmt.Println("err3 is err2")
+	}
+}
+```
 
-The [`fmt.Errorf`](https://tip.golang.org/pkg/fmt/#Errorf) function now supports multiple occurrances of the `%w` format verb, which will cause it to return an error that wraps all of those error operands.
+这段程序的输出结果为：
 
-The new function [`errors.Join`](https://tip.golang.org/pkg/errors/#Join) returns an error wrapping a list of errors.
+```bash
+*errors.joinError, err1
+err2
+err is err1
+err is err2
+*fmt.wrapError, err1
+err2
+err3 is err1
+err3 is err2
+```
+
+详情可以参考：https://pkg.go.dev/errors@master#pkg-overview
+
+`fmt.Errorf`里带有`%w`参数，就会返回一个实现了Unwrap方法的error类型的变量。
 
 ### HTTP ResponseController
 
-The new [`"net/http".ResponseController`](https://tip.golang.org/pkg/net/http/#ResponseController) type provides access to extended per-request functionality not handled by the [`"net/http".ResponseWriter`](https://tip.golang.org/pkg/net/http/#ResponseWriter) interface.
+`net/http`这个package新增了名为`ResponseController`的新类型。
 
-Previously, we have added new per-request functionality by defining optional interfaces which a `ResponseWriter` can implement, such as [`Flusher`](https://tip.golang.org/pkg/net/http/#Flusher). These interfaces are not discoverable and clumsy to use.
-
-The `ResponseController` type provides a clearer, more discoverable way to add per-handler controls. Two such controls also added in Go 1.20 are `SetReadDeadline` and `SetWriteDeadline`, which allow setting per-request read and write deadlines. For example:
-
-```
+```go
 func RequestHandler(w ResponseWriter, r *Request) {
   rc := http.NewResponseController(w)
   rc.SetWriteDeadline(0) // disable Server.WriteTimeout when sending a large response
@@ -61,7 +94,15 @@ func RequestHandler(w ResponseWriter, r *Request) {
 }
 ```
 
+> A ResponseController is used by an HTTP handler to control the response.
+>
+> A ResponseController may not be used after the Handler.ServeHTTP method has returned.
+
+详情可以参考：https://pkg.go.dev/net/http@master#ResponseController。
+
 ### New ReverseProxy Rewrite hook
+
+
 
 The [`httputil.ReverseProxy`](https://tip.golang.org/pkg/net/http/httputil/#ReverseProxy) forwarding proxy includes a new [`Rewrite`](https://tip.golang.org/pkg/net/http/httputil/#ReverseProxy.Rewrite) hook function, superseding the previous `Director` hook.
 
