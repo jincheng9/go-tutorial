@@ -100,21 +100,11 @@ func RequestHandler(w ResponseWriter, r *Request) {
 
 详情可以参考：https://pkg.go.dev/net/http@master#ResponseController。
 
-### New ReverseProxy Rewrite hook
+### Rewrite钩子函数
 
+ [`httputil.ReverseProxy`](https://tip.golang.org/pkg/net/http/httputil/#ReverseProxy) 类型新增了一个 [`Rewrite`](https://tip.golang.org/pkg/net/http/httputil/#ReverseProxy.Rewrite) 方法，这是一个钩子函数，用来取代之前的`Director`钩子函数。
 
-
-The [`httputil.ReverseProxy`](https://tip.golang.org/pkg/net/http/httputil/#ReverseProxy) forwarding proxy includes a new [`Rewrite`](https://tip.golang.org/pkg/net/http/httputil/#ReverseProxy.Rewrite) hook function, superseding the previous `Director` hook.
-
-The `Rewrite` hook accepts a [`ProxyRequest`](https://tip.golang.org/pkg/net/http/httputil/#ProxyRequest) parameter, which includes both the inbound request received by the proxy and the outbound request that it will send. Unlike `Director` hooks, which only operate on the outbound request, this permits `Rewrite` hooks to avoid certain scenarios where a malicious inbound request may cause headers added by the hook to be removed before forwarding. See [issue #50580](https://go.dev/issue/50580).
-
-The [`ProxyRequest.SetURL`](https://tip.golang.org/pkg/net/http/httputil/#ProxyRequest.SetURL) method routes the outbound request to a provided destination and supersedes the `NewSingleHostReverseProxy` function. Unlike `NewSingleHostReverseProxy`, `SetURL` also sets the `Host` header of the outbound request.
-
-The [`ProxyRequest.SetXForwarded`](https://tip.golang.org/pkg/net/http/httputil/#ProxyRequest.SetXForwarded) method sets the `X-Forwarded-For`, `X-Forwarded-Host`, and `X-Forwarded-Proto` headers of the outbound request. When using a `Rewrite`, these headers are not added by default.
-
-An example of a `Rewrite` hook using these features is:
-
-```
+```go
 proxyHandler := &httputil.ReverseProxy{
   Rewrite: func(r *httputil.ProxyRequest) {
     r.SetURL(outboundURL) // Forward request to outboundURL.
@@ -124,11 +114,9 @@ proxyHandler := &httputil.ReverseProxy{
 }
 ```
 
-[`ReverseProxy`](https://tip.golang.org/pkg/net/http/httputil/#ReverseProxy) no longer adds a `User-Agent` header to forwarded requests when the incoming request does not have one.
+详情可以参考：https://pkg.go.dev/net/http/httputil@master#ReverseProxy.Rewrite。
 
-### Minor changes to the library
-
-As always, there are various minor changes and updates to the library, made with the Go 1 [promise of compatibility](https://tip.golang.org/doc/go1compat) in mind. There are also various performance improvements, not enumerated here.
+### 标准库的修改
 
 - [archive/tar](https://tip.golang.org/pkg/archive/tar/)
 
