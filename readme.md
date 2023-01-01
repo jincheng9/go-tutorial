@@ -120,7 +120,8 @@
   * [第13篇：init函数的常见错误和最佳实践](./workspace/senior/p28/13-go-package-init-function.md)
   * [第14篇：过度使用getter和setter方法](./workspace/senior/p28/14-go-overuse-getter-setter.md)
   * [第15篇：interface使用的常见错误和最佳实践](./workspace/senior/p28/15-go-interface-pollution.md)
-
+  * [第16篇：any关键字的常见错误和最佳实践](./workspace/senior/p28/16-any-keyword.md)
+  
 * 高性能Go
   * [high performance go workshop](https://dave.cheney.net/high-performance-go-workshop/dotgo-paris.html)
 
