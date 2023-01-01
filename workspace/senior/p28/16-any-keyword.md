@@ -67,7 +67,7 @@ s := store.Store{}
 s.Set("foo", 42)
 ```
 
-[copy](javascript:void(0))
+
 
 By using any, we lose some of the benefits of Go as a statically typed language. Instead, we should avoid any types and make our signatures explicit as much as possible. Regarding our example, this could mean duplicating the Get and Set methods per type:
 
