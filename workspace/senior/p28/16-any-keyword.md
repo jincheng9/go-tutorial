@@ -1,8 +1,8 @@
-# Go常见错误第16篇：any关键字的常见错误和最佳实践
+# Go常见错误第16篇：any的常见错误和最佳实践
 
 ## 前言
 
-这是Go常见错误系列的第16篇：any关键字的常见错误和最佳实践。
+这是Go常见错误系列的第16篇：any的常见错误和最佳实践。
 
 素材来源于Go布道者，现Docker公司资深工程师[Teiva Harsanyi](https://teivah.github.io/)。
 
@@ -12,11 +12,13 @@
 
 ## 常见错误和最佳实践
 
-In Go, an interface type that specifies zero methods is known as the empty interface, interface{}. With Go 1.18, the predeclared type any became an alias for an empty interface; hence, all the interface{} occurrences can be replaced by any. In many cases, any can be considered an overgeneralization; and as mentioned by Rob Pike, it doesn’t convey anything (https://www.youtube.com/watch?v=PAAkCSZUG1c&t=7m36s). Let’s first remind ourselves of the core concepts, and then we can discuss the potential problems.
+Go语言中，没有方法的接口类型是空接口，也就是大家熟知的`interface{}`。
 
-An any type can hold any value type:
+从Go 1.18开始，定义了一个预声明标识符(Predeclared identifiers)：any。
 
-```
+any实际上是空接口的别名，所以任何用了`interface{}`的地方都可以把`interface{}` 替换为any。
+
+```go
 func main() {
     var i any
  
@@ -35,11 +37,17 @@ func main() {
 func f() {}
 ```
 
+很多场景里，如果直接用any，会带来代码的过度抽象。
+
+Rob Pike在[Gopherfest 2015]((https://www.youtube.com/watch?v=PAAkCSZUG1c&t=7m36s))上，曾经分享过他的观点：
+
+> interface{} says nothing.
+
 
 
 In assigning a value to an any type, we lose all type information, which requires a type assertion to get anything useful out of the i variable, as in the previous example. Let’s look at another example, where using any isn’t accurate. In the following, we implement a Store struct and the skeleton of two methods, Get and Set. We use these methods to store the different struct types, Customer and Contract:
 
-```
+```go
 package store
  
 type Customer struct{
@@ -62,7 +70,7 @@ func (s *Store) Set(id string, v any) error {
 
 Although there is nothing wrong with Store compilation-wise, we should take a minute to think about the method signatures. Because we accept and return any arguments, the methods lack expressiveness. If future developers need to use the Store struct, they will probably have to dig into the documentation or read the code to understand how to use these methods. Hence, accepting or returning an any type doesn’t convey meaningful information. Also, because there is no safeguard at compile time, nothing prevents a caller from calling these methods with whatever data type, such as an int:
 
-```
+```go
 s := store.Store{}
 s.Set("foo", 42)
 ```
@@ -71,7 +79,7 @@ s.Set("foo", 42)
 
 By using any, we lose some of the benefits of Go as a statically typed language. Instead, we should avoid any types and make our signatures explicit as much as possible. Regarding our example, this could mean duplicating the Get and Set methods per type:
 
-```
+```go
 func (s *Store) GetContract(id string) (Contract, error) {
     // ...
 }
@@ -93,7 +101,7 @@ func (s *Store) SetCustomer(id string, customer Customer) error {
 
 In this version, the methods are expressive, reducing the risk of incomprehension. Having more methods isn’t necessarily a problem because clients can also create their own abstraction using an interface. For example, if a client is interested only in the Contract methods, it could write something like this:
 
-```
+```go
 type ContractStorer interface {
     GetContract(id string) (store.Contract, error)
     SetContract(id string, contract store.Contract) error
@@ -104,7 +112,7 @@ type ContractStorer interface {
 
 What are the cases when any is helpful? Let’s take a look at the standard library and see two examples where functions or methods accept any arguments. The first example is in the encoding/json package. Because we can marshal any type, the Marshal function accepts an any argument:
 
-```
+```go
 func Marshal(v any) ([]byte, error) {
     // ...
 }
@@ -114,7 +122,7 @@ func Marshal(v any) ([]byte, error) {
 
 Another example is in the database/sql package. If the query is parameterized (for example, SELECT * FROM FOO WHERE id = ?), the parameters could be any kind. Hence, it also uses any arguments:
 
-```
+```go
 func (c *Conn) QueryContext(ctx context.Context, query string,
     args ...any) (*Rows, error) {
     // ...
@@ -190,3 +198,5 @@ In summary, any can be helpful if there is a genuine need for accepting or retur
 ## References
 
 * https://livebook.manning.com/book/100-go-mistakes-how-to-avoid-them/chapter-2/
+* https://go.dev/ref/spec#Predeclared_identifiers
+* https://go101.org/article/keywords-and-identifiers.html#:~:text=Keywords%20are%20the%20special%20words,understand%20and%20parse%20user%20code.&text=They%20can%20be%20categorized%20as,code%20elements%20in%20Go%20programs.
