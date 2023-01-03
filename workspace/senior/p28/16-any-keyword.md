@@ -45,7 +45,11 @@ Rob Pike在[Gopherfest 2015]((https://www.youtube.com/watch?v=PAAkCSZUG1c&t=7m36
 
 
 
-In assigning a value to an any type, we lose all type information, which requires a type assertion to get anything useful out of the i variable, as in the previous example. Let’s look at another example, where using any isn’t accurate. In the following, we implement a Store struct and the skeleton of two methods, Get and Set. We use these methods to store the different struct types, Customer and Contract:
+In assigning a value to an any type, we lose all type information, which requires a type assertion to get anything useful out of the i variable, as in the previous example.
+
+Let’s look at another example, where using any isn’t accurate. 
+
+In the following, we implement a Store struct and the skeleton of two methods, Get and Set. We use these methods to store the different struct types, Customer and Contract:
 
 ```go
 package store
@@ -68,7 +72,13 @@ func (s *Store) Set(id string, v any) error {
 }
 ```
 
-Although there is nothing wrong with Store compilation-wise, we should take a minute to think about the method signatures. Because we accept and return any arguments, the methods lack expressiveness. If future developers need to use the Store struct, they will probably have to dig into the documentation or read the code to understand how to use these methods. Hence, accepting or returning an any type doesn’t convey meaningful information. Also, because there is no safeguard at compile time, nothing prevents a caller from calling these methods with whatever data type, such as an int:
+Although there is nothing wrong with Store compilation-wise, we should take a minute to think about the method signatures. Because we accept and return any arguments, the methods lack expressiveness. 
+
+If future developers need to use the Store struct, they will probably have to dig into the documentation or read the code to understand how to use these methods. 
+
+Hence, accepting or returning an any type doesn’t convey meaningful information. 
+
+Also, because there is no safeguard at compile time, nothing prevents a caller from calling these methods with whatever data type, such as an int:
 
 ```go
 s := store.Store{}
@@ -77,7 +87,11 @@ s.Set("foo", 42)
 
 
 
-By using any, we lose some of the benefits of Go as a statically typed language. Instead, we should avoid any types and make our signatures explicit as much as possible. Regarding our example, this could mean duplicating the Get and Set methods per type:
+By using any, we lose some of the benefits of Go as a statically typed language. 
+
+Instead, we should avoid any types and make our signatures explicit as much as possible. 
+
+Regarding our example, this could mean duplicating the Get and Set methods per type:
 
 ```go
 func (s *Store) GetContract(id string) (Contract, error) {
@@ -99,7 +113,11 @@ func (s *Store) SetCustomer(id string, customer Customer) error {
 
 
 
-In this version, the methods are expressive, reducing the risk of incomprehension. Having more methods isn’t necessarily a problem because clients can also create their own abstraction using an interface. For example, if a client is interested only in the Contract methods, it could write something like this:
+In this version, the methods are expressive, reducing the risk of incomprehension. 
+
+Having more methods isn’t necessarily a problem because clients can also create their own abstraction using an interface. 
+
+For example, if a client is interested only in the Contract methods, it could write something like this:
 
 ```go
 type ContractStorer interface {
@@ -110,7 +128,11 @@ type ContractStorer interface {
 
 
 
-What are the cases when any is helpful? Let’s take a look at the standard library and see two examples where functions or methods accept any arguments. The first example is in the encoding/json package. Because we can marshal any type, the Marshal function accepts an any argument:
+What are the cases when any is helpful? 
+
+Let’s take a look at the standard library and see two examples where functions or methods accept any arguments. 
+
+The first example is in the encoding/json package. Because we can marshal any type, the Marshal function accepts an any argument:
 
 ```go
 func Marshal(v any) ([]byte, error) {
@@ -120,7 +142,11 @@ func Marshal(v any) ([]byte, error) {
 
 
 
-Another example is in the database/sql package. If the query is parameterized (for example, SELECT * FROM FOO WHERE id = ?), the parameters could be any kind. Hence, it also uses any arguments:
+Another example is in the database/sql package. 
+
+If the query is parameterized (for example, SELECT * FROM FOO WHERE id = ?), the parameters could be any kind. 
+
+Hence, it also uses any arguments:
 
 ```go
 func (c *Conn) QueryContext(ctx context.Context, query string,
@@ -131,7 +157,11 @@ func (c *Conn) QueryContext(ctx context.Context, query string,
 
 
 
-In summary, any can be helpful if there is a genuine need for accepting or returning any possible type (for instance, when it comes to marshaling or formatting). In general, we should avoid overgeneralizing the code we write at all costs. Perhaps a little bit of duplicated code might occasionally be better if it improves other aspects such as code expressiveness.
+In summary, any can be helpful if there is a genuine need for accepting or returning any possible type (for instance, when it comes to marshaling or formatting). 
+
+In general, we should avoid overgeneralizing the code we write at all costs. 
+
+Perhaps a little bit of duplicated code might occasionally be better if it improves other aspects such as code expressiveness.
 
 ## 总结
 
