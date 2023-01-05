@@ -45,9 +45,35 @@ Rob Pike在[Gopherfest 2015]((https://www.youtube.com/watch?v=PAAkCSZUG1c&t=7m36
 
 
 
-In assigning a value to an any type, we lose all type information, which requires a type assertion to get anything useful out of the i variable, as in the previous example.
+### 常见错误
 
-Let’s look at another example, where using any isn’t accurate. 
+给any类型的变量赋值的时候，我们其实失去了所有类型信息，需要依赖类型断言(type assertion)来获取类型信息。
+
+类型断言即`t, ok := i.(T)`，代码示例如下所示：
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+	var i interface{} = "hello"
+
+	s := i.(string)
+	fmt.Println(s)
+
+	s, ok := i.(string)
+	fmt.Println(s, ok)
+
+	f, ok := i.(float64)
+	fmt.Println(f, ok)
+
+	f = i.(float64) // panic
+	fmt.Println(f)
+}
+```
+
+我们看看下面这个例子，体会下使用any带来的问题。
 
 In the following, we implement a Store struct and the skeleton of two methods, Get and Set. We use these methods to store the different struct types, Customer and Contract:
 
@@ -127,6 +153,8 @@ type ContractStorer interface {
 ```
 
 
+
+### 最佳实践
 
 What are the cases when any is helpful? 
 
