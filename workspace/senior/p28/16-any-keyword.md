@@ -49,7 +49,7 @@ Rob Pike在[Gopherfest 2015]((https://www.youtube.com/watch?v=PAAkCSZUG1c&t=7m36
 
 给any类型的变量赋值的时候，我们其实失去了所有类型信息，需要依赖类型断言(type assertion)来获取类型信息。
 
-类型断言即`t, ok := i.(T)`，代码示例如下所示：
+[类型断言](https://go.dev/tour/methods/15)即`t, ok := i.(T)`，代码示例如下所示：
 
 ```go
 package main
