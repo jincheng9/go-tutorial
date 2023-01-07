@@ -39,7 +39,7 @@ func f() {}
 
 很多场景里，如果直接用any，会带来代码的过度抽象。
 
-Rob Pike在[Gopherfest 2015]((https://www.youtube.com/watch?v=PAAkCSZUG1c&t=7m36s))上，曾经分享过他的观点：
+Rob Pike在[Gopherfest 2015](https://www.youtube.com/watch?v=PAAkCSZUG1c&t=7m36s)上，曾经分享过他的观点：
 
 > interface{} says nothing.
 
@@ -96,15 +96,15 @@ func (s *Store) Set(id string, v any) error {
 }
 ```
 
-这段代码里，我们定义了一个Store结构体，这个结构体有2个方法Get和Set，可以用来设置和获取任意类型的结构体变量。
+这段代码里，我们定义了一个Store结构体，这个结构体有2个方法Get和Set，可以用来设置和获取Customer和Contract这2个结构体类型的变量。
 
 示例代码计划用Get和Set方法来设置和查询Customer结构体和Contract结构体。
 
-Get和Set由于要存储任意类型的结构体变量，所以Set方法的第2个参数是any，Get方法返回的第一个返回值为any类型。
+Get和Set方法虽然只存储Customer和Contrac这2个结构体类型，但是使用了any作为方法参数和方法返回值类型。
 
-如果一个开发者只是看到函数签名里参数和返回值为any，可能以为可以存储任何类型，比如int。
+如果一个开发者只是看到函数签名里参数和返回值为any，会很容易误以为可以存储和查询任何类型的变量，比如int。
 
-但实际上Get和Set方法的实现只是为了服务于Customer和Contrat结构体。
+但实际上Get和Set方法的实现只是为了服务于Customer和Contract结构体。
 
 这就是any类型带来的问题，因为隐藏了类型信息，开发者看到any要特别留意，仔细阅读代码和文档，才能避免出错。
 
