@@ -75,8 +75,6 @@ func main() {
 
 我们看看下面这个例子，体会下使用any带来的问题。
 
-In the following, we implement a Store struct and the skeleton of two methods, Get and Set. We use these methods to store the different struct types, Customer and Contract:
-
 ```go
 package store
  
@@ -98,26 +96,30 @@ func (s *Store) Set(id string, v any) error {
 }
 ```
 
-Although there is nothing wrong with Store compilation-wise, we should take a minute to think about the method signatures. Because we accept and return any arguments, the methods lack expressiveness. 
+这段代码里，我们定义了一个Store结构体，这个结构体有2个方法Get和Set，可以用来设置和获取任意类型的结构体变量。
 
-If future developers need to use the Store struct, they will probably have to dig into the documentation or read the code to understand how to use these methods. 
+示例代码计划用Get和Set方法来设置和查询Customer结构体和Contract结构体。
 
-Hence, accepting or returning an any type doesn’t convey meaningful information. 
+Get和Set由于要存储任意类型的结构体变量，所以Set方法的第2个参数是any，Get方法返回的第一个返回值为any类型。
 
-Also, because there is no safeguard at compile time, nothing prevents a caller from calling these methods with whatever data type, such as an int:
+如果一个开发者只是看到函数签名里参数和返回值为any，可能以为可以存储任何类型，比如int。
+
+但实际上Get和Set方法的实现只是为了服务于Customer和Contrat结构体。
+
+这就是any类型带来的问题，因为隐藏了类型信息，开发者看到any要特别留意，仔细阅读代码和文档，才能避免出错。
+
+比如有的开发者可能出现以下误用的情况：
 
 ```go
 s := store.Store{}
 s.Set("foo", 42)
 ```
 
+Set的第2个参数虽然是any，但实际是要存储Customer和Contract类型的结构体，但由于参数为any，有的开发者可能就会直接存一个int类型，那就和代码设计的预期不符。
 
+使用any会丢失类型信息，Go作为静态类型语言的优势就被影响了。
 
-By using any, we lose some of the benefits of Go as a statically typed language. 
-
-Instead, we should avoid any types and make our signatures explicit as much as possible. 
-
-Regarding our example, this could mean duplicating the Get and Set methods per type:
+如下代码，其实是更好的设计。看代码一目了然，很方便知道每个方法存储和查询的是什么类型的结构体。
 
 ```go
 func (s *Store) GetContract(id string) (Contract, error) {
@@ -137,63 +139,36 @@ func (s *Store) SetCustomer(id string, customer Customer) error {
 }
 ```
 
-
-
-In this version, the methods are expressive, reducing the risk of incomprehension. 
-
-Having more methods isn’t necessarily a problem because clients can also create their own abstraction using an interface. 
-
-For example, if a client is interested only in the Contract methods, it could write something like this:
-
-```go
-type ContractStorer interface {
-    GetContract(id string) (store.Contract, error)
-    SetContract(id string, contract store.Contract) error
-}
-```
-
-
-
 ### 最佳实践
 
-What are the cases when any is helpful? 
+any当然也不是一无是处，我们来看看Go标准库里的以下几个关于any的使用场景。
 
-Let’s take a look at the standard library and see two examples where functions or methods accept any arguments. 
+* 第一个例子是encoding/json这个package里的Marshal函数。
 
-The first example is in the encoding/json package. Because we can marshal any type, the Marshal function accepts an any argument:
+  因为Marshal函数可以操作任何类型，所以参数类型为any。
 
-```go
-func Marshal(v any) ([]byte, error) {
-    // ...
-}
-```
+  ```go
+  func Marshal(v any) ([]byte, error) {
+      // ...
+  }
+  ```
 
+* 第二个例子是database/sql包里的QueryContext方法。
 
+  如果这个方法的第2个query参数是格式化字符串，比如`SELECT * FROM FOO WHERE id = ?`，由于查询语句里`?`的值其实可以是任何类型，所以后面的args参数是any类型。
 
-Another example is in the database/sql package. 
-
-If the query is parameterized (for example, SELECT * FROM FOO WHERE id = ?), the parameters could be any kind. 
-
-Hence, it also uses any arguments:
-
-```go
-func (c *Conn) QueryContext(ctx context.Context, query string,
-    args ...any) (*Rows, error) {
-    // ...
-}
-```
-
-
-
-In summary, any can be helpful if there is a genuine need for accepting or returning any possible type (for instance, when it comes to marshaling or formatting). 
-
-In general, we should avoid overgeneralizing the code we write at all costs. 
-
-Perhaps a little bit of duplicated code might occasionally be better if it improves other aspects such as code expressiveness.
+  ```go
+  func (c *Conn) QueryContext(ctx context.Context, query string,
+      args ...any) (*Rows, error) {
+      // ...
+  }
+  ```
 
 ## 总结
 
+如果具体的使用场景的确是适合任意类型，那可以使用any。
 
+但通常而言，为了代码的易读性和可维护性，我们应该避免过度抽象我们的代码
 
 
 
@@ -228,6 +203,8 @@ Perhaps a little bit of duplicated code might occasionally be better if it impro
 * [Go常见错误第13篇：init函数的常见错误和最佳实践](https://mp.weixin.qq.com/s?__biz=Mzg2MTcwNjc1Mg==&mid=2247484553&idx=1&sn=a4de11c452157193ae4381ab3555c42c&chksm=ce124be6f965c2f0885b8acf21c867e82d09807eba7be7890c54c01acf2b6fc413267e90d371&token=2029492652&lang=zh_CN#rd)
 
 * [Go常见错误第14篇：过度使用getter和setter方法 ](https://mp.weixin.qq.com/s?__biz=Mzg2MTcwNjc1Mg==&mid=2247484568&idx=1&sn=2f078aa6561093691b4aeae58de44830&chksm=ce124bf7f965c2e17b99896393dfb684d5868156ea4e0b324bc86e2dcc596ea55d5e6c562c29&token=1629431500&lang=zh_CN#rd)
+
+* [Go常见错误第15篇：interface使用的常见错误和最佳实践](https://mp.weixin.qq.com/s?__biz=Mzg2MTcwNjc1Mg==&mid=2247484589&idx=1&sn=0e0e71b71e6f236349aff55fe3b32b9e&chksm=ce124bc2f965c2d44b6f5bf74fd704db1417f8af2a584ce009a683f7ddae5678a95b09c8388f&token=1258925621&lang=zh_CN#rd)
 
   
 
