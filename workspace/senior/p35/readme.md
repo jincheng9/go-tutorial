@@ -1,8 +1,8 @@
-# 一文读懂Go 1.21引入的PGO性能优化
+# 一文读懂Go 1.20引入的PGO性能优化
 
 ## 背景
 
-Go 1.21版本于2023年2月份正式发布，在这个版本里引入了PGO性能优化机制。
+Go 1.20版本于2023年2月份正式发布，在这个版本里引入了PGO性能优化机制。
 
 PGO的英文全称是Profile Guided Optimization，基本原理分为以下2个步骤：
 
@@ -140,6 +140,8 @@ $ curl -o cpu.pprof "http://localhost:8080/debug/pprof/profile?seconds=30"
 
 Once this completes, kill the load generator and the server.
 
+**注意**：要使用Go 1.20版本去编译和运行程序
+
 ### Using the profile
 
 We can ask the Go toolchain to build with PGO using the `-pgo` flag to `go build`. `-pgo` takes either the path to the profile to use, or `auto`, which will use the `default.pgo` file in the main package directory.
@@ -150,7 +152,7 @@ Let’s build:
 
 ```
 $ mv cpu.pprof default.pgo
-$ go build -pgo=auto -o markdown.withpgo.exe
+$ go build -pgo=auto -o markdown.withpgo
 ```
 
 ### Evaluation
@@ -160,25 +162,25 @@ We will use a Go benchmark version of the load generator to evaluate the effect 
 First, we will benchmark the server without PGO. Start that server:
 
 ```
-$ ./markdown.nopgo.exe
+$ ./markdown.nopgo
 ```
 
 While that is running, run several benchmark iterations:
 
 ```
-$ go test example.com/markdown/load -bench=. -count=20 -source ../README.md > nopgo.txt
+$ go test example.com/markdown/load -bench=. -count=20 -source ../input.md > nopgo.txt
 ```
 
 Once that completes, kill the original server and start the version with PGO:
 
 ```
-$ ./markdown.withpgo.exe
+$ ./markdown.withpgo
 ```
 
 While that is running, run several benchmark iterations:
 
 ```
-$ go test example.com/markdown/load -bench=. -count=20 -source ../README.md > withpgo.txt
+$ go test example.com/markdown/load -bench=. -count=20 -source ../input.md > withpgo.txt
 ```
 
 Once that completes, let’s compare the results:
