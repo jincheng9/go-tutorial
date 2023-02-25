@@ -140,7 +140,7 @@ $ curl -o cpu.pprof "http://localhost:8080/debug/pprof/profile?seconds=30"
 
 Once this completes, kill the load generator and the server.
 
-**注意**：要使用Go 1.20版本去编译和运行程序
+**注意**：要使用Go 1.20版本去编译和运行程序。
 
 ### Using the profile
 
@@ -199,13 +199,13 @@ Load-12   393.8µ ± 1%   383.6µ ± 1%  -2.59% (p=0.000 n=20)
 
 The new version is around 2.6% faster! In Go 1.20, workloads typically get between 2% and 4% CPU usage improvements from enabling PGO. Profiles contain a wealth of information about application behavior and Go 1.20 just begins to crack the surface by using this information for inlining. Future releases will continue improving performance as more parts of the compiler take advantage of PGO.
 
-## Next steps
+## 总结
 
 In this example, after collecting a profile, we rebuilt our server using the exact same source code used in the original build. In a real-world scenario, there is always ongoing development. So we may collect a profile from production, which is running last week’s code, and use it to build with today’s source code. That is perfectly fine! PGO in Go can handle minor changes to source code without issue.
 
 For much more information on using PGO, best practices and caveats to be aware of, please see the [profile-guided optimization user guide](https://go.dev/doc/pgo).
 
-Please send us your feedback! PGO is still in preview and we’d love to hear about anything that is difficult to use, doesn’t work correctly, etc. Please file issues at https://go.dev/issue/new.
+源代码地址：[pgo optimization source code](https://github.com/jincheng9/go-tutorial/tree/main/workspace/senior/p35)。
 
 ## 推荐阅读
 
