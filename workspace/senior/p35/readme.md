@@ -1,6 +1,15 @@
-# 一文读懂Go 1.21的PGO性能优化
+# 一文读懂Go 1.21引入的PGO性能优化
 
+## 背景
 
+Go 1.21版本于2023年2月份正式发布，在这个版本里引入了PGO性能优化机制。
+
+PGO的英文全称是Profile Guided Optimization，基本原理分为以下2个步骤：
+
+* 先对程序做profile，得到一个.pgo文件
+* 编译程序时启用pgo，编译器会根据.pgo文件里的内容对程序做性能优化
+
+## 实例
 
 
 
@@ -36,5 +45,4 @@
 
 ## References
 
-* https://twitter.com/go100and1
-* https://twitter.com/go100and1/status/1623546829773361152
+* https://go.dev/blog/pgo-preview

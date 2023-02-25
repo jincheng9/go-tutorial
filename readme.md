@@ -121,7 +121,7 @@
   * [第15篇：interface使用的常见错误和最佳实践](./workspace/senior/p28/15-go-interface-pollution.md)
   * [第16篇：any的常见错误和最佳实践](./workspace/senior/p28/16-any-keyword.md)
 * 高性能Go
-  * [Profile-guided Optimization使用讲解](./workspace/senior/p35)
+  * [一文读懂Go 1.21引入的PGO性能优化](./workspace/senior/p35)
   * [high performance go workshop](https://dave.cheney.net/high-performance-go-workshop/dotgo-paris.html)
   
 * Go安全
