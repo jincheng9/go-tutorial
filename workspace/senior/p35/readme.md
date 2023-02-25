@@ -29,18 +29,19 @@ PGO的原理很简单，那就是先把程序跑起来，收集程序运行过�
 
 ## 实例
 
-Let’s build a service that converts Markdown to HTML: users upload Markdown source to `/render`, which returns the HTML conversion. We can use [`gitlab.com/golang-commonmark/markdown`](https://pkg.go.dev/gitlab.com/golang-commonmark/markdown) to implement this easily.
+我们来实现一个web接口，该接口以markdown文件作为输入，将markdown格式转换为html格式返回。
 
-### Set up
+我们借助 [`gitlab.com/golang-commonmark/markdown`](https://pkg.go.dev/gitlab.com/golang-commonmark/markdown) 项目来实现该接口。
 
-```
+### 环境搭建
+
+```bash
 $ go mod init example.com/markdown
-$ go get gitlab.com/golang-commonmark/markdown@bf3e522c626a
 ```
 
-In `main.go`:
+新建一个 `main.go`文件，代码如下：
 
-```
+```go
 package main
 
 import (
@@ -96,10 +97,11 @@ func main() {
 
 Build and run the server:
 
-```
-$ go build -o markdown.nopgo.exe
-$ ./markdown.nopgo.exe
-2023/01/19 14:26:24 Serving on port 8080...
+```bash
+$ go mod tidy
+$ go build -o markdown.nopgo
+$ ./markdown.nopgo
+2023/02/25 22:30:51 Serving on port 8080...
 ```
 
 Let’s try sending some Markdown from another terminal. We can use the README from the Go project as a sample document:
