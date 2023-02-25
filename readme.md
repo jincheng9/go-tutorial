@@ -121,7 +121,9 @@
   * [第15篇：interface使用的常见错误和最佳实践](./workspace/senior/p28/15-go-interface-pollution.md)
   * [第16篇：any的常见错误和最佳实践](./workspace/senior/p28/16-any-keyword.md)
 * 高性能Go
+  * [Profile-guided Optimization使用讲解](./workspace/senior/p35)
   * [high performance go workshop](https://dave.cheney.net/high-performance-go-workshop/dotgo-paris.html)
+  
 * Go安全
   * [Go的全新安全漏洞检测工具govulncheck来了](./workspace/senior/p32/01-go-vulnerability-management.md)
 * Go版本演进
