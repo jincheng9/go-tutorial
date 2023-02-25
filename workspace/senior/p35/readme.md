@@ -29,7 +29,7 @@ PGO的原理很简单，那就是先把程序跑起来，收集程序运行过�
 
 ## 实例
 
-我们来实现一个web接口，该接口以markdown文件作为输入，将markdown格式转换为html格式返回。
+我们来实现一个web接口render，该接口以markdown文件作为输入，将markdown格式转换为html格式返回。
 
 我们借助 [`gitlab.com/golang-commonmark/markdown`](https://pkg.go.dev/gitlab.com/golang-commonmark/markdown) 项目来实现该接口。
 
@@ -95,7 +95,7 @@ func main() {
 }
 ```
 
-Build and run the server:
+编译和运行该程序：
 
 ```bash
 $ go mod tidy
@@ -104,16 +104,21 @@ $ ./markdown.nopgo
 2023/02/25 22:30:51 Serving on port 8080...
 ```
 
-Let’s try sending some Markdown from another terminal. We can use the README from the Go project as a sample document:
+自己本地新建一个input.md文件，内容可以自定义，符合markdown语法即可。
 
-```
-$ curl -o README.md -L "https://raw.githubusercontent.com/golang/go/c16c2c49e2fa98ae551fc6335215fadd62d33542/README.md"
-$ curl --data-binary @README.md http://localhost:8080/render
+我演示的例子里用到了https://raw.githubusercontent.com/golang/go/c16c2c49e2fa98ae551fc6335215fadd62d33542/README.md 这个markdown文件。
+
+通过curl命令发送markdown文件的二进制内容给render接口。
+
+```bash
+$ curl --data-binary @input.md http://localhost:8080/render
 <h1>The Go Programming Language</h1>
 <p>Go is an open source programming language that makes it easy to build simple,
 reliable, and efficient software.</p>
 ...
 ```
+
+可以看到该接口返回了input.md文件内容对应的html格式。
 
 ### Profiling
 
