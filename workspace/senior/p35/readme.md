@@ -106,7 +106,7 @@ $ ./markdown.nopgo
 
 自己本地新建一个input.md文件，内容可以自定义，符合markdown语法即可。
 
-我演示的例子里用到了https://raw.githubusercontent.com/golang/go/c16c2c49e2fa98ae551fc6335215fadd62d33542/README.md 这个markdown文件。
+我演示的例子里用到了[input.md](https://raw.githubusercontent.com/golang/go/c16c2c49e2fa98ae551fc6335215fadd62d33542/README.md) 这个markdown文件。
 
 通过curl命令发送markdown文件的二进制内容给render接口。
 
@@ -122,82 +122,98 @@ reliable, and efficient software.</p>
 
 ### Profiling
 
-Now that we have a working service, let’s collect a profile and rebuild with PGO to see if we get better performance.
+那接下来我们给`main.go`程序做profiling，得到程序运行时的数据，然后通过PGO来做性能优化。
 
-In `main.go`, we imported [net/http/pprof](https://pkg.go.dev/net/http/pprof) which automatically adds a `/debug/pprof/profile` endpoint to the server for fetching a CPU profile.
+在`main.go`里，有import [net/http/pprof](https://pkg.go.dev/net/http/pprof) 这个库，它会在原来已有的web接口`/render`的基础上，新增一个新的web接口`/debug/pprof/profile`，我们可以通过请求这个profiling接口来获取程序运行时的数据。
 
-Normally you want to collect a profile from your production environment so that the compiler gets a representative view of behavior in production. Since this example doesn’t have a “production” environment, we will create a simple program to generate load while we collect a profile. Copy the source of [this program](https://go.dev/play/p/yYH0kfsZcpL) to `load/main.go` and start the load generator (make sure the server is still running!).
+* 在程序主目录下，新增一个load子目录，在load子目录下新增一个`main.go`的文件，`load/main.go`运行时会不断给上面`./markdown.nogpo`启动起来的server发送`/render`请求，来模拟程序实际运行时的情况。
 
-```
-$ go run example.com/markdown/load
-```
+  ```bash
+  $ go run example.com/markdown/load
+  ```
 
-While that is running, download a profile from the server:
+* 请求profiling接口来获取程序运行时数据。
 
-```
-$ curl -o cpu.pprof "http://localhost:8080/debug/pprof/profile?seconds=30"
-```
+  ```bash
+  $ curl -o cpu.pprof "http://localhost:8080/debug/pprof/profile?seconds=30"
+  ```
 
-Once this completes, kill the load generator and the server.
+​		等待30秒，curl命令会结束，在程序主目录下会生成`cpu.pprof`文件。
 
-**注意**：要使用Go 1.20版本去编译和运行程序。
+**注意**：要使用Go 1.20版本去编译和运行程序。`load/main.go`的源代码参考
 
-### Using the profile
+### PGO优化程序
 
-We can ask the Go toolchain to build with PGO using the `-pgo` flag to `go build`. `-pgo` takes either the path to the profile to use, or `auto`, which will use the `default.pgo` file in the main package directory.
-
-We recommending commiting `default.pgo` profiles to your repository. Storing profiles alongside your source code ensures that users automatically have access to the profile simply by fetching the repository (either via the version control system, or via `go get`) and that builds remain reproducible. In Go 1.20, `-pgo=off` is the default, so users still need to add `-pgo=auto`, but a future version of Go is expected to change the default to `-pgo=auto`, automatically giving anyone that builds the binary the benefit of PGO.
-
-Let’s build:
-
-```
+```bash
 $ mv cpu.pprof default.pgo
 $ go build -pgo=auto -o markdown.withpgo
 ```
 
-### Evaluation
+`go build`编译程序的时候，启用`-pgo`选项。
 
-We will use a Go benchmark version of the load generator to evaluate the effect of PGO on performance. Copy [this benchmark](https://go.dev/play/p/6FnQmHfRjbh) to `load/bench_test.go`.
+`-pgo`既可以支持profiling文件路径，也可以支持`auto`模式。
 
-First, we will benchmark the server without PGO. Start that server:
+如果是`auto`模式，会自动寻找程序主目录下名为`default.pgo`的profiling文件。
 
-```
+Go官方推荐大家使用`auto`模式，而且把`default.pgo`文件也存放在程序主目录下，这样方便项目开发者使用`default.pgo`来对程序做性能优化。
+
+Go 1.20版本里，`-pgo`选项的默认值是`off`，我们必须添加`-pgo=auto`来开启PGO优化。
+
+未来的Go版本里，官方是计划`-pgo`选项默认值为`auto`。
+
+### 性能对比
+
+在程序的子目录`load`下新增`bench_test.go`文件，`bench_test.go`里使用Go性能测试的Benchmark框架来给server做压力测试。
+
+#### 未开启PGO优化的场景
+
+启用未开启PGO优化的server程序：
+
+```bash
 $ ./markdown.nopgo
 ```
 
-While that is running, run several benchmark iterations:
+开启压力测试：
 
-```
+```bash
 $ go test example.com/markdown/load -bench=. -count=20 -source ../input.md > nopgo.txt
 ```
 
-Once that completes, kill the original server and start the version with PGO:
+#### 开启PGO优化的场景
 
-```
+启用开启了PGO优化的server程序：
+
+```bash
 $ ./markdown.withpgo
 ```
 
-While that is running, run several benchmark iterations:
+开启压力测试：
 
-```
+```bash
 $ go test example.com/markdown/load -bench=. -count=20 -source ../input.md > withpgo.txt
 ```
 
-Once that completes, let’s compare the results:
+#### 综合对比
 
-```
+通过上面压力测试得到的`nopgo.txt`和`withpgo.txt`来做性能比较。
+
+```bash
 $ go install golang.org/x/perf/cmd/benchstat@latest
 $ benchstat nopgo.txt withpgo.txt
-goos: linux
+goos: darwin
 goarch: amd64
 pkg: example.com/markdown/load
-cpu: Intel(R) Xeon(R) W-2135 CPU @ 3.70GHz
-        │  nopgo.txt  │            withpgo.txt             │
-        │   sec/op    │   sec/op     vs base               │
-Load-12   393.8µ ± 1%   383.6µ ± 1%  -2.59% (p=0.000 n=20)
+cpu: Intel(R) Core(TM) i5-5250U CPU @ 1.60GHz
+       │  nopgo.txt  │             withpgo.txt             │
+       │   sec/op    │   sec/op     vs base                │
+Load-4   447.3µ ± 7%   401.3µ ± 1%  -10.29% (p=0.000 n=20)
 ```
 
-The new version is around 2.6% faster! In Go 1.20, workloads typically get between 2% and 4% CPU usage improvements from enabling PGO. Profiles contain a wealth of information about application behavior and Go 1.20 just begins to crack the surface by using this information for inlining. Future releases will continue improving performance as more parts of the compiler take advantage of PGO.
+可以看到，使用PGO优化后，程序的性能提升了10.29%。
+
+在Go 1.20版本里，使用PGO之后，通常程序的性能可以提升2%-4%左右。
+
+后续的版本里，编译器还会继续优化，利用PGO进一步提升程序性能。
 
 ## 总结
 
