@@ -217,9 +217,14 @@ Load-4   447.3µ ± 7%   401.3µ ± 1%  -10.29% (p=0.000 n=20)
 
 ## 总结
 
-In this example, after collecting a profile, we rebuilt our server using the exact same source code used in the original build. In a real-world scenario, there is always ongoing development. So we may collect a profile from production, which is running last week’s code, and use it to build with today’s source code. That is perfectly fine! PGO in Go can handle minor changes to source code without issue.
+Go 1.20版本引入了PGO来让编译器对程序做性能优化。PGO使用分2个步骤：
 
-For much more information on using PGO, best practices and caveats to be aware of, please see the [profile-guided optimization user guide](https://go.dev/doc/pgo).
+* 先得到一个profiling文件。
+* 使用`go build`编译时开启PGO选项，通过profiling文件来指导编译器对程序做性能优化。
+
+在生产环境里，我们可以收集近段时间的profiling数据，然后通过PGO优化程序来提升系统处理性能。
+
+更多关于PGO的使用说明和最佳实践可以参考[profile-guided optimization user guide](https://go.dev/doc/pgo)。
 
 源代码地址：[pgo optimization source code](https://github.com/jincheng9/go-tutorial/tree/main/workspace/senior/p35)。
 
