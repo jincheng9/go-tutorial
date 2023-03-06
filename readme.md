@@ -89,7 +89,6 @@
   * [Go语言中命名函数参数和命名函数返回值的注意事项](./workspace/senior/p21)
 * 并发编程
   * [Go语言中Context并发模式](./workspace/senior/p31/01-go-context.md)
-
 * 泛型
   * [泛型：Go泛型入门官方教程](./workspace/senior/p6)
   * [泛型：一文读懂Go泛型设计和使用场景](./workspace/senior/p7)
@@ -121,13 +120,12 @@
   * [第14篇：过度使用getter和setter方法](./workspace/senior/p28/14-go-overuse-getter-setter.md)
   * [第15篇：interface使用的常见错误和最佳实践](./workspace/senior/p28/15-go-interface-pollution.md)
   * [第16篇：any的常见错误和最佳实践](./workspace/senior/p28/16-any-keyword.md)
-  
 * 高性能Go
+  * [一文读懂Go 1.20引入的PGO性能优化](./workspace/senior/p35)
   * [high performance go workshop](https://dave.cheney.net/high-performance-go-workshop/dotgo-paris.html)
-
+  
 * Go安全
   * [Go的全新安全漏洞检测工具govulncheck来了](./workspace/senior/p32/01-go-vulnerability-management.md)
-
 * Go版本演进
   * [Go 1.19要来了，看看都有哪些变化：第1篇](./workspace/senior/p29/readme.md)
   * [Go 1.19要来了，看看都有哪些变化：第2篇](./workspace/senior/p29/readme2.md)
@@ -137,6 +135,7 @@
   * [Go 1.20要来了，看看都有哪些变化：第2篇](./workspace/senior/p33/readme2.md)
   * [Go 1.20要来了，看看都有哪些变化：第3篇](./workspace/senior/p33/readme3.md)
   * [Go 1.20要来了，看看都有哪些变化：第4篇](./workspace/senior/p33/readme4.md)
+  * [Go 1.21的2个语言变化](./workspace/senior/p34)
 
 
 

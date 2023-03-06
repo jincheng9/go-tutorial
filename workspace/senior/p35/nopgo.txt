@@ -1,0 +1,26 @@
+goos: darwin
+goarch: amd64
+pkg: example.com/markdown/load
+cpu: Intel(R) Core(TM) i5-5250U CPU @ 1.60GHz
+BenchmarkLoad-4   	    2259	    598091 ns/op
+BenchmarkLoad-4   	    2326	    450004 ns/op
+BenchmarkLoad-4   	    2941	    492777 ns/op
+BenchmarkLoad-4   	    3039	    451481 ns/op
+BenchmarkLoad-4   	    2637	    855634 ns/op
+BenchmarkLoad-4   	    2934	    440686 ns/op
+BenchmarkLoad-4   	    2874	    444654 ns/op
+BenchmarkLoad-4   	    2944	    407283 ns/op
+BenchmarkLoad-4   	    2994	    417179 ns/op
+BenchmarkLoad-4   	    2917	    469557 ns/op
+BenchmarkLoad-4   	    2734	    472006 ns/op
+BenchmarkLoad-4   	    2030	    622343 ns/op
+BenchmarkLoad-4   	    2316	    493430 ns/op
+BenchmarkLoad-4   	    2983	    425761 ns/op
+BenchmarkLoad-4   	    3066	    406583 ns/op
+BenchmarkLoad-4   	    2713	    425711 ns/op
+BenchmarkLoad-4   	    3006	    400636 ns/op
+BenchmarkLoad-4   	    3061	    398521 ns/op
+BenchmarkLoad-4   	    2958	    406973 ns/op
+BenchmarkLoad-4   	    3007	    477155 ns/op
+PASS
+ok  	example.com/markdown/load	28.778s
