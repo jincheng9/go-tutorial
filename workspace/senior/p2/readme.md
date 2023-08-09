@@ -215,7 +215,7 @@ For portability, the status code should be in the range [0, 125].
         link *_defer // 同一个协程里面的defer 延迟函数，会通过该指针连接在一起 
     }
     ```
-    内部维护这一个单链表，在对应的函数体里面执行的是 头插法，每次在结束时候都收从头开始遍历，也就是FILO（先进后出)
+   内部维护这一个单链表，在对应的函数体里面执行的是单链表的头插法方式，每次在结束时候都是从头开始遍历，也就是FILO（First In Last Out)（先进后出)
 
 ## 代码
 
