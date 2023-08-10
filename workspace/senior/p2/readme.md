@@ -201,7 +201,21 @@ For portability, the status code should be in the range [0, 125].
    invoked, not when the "defer" statement is executed.
    ```
 
-   
+## go-defer 的实现原理
+    ```go
+    type _defer struct {
+        siz int32 // 参数和返回值的内存大小 
+        started bool 
+        heap bool //是否分配在堆上面 
+        openDefer bool // 是否经过开放编码优化 
+        sp uintptr // sp 计数器值，栈指针 
+        pc uintptr // pc 计数器值，程序计数器 
+        fn *funcval // defer 传入的函数地址，也就是延后执行的函数 
+        _panic *_panic // defer 的 panic 结构体 
+        link *_defer // 同一个协程里面的defer 延迟函数，会通过该指针连接在一起 
+    }
+    ```
+   内部维护这一个单链表，在对应的函数体里面执行的是单链表的头插法方式，每次在结束时候都是从头开始遍历，也就是FILO（First In Last Out)（先进后出)
 
 ## 代码
 
